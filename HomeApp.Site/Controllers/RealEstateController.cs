@@ -57,6 +57,7 @@ namespace HomeApp.Site.Controllers
 
             ViewBag.Sort = sort;
             ViewBag.CurrentPage = 1;
+            ViewBag.OperationType = operationType;
             ViewBag.RealEstateBagFilter = new RealEstateBagFilter
             {
                 Address = address,
@@ -101,6 +102,7 @@ namespace HomeApp.Site.Controllers
 
             ViewBag.Sort = sort;
             ViewBag.CurrentPage = page;
+            ViewBag.OperationType = operationType;
             ViewBag.RealEstateBagFilter = new RealEstateBagFilter
             {
                 Address = address,
@@ -142,6 +144,7 @@ namespace HomeApp.Site.Controllers
 
             ViewBag.Sort = sort;
             ViewBag.CurrentPage = 1;
+            ViewBag.OperationType = operationType;
             ViewBag.RealEstateBagFilter = new RealEstateBagFilter
             {
                 Address = address,
@@ -186,6 +189,7 @@ namespace HomeApp.Site.Controllers
 
             ViewBag.Sort = sort;
             ViewBag.CurrentPage = page;
+            ViewBag.OperationType = operationType;
             ViewBag.RealEstateBagFilter = new RealEstateBagFilter
             {
                 Address = address,

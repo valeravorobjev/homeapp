@@ -5,8 +5,7 @@
 @model HomeApp.Core.ViewModels.RealEstateList
 
 @{
-    string op = Context.Request.Path.ToString().Split('/')[3];
-    OperationType operationType = (OperationType)Enum.Parse(typeof(OperationType), op);
+    OperationType operationType = (OperationType)ViewBag.OperationType;
 }
 
 @Html.Partial("SearchActionPartial")

@@ -6,9 +6,8 @@
 @model HomeApp.Core.ViewModels.RealEstateList
 
 @{
-    string op = Context.Request.Path.ToString().Split('/')[3];
     RealEstateBagFilter filter = ViewBag.RealEstateBagFilter as RealEstateBagFilter;
-    OperationType operationType = (OperationType)Enum.Parse(typeof(OperationType), op);
+    OperationType operationType = (OperationType)ViewBag.OperationType;
 }
 
 @Html.Partial("SearchActionPartial")
@@ -33,7 +32,7 @@
         {
             <div class="load-more">
                 <a href="#LoadMore" id="LoadMore"><i class="zmdi zmdi-refresh-alt"></i> Показать еще</a>
-                <input type="hidden" name="operationType" value="@op" />
+                <input type="hidden" name="operationType" value="@operationType" />
                 <input type="hidden" name="url" value="@($"{Context.Request.Scheme}://{Context.Request.Host}/Api/V1/RealEstate{Context.Request.QueryString}")" />
                 <unput type="hidden" name="host" value=""></unput>
                 <input type="hidden" name="address" value="@filter?.Address" />

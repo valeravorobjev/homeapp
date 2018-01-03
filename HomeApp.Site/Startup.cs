@@ -34,6 +34,8 @@ namespace HomeApp.Site
                 options.SerializerSettings.Converters = new List<JsonConverter> { new BsonIdConverter() };
             });
 
+            services.AddRouting(options => { options.LowercaseUrls = true; });
+
             services.AddScoped<ISessionRepository, SessionRepository>(options => new SessionRepository(con));
             services.AddScoped<IAuthRepository, AuthRepository>(options=>new AuthRepository(options.GetService<ISessionRepository>(), con));
 
