@@ -1,16 +1,16 @@
 ﻿using System.Collections.Generic;
 
-namespace HomeApp.Core.ViewModels
+namespace HomeApp.Core.Models
 {
     /// <summary>
     /// Модель для представления. Список комментариев
     /// </summary>
-    public class CommentList
+    public class CommentsModel
     {
         /// <summary>
         /// Список комментариев
         /// </summary>
-        public List<UserComment> UserComments { get; set; }
+        public List<UserCommentModel> UserComments { get; set; }
         /// <summary>
         /// Количество комментариев
         /// </summary>

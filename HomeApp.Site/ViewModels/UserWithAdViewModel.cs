@@ -1,11 +1,10 @@
 ﻿using HomeApp.Core.Db.Entities;
 
-namespace HomeApp.Core.ViewModels
+namespace HomeApp.Site.ViewModels
 {
-    public class UserProperties
+    public class UserWithAdViewModel
     {
         public User User { get; set; }
         public Ad Ad { get; set; }
-        public RealEstateList RealEstateList { get; set; }
     }
 }

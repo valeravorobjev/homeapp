@@ -2,11 +2,11 @@
 @using HomeApp.Core.Db.Entities
 @using HomeApp.Core.Db.Entities.Models.Enums
 @using HomeApp.Core.Extentions
-@using HomeApp.Core.ViewModels
-@model HomeApp.Core.ViewModels.RealEstateList
+@using HomeApp.Site.ViewModels
+@model HomeApp.Core.Models.RealEstatesModel
 
 @{
-    RealEstateBagFilter filter = ViewBag.RealEstateBagFilter as RealEstateBagFilter;
+    RealEstateBagFilterViewModel filter = ViewBag.RealEstateBagFilter as RealEstateBagFilterViewModel;
     OperationType operationType = (OperationType)ViewBag.OperationType;
 }
 

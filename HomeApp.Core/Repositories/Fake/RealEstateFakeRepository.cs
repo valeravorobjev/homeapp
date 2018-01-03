@@ -13,8 +13,8 @@ using HomeApp.Core.Extentions.Project;
 using HomeApp.Core.Extentions.Project.Models.Enums;
 using HomeApp.Core.Extentions.Sorts;
 using HomeApp.Core.Extentions.Sorts.Models.Enums;
+using HomeApp.Core.Models;
 using HomeApp.Core.Repositories.Contracts;
-using HomeApp.Core.ViewModels;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
@@ -42,7 +42,7 @@ namespace HomeApp.Core.Repositories.Fake
             FlatListInit();
         }
 
-        async Task<RealEstateList> IRealEstateRepository.GetRealEstates(UnitBaseFilter filter, RealEstateSort sortType)
+        async Task<RealEstatesModel> IRealEstateRepository.GetRealEstates(UnitBaseFilter filter, RealEstateSort sortType)
         {
             IMongoQueryable<RealEstate> query = _realEstateCollection.AsQueryable();
             if (filter is HouseFilter)
@@ -71,7 +71,7 @@ namespace HomeApp.Core.Repositories.Fake
             int count = await query.CountAsync();
             List<RealEstate> realEstates = await query.Sort(sortType).Skip(filter.Skip).Take(filter.Take).ToListAsync();
 
-            return new RealEstateList
+            return new RealEstatesModel
             {
                 Count = count,
                 RealEstates = realEstates
@@ -106,7 +106,7 @@ namespace HomeApp.Core.Repositories.Fake
             return count;
         }
 
-        async Task<RealEstateList> IRealEstateRepository.GetTopRealEstates(List<OperationType> operationTypes, int take)
+        async Task<RealEstatesModel> IRealEstateRepository.GetTopRealEstates(List<OperationType> operationTypes, int take)
         {
             UnitBaseFilter filter = new UnitBaseFilter();
             filter.OperationTypes = operationTypes;
@@ -120,7 +120,7 @@ namespace HomeApp.Core.Repositories.Fake
                 .ToListAsync();
 
 
-            return new RealEstateList()
+            return new RealEstatesModel()
             {
                 Count = realEstates.Count,
                 RealEstates = realEstates

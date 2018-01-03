@@ -1,5 +1,5 @@
 ﻿@using HomeApp.Core.Db.Entities.Models
-@model HomeApp.Core.ViewModels.UserComment
+@model HomeApp.Core.Models.UserCommentModel
 
 <div class="agent-reviews__item">
     <div class="text-strong">От @(((Person)Model.User).FirstName?.Ru) @(((Person)Model.User).LastName?.Ru) @(((Person)Model.User).MidName?.Ru) за @Model.Comment.Date</div>

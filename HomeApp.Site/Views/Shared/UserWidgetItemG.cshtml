@@ -1,5 +1,5 @@
 ﻿@using HomeApp.Core.Db.Entities.Models
-@model HomeApp.Core.ViewModels.UserWithRealEstateCount
+@model HomeApp.Core.Models.UserWithRealEstateCountModel
 
 <a class="grid-widget__item" asp-controller="Specialist" asp-action="Overview" asp-route-userId="@Model.User.Id">
     <img src="@Url.Content(@Model.User.PhotoMinPath)" alt="">

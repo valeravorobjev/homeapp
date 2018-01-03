@@ -5,8 +5,9 @@ using HomeApp.Core.Db.Entities;
 using HomeApp.Core.Db.Entities.Models.Enums;
 using HomeApp.Core.Extentions.Filters.Models;
 using HomeApp.Core.Extentions.Sorts.Models.Enums;
+using HomeApp.Core.Models;
 using HomeApp.Core.Repositories.Contracts;
-using HomeApp.Core.ViewModels;
+using HomeApp.Site.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
 
@@ -29,7 +30,7 @@ namespace HomeApp.Site.Controllers
         [Route("Grid/{userType}")]
         public async Task<IActionResult> Grid(UserType userType, [FromQuery]string sort = "FeaturedListings")
         {
-            UserList userList = null;
+            UsersModel userList = null;
             if (userType == UserType.Realtor)
             {
                 PersonProfessionalFilter filter = new PersonProfessionalFilter() { Take = 12, Skip = 0, UserTypes = new List<UserType> { userType } };
@@ -49,6 +50,7 @@ namespace HomeApp.Site.Controllers
 
             ViewBag.Sort = sort;
             ViewBag.CurrentPage = 1;
+            ViewBag.UserType = userType;
             return View(userList);
 
         }
@@ -56,7 +58,7 @@ namespace HomeApp.Site.Controllers
         [Route("List/{userType}")]
         public async Task<IActionResult> List(UserType userType, [FromQuery]string sort = "FeaturedListings")
         {
-            UserList userList = null;
+            UsersModel userList = null;
             if (userType == UserType.Realtor)
             {
                 PersonProfessionalFilter filter = new PersonProfessionalFilter() { Take = 12, Skip = 0, UserTypes = new List<UserType> { userType } };
@@ -76,6 +78,7 @@ namespace HomeApp.Site.Controllers
 
             ViewBag.Sort = sort;
             ViewBag.CurrentPage = 1;
+            ViewBag.UserType = userType;
             return View(userList);
         }
 
@@ -85,7 +88,7 @@ namespace HomeApp.Site.Controllers
             if (page <= 0) page = 1;
             int pageSize = 16;
 
-            UserList userList = null;
+            UsersModel userList = null;
             if (userType == UserType.Realtor)
             {
                 PersonProfessionalFilter filter = new PersonProfessionalFilter() { Take = pageSize, Skip = pageSize * page, UserTypes = new List<UserType> { userType } };
@@ -105,6 +108,7 @@ namespace HomeApp.Site.Controllers
 
             ViewBag.Sort = sort;
             ViewBag.CurrentPage = page;
+            ViewBag.UserType = userType;
             return View(userList);
         }
 
@@ -126,7 +130,7 @@ namespace HomeApp.Site.Controllers
                 RealEstateStatusList = new List<RealEstateStatus> { RealEstateStatus.Active }
             });
 
-            UserOverview overview = new UserOverview();
+            UserOverviewViewModel overview = new UserOverviewViewModel();
             overview.User = user;
             overview.Ad = ad;
             overview.SoldRentEstateCount = soldRentEstateCount;
@@ -141,7 +145,7 @@ namespace HomeApp.Site.Controllers
             User user = await _userRepository.GetUser(new ObjectId(userId));
             Ad ad = await _adRepository.GetAdForUser(user.Id);
 
-            RealEstateList realEstateList = await _realEstateRepository.GetRealEstates(new UnitBaseFilter
+            RealEstatesModel realEstateList = await _realEstateRepository.GetRealEstates(new UnitBaseFilter
             {
                 UserId = new ObjectId(userId),
                 Take = 12,
@@ -149,7 +153,7 @@ namespace HomeApp.Site.Controllers
                 RealEstateStatusList = new List<RealEstateStatus> { RealEstateStatus.Active, RealEstateStatus.Sold, RealEstateStatus.Rented }
             }, RealEstateSort.FeaturedListings);
 
-            UserProperties properties = new UserProperties();
+            UserPropertiesViewModel properties = new UserPropertiesViewModel();
             properties.User = user;
             properties.Ad = ad;
             properties.RealEstateList = realEstateList;
@@ -162,9 +166,9 @@ namespace HomeApp.Site.Controllers
         {
             User user = await _userRepository.GetUser(new ObjectId(userId));
             Ad ad = await _adRepository.GetAdForUser(user.Id);
-            CommentList commentList = await _userRepository.GetComments(user.Id, 0, 12);
+            CommentsModel commentList = await _userRepository.GetComments(user.Id, 0, 12);
 
-            UserReviews reviews = new UserReviews();
+            UserReviewsViewModel reviews = new UserReviewsViewModel();
             reviews.User = user;
             reviews.Ad = ad;
             reviews.CommentList = commentList;

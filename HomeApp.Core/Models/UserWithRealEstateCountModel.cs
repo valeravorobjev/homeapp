@@ -1,11 +1,11 @@
 ﻿using HomeApp.Core.Db.Entities;
 
-namespace HomeApp.Core.ViewModels
+namespace HomeApp.Core.Models
 {
     /// <summary>
     /// Вью модель пользователя с количеством объявлений
     /// </summary>
-    public class UserWithRealEstateCount
+    public class UserWithRealEstateCountModel
     {
         /// <summary>
         /// Пользователь

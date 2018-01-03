@@ -1,5 +1,7 @@
-﻿@using HomeApp.Core.ViewModels
-@model HomeApp.Core.ViewModels.UserReviews
+﻿@using HomeApp.Core.Models
+@using HomeApp.Core.ViewModels
+@using HomeApp.Site.ViewModels
+@model HomeApp.Site.ViewModels.UserReviewsViewModel
 
 <section class="section">
     <div class="container">
@@ -10,7 +12,7 @@
         <div class="row">
             <div class="col-md-8">
                 <div class="card profile">
-                    @Html.Partial("ProfilePartial", new UserWithAd { User = Model.User, Ad = Model.Ad })
+                    @Html.Partial("ProfilePartial", new UserWithAdViewModel { User = Model.User, Ad = Model.Ad })
                 </div>
 
                 <div class="card">
@@ -28,7 +30,7 @@
                         <div class="card__sub">
                             <h4>@Model.CommentList.Count отзывов</h4>
 
-                            @foreach (UserComment userComment in Model.CommentList.UserComments)
+                            @foreach (UserCommentModel userComment in Model.CommentList.UserComments)
                             {
                                 @Html.Partial("UserComment", userComment)
                             }

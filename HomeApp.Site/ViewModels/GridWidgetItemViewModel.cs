@@ -1,13 +1,13 @@
 ﻿using HomeApp.Core.Db.Entities;
 using HomeApp.Core.ViewModels.Enums;
 
-namespace HomeApp.Core.ViewModels
+namespace HomeApp.Site.ViewModels
 {
-    public class GridWidgetItemModel
+    public class GridWidgetItemViewModel
     {
-        public GridWidgetItemModel() { }
+        public GridWidgetItemViewModel() { }
 
-        public GridWidgetItemModel(RealEstate realEstate, GridWidgetItemWidth gridWidgetItemWidth)
+        public GridWidgetItemViewModel(RealEstate realEstate, GridWidgetItemWidth gridWidgetItemWidth)
         {
             GridWidgetItemWidth = gridWidgetItemWidth;
             RealEstate = realEstate;

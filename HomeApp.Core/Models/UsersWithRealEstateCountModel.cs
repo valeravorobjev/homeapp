@@ -1,16 +1,16 @@
 ﻿using System.Collections.Generic;
 
-namespace HomeApp.Core.ViewModels
+namespace HomeApp.Core.Models
 {
     /// <summary>
     /// Список пользователей с количеством объявлений
     /// </summary>
-    public class UserWithRealEstateCountList
+    public class UsersWithRealEstateCountModel
     {
         /// <summary>
         /// Пользователи с количеством объявлений
         /// </summary>
-        public List<UserWithRealEstateCount> UsersWithRealEstateCount { get; set; }
+        public List<UserWithRealEstateCountModel> UsersWithRealEstateCount { get; set; }
         /// <summary>
         /// Всего пользователей с объявлениями
         /// </summary>

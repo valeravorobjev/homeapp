@@ -1,11 +1,10 @@
 ﻿@using HomeApp.Core.Db.Entities
 @using HomeApp.Core.Db.Entities.Models.Enums
 @using HomeApp.Core.Extentions
-@model HomeApp.Core.ViewModels.UserList
+@model HomeApp.Core.Models.UsersModel
 
 @{
-    string ut = Context.Request.Path.ToString().Split('/')[3];
-    UserType userType = (UserType)Enum.Parse(typeof(UserType), ut);
+    UserType userType = (UserType)ViewBag.UserType;
 }
 
 @Html.Partial("SpecialistSearchActionPartial")

@@ -14,8 +14,8 @@ using HomeApp.Core.Extentions.Project;
 using HomeApp.Core.Extentions.Project.Models.Enums;
 using HomeApp.Core.Extentions.Sorts;
 using HomeApp.Core.Extentions.Sorts.Models.Enums;
+using HomeApp.Core.Models;
 using HomeApp.Core.Repositories.Contracts;
-using HomeApp.Core.ViewModels;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
@@ -51,7 +51,7 @@ namespace HomeApp.Core.Repositories.Fake
             return user.Project(UserProjectSettings.Default);
         }
 
-        async Task<UserList> IUserRepository.GetUsers(UserFilter filter, UserSort sortType)
+        async Task<UsersModel> IUserRepository.GetUsers(UserFilter filter, UserSort sortType)
         {
             List<User> users = await
                 _usersCollection.AsQueryable()
@@ -63,14 +63,14 @@ namespace HomeApp.Core.Repositories.Fake
 
             int count = await _usersCollection.AsQueryable().Filter(filter).CountAsync();
 
-            return new UserList
+            return new UsersModel
             {
                 Count = count,
                 Users = users.Project(UserProjectSettings.Default)
             };
         }
 
-        async Task<UserList> IUserRepository.GetProfessionals(ProfessionalFilter filter, ProfessionalSort sortType)
+        async Task<UsersModel> IUserRepository.GetProfessionals(ProfessionalFilter filter, ProfessionalSort sortType)
         {
             IMongoQueryable<User> query = _usersCollection.AsQueryable().Filter(filter);
 
@@ -82,14 +82,14 @@ namespace HomeApp.Core.Repositories.Fake
 
             int count = await query.CountAsync();
 
-            return new UserList
+            return new UsersModel
             {
                 Count = count,
                 Users = users.Project(UserProjectSettings.Default)
             };
         }
 
-        async Task<UserList> IUserRepository.GetTopUsers(List<UserType> userTypes, int take)
+        async Task<UsersModel> IUserRepository.GetTopUsers(List<UserType> userTypes, int take)
         {
 
             List<User> users = await
@@ -105,19 +105,19 @@ namespace HomeApp.Core.Repositories.Fake
                 .Take(take).CountAsync();
 
 
-            return new UserList
+            return new UsersModel
             {
                 Count = count,
                 Users = users.Project(UserProjectSettings.Default)
             };
         }
 
-        async Task<UserWithRealEstateCountList> IUserRepository.GetTopUsersWithRealEstateCount(List<UserType> userTypes, int take)
+        async Task<UsersWithRealEstateCountModel> IUserRepository.GetTopUsersWithRealEstateCount(List<UserType> userTypes, int take)
         {
-            IMongoQueryable<UserWithRealEstateCount> joined = _usersCollection.AsQueryable()
+            IMongoQueryable<UserWithRealEstateCountModel> joined = _usersCollection.AsQueryable()
                 .Filter(new UserFilter { UserTypes = userTypes })
                 .GroupJoin(_realEstateCollection, u => u.Id, r => r.UserId, (user, real) =>
-                        new UserWithRealEstateCount()
+                        new UserWithRealEstateCountModel()
                         {
                             User = new User
                             {
@@ -148,18 +148,18 @@ namespace HomeApp.Core.Repositories.Fake
                 .Take(take);
 
             int count = await joined.CountAsync();
-            List<UserWithRealEstateCount> userWithRealEstateCount = await joined.ToListAsync();
+            List<UserWithRealEstateCountModel> userWithRealEstateCount = await joined.ToListAsync();
 
-            UserWithRealEstateCountList ul = new UserWithRealEstateCountList();
+            UsersWithRealEstateCountModel ul = new UsersWithRealEstateCountModel();
             ul.Count = count;
             ul.UsersWithRealEstateCount = userWithRealEstateCount.Select(
-                uwr => new UserWithRealEstateCount { RealEstateCount = uwr.RealEstateCount, User = uwr.User.Project(UserProjectSettings.Default) }).ToList();
+                uwr => new UserWithRealEstateCountModel { RealEstateCount = uwr.RealEstateCount, User = uwr.User.Project(UserProjectSettings.Default) }).ToList();
 
             return ul;
 
         }
 
-        async Task<UserList> IUserRepository.GetPersonProfessionals(PersonProfessionalFilter filter, PersonProfessionalSort sortType)
+        async Task<UsersModel> IUserRepository.GetPersonProfessionals(PersonProfessionalFilter filter, PersonProfessionalSort sortType)
         {
             List<User> users =
                 await _usersCollection.AsQueryable()
@@ -172,14 +172,14 @@ namespace HomeApp.Core.Repositories.Fake
             int count = await _usersCollection.AsQueryable().Filter(filter).CountAsync();
 
 
-            return new UserList()
+            return new UsersModel()
             {
                 Count = count,
                 Users = users
             };
         }
 
-        async Task<CommentList> IUserRepository.GetComments(ObjectId userId, int skip, int take)
+        async Task<CommentsModel> IUserRepository.GetComments(ObjectId userId, int skip, int take)
         {
             int count =
                 await _usersCollection.AsQueryable()
@@ -189,16 +189,16 @@ namespace HomeApp.Core.Repositories.Fake
 
             if (count == 0)
             {
-                return new CommentList { Count = 0, UserComments = new List<UserComment>() };
+                return new CommentsModel { Count = 0, UserComments = new List<UserCommentModel>() };
             }
 
             List<Comment> comments = await _usersCollection.AsQueryable().Where(u => u.Id == userId && u.Comments != null)
                 .SelectMany(u => u.Comments).Skip(skip).Take(take).ToListAsync();
 
-            CommentList commentList = new CommentList
+            CommentsModel commentList = new CommentsModel
             {
                 Count = count,
-                UserComments = comments.Select(c => new UserComment()
+                UserComments = comments.Select(c => new UserCommentModel()
                 {
                     Comment = c,
                     User = _usersCollection.AsQueryable().FirstOrDefault(u => u.Id == c.UserId).Project(UserProjectSettings.Default)

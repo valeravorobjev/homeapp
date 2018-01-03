@@ -4,9 +4,10 @@ using HomeApp.Core.Db.Entities;
 using HomeApp.Core.Db.Entities.Models.Enums;
 using HomeApp.Core.Extentions.Filters.Models;
 using HomeApp.Core.Extentions.Sorts.Models.Enums;
+using HomeApp.Core.Models;
 using HomeApp.Core.Repositories.Contracts;
-using HomeApp.Core.ViewModels;
 using HomeApp.Site.Utils;
+using HomeApp.Site.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
 using Microsoft.Extensions.Options;
@@ -53,12 +54,12 @@ namespace HomeApp.Site.Controllers
             filter.SetFilter(_options, 16, 0, operationType, new List<RealEstateStatus> { RealEstateStatus.Active },
                 address, unitType, costLow, costHight, (int?)areaLow, (int?)areaHight, bathCount, bedCount, livingLow, livingHight, (int?)yearBuiltLow, (int?)yearBuiltHight);
 
-            RealEstateList realEstateList = await _realEstateRepository.GetRealEstates(filter, sort);
+            RealEstatesModel realEstateList = await _realEstateRepository.GetRealEstates(filter, sort);
 
             ViewBag.Sort = sort;
             ViewBag.CurrentPage = 1;
             ViewBag.OperationType = operationType;
-            ViewBag.RealEstateBagFilter = new RealEstateBagFilter
+            ViewBag.RealEstateBagFilter = new RealEstateBagFilterViewModel
             {
                 Address = address,
                 UnitType = unitType,
@@ -98,12 +99,12 @@ namespace HomeApp.Site.Controllers
                 new List<RealEstateStatus> { RealEstateStatus.Active },
                 address, unitType, costLow, costHight, (int?)areaLow, (int?)areaHight, bathCount, bedCount, livingLow, livingHight, (int?)yearBuiltLow, (int?)yearBuiltHight);
 
-            RealEstateList realEstateList = await _realEstateRepository.GetRealEstates(filter, sort);
+            RealEstatesModel realEstateList = await _realEstateRepository.GetRealEstates(filter, sort);
 
             ViewBag.Sort = sort;
             ViewBag.CurrentPage = page;
             ViewBag.OperationType = operationType;
-            ViewBag.RealEstateBagFilter = new RealEstateBagFilter
+            ViewBag.RealEstateBagFilter = new RealEstateBagFilterViewModel
             {
                 Address = address,
                 UnitType = unitType,
@@ -140,12 +141,12 @@ namespace HomeApp.Site.Controllers
             filter.SetFilter(_options, 16, 0, operationType, new List<RealEstateStatus> { RealEstateStatus.Active },
                 address, unitType, costLow, costHight, (int?)areaLow, (int?)areaHight, bathCount, bedCount, livingLow, livingHight, (int?)yearBuiltLow, (int?)yearBuiltHight);
 
-            RealEstateList realEstateList = await _realEstateRepository.GetRealEstates(filter, sort);
+            RealEstatesModel realEstateList = await _realEstateRepository.GetRealEstates(filter, sort);
 
             ViewBag.Sort = sort;
             ViewBag.CurrentPage = 1;
             ViewBag.OperationType = operationType;
-            ViewBag.RealEstateBagFilter = new RealEstateBagFilter
+            ViewBag.RealEstateBagFilter = new RealEstateBagFilterViewModel
             {
                 Address = address,
                 UnitType = unitType,
@@ -185,12 +186,12 @@ namespace HomeApp.Site.Controllers
                 new List<RealEstateStatus> { RealEstateStatus.Active },
                 address, unitType, costLow, costHight, (int?)areaLow, (int?)areaHight, bathCount, bedCount, livingLow, livingHight, (int?)yearBuiltLow, (int?)yearBuiltHight);
 
-            RealEstateList realEstateList = await _realEstateRepository.GetRealEstates(filter, sort);
+            RealEstatesModel realEstateList = await _realEstateRepository.GetRealEstates(filter, sort);
 
             ViewBag.Sort = sort;
             ViewBag.CurrentPage = page;
             ViewBag.OperationType = operationType;
-            ViewBag.RealEstateBagFilter = new RealEstateBagFilter
+            ViewBag.RealEstateBagFilter = new RealEstateBagFilterViewModel
             {
                 Address = address,
                 UnitType = unitType,
@@ -211,11 +212,11 @@ namespace HomeApp.Site.Controllers
             RealEstate result = await _realEstateRepository.GetRealEstate(new ObjectId(realEstateId));
             User user = await _userRepository.GetUser(result.UserId);
 
-            DetailModel detailModel = new DetailModel();
-            detailModel.RealEstate = result;
-            detailModel.Agent = user;
+            DetailViewModel detailViewModel = new DetailViewModel();
+            detailViewModel.RealEstate = result;
+            detailViewModel.Agent = user;
 
-            return View(detailModel);
+            return View(detailViewModel);
         }
     }
 }

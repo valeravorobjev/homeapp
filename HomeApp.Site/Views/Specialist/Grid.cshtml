@@ -1,11 +1,10 @@
 ﻿@using HomeApp.Core.Db.Entities
 @using HomeApp.Core.Db.Entities.Models.Enums
 @using HomeApp.Core.Extentions
-@model HomeApp.Core.ViewModels.UserList
+@model HomeApp.Core.Models.UsersModel
 
 @{
-    string ut = Context.Request.Path.ToString().Split('/')[3];
-    UserType userType = (UserType)Enum.Parse(typeof(UserType), ut);
+    UserType userType = (UserType)ViewBag.UserType;
 }
 
 @Html.Partial("SpecialistSearchActionPartial")
@@ -29,7 +28,7 @@
         </div>
         <div class="load-more">
             <a href="#LoadMore" id="LoadMore"><i class="zmdi zmdi-refresh-alt"></i> Показать еще</a>
-            <input type="hidden" name="userType" value="@ut" />
+            <input type="hidden" name="userType" value="@userType" />
             <input type="hidden" name="url" value="@($"{Context.Request.Scheme}://{Context.Request.Host}/Api/V1/Specialist{Context.Request.QueryString}")" />
             <unput type="hidden" name="host" value=""></unput>
         </div>

@@ -3,8 +3,8 @@ using System.Threading.Tasks;
 using HomeApp.Core.Db.Entities.Models.Enums;
 using HomeApp.Core.Extentions.Filters.Models;
 using HomeApp.Core.Extentions.Sorts.Models.Enums;
+using HomeApp.Core.Models;
 using HomeApp.Core.Repositories.Contracts;
-using HomeApp.Core.ViewModels;
 using HomeApp.Site.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -46,7 +46,7 @@ namespace HomeApp.Site.Controllers.Api.V1
             filter.SetFilter(_options, 16, 0, operationType, new List<RealEstateStatus> { RealEstateStatus.Active },
                 address, unitType, costLow, costHight, (int?)areaLow, (int?)areaHight, bathCount, bedCount, livingLow, livingHight, (int?)yearBuiltLow, (int?)yearBuultHight);
 
-            RealEstateList realEstateList = await _realEstateRepository.GetRealEstates(filter, sort);
+            RealEstatesModel realEstateList = await _realEstateRepository.GetRealEstates(filter, sort);
 
             return Ok(realEstateList);
         }

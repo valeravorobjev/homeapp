@@ -1,5 +1,6 @@
 ﻿using System;
 using HomeApp.Core.ViewModels;
+using HomeApp.Site.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HomeApp.Site.ViewComponents
@@ -10,7 +11,7 @@ namespace HomeApp.Site.ViewComponents
         public IViewComponentResult Invoke(int dataCount, int pageSize, int numbersCount, 
             int currentPage, string controller, 
             string action, 
-            dynamic sort, RealEstateBagFilter filter)
+            dynamic sort, RealEstateBagFilterViewModel filter)
         {
             int totalPage = dataCount / pageSize + (int)Math.Ceiling(dataCount % pageSize * 0.1);
             int offest = totalPage - numbersCount;

@@ -1,8 +1,8 @@
 ﻿using HomeApp.Core.Db.Entities.Models.Enums;
 
-namespace HomeApp.Core.ViewModels
+namespace HomeApp.Site.ViewModels
 {
-    public class RealEstateBagFilter
+    public class RealEstateBagFilterViewModel
     {
         public string Address { get; set; }
         public UnitType? UnitType { get; set; }

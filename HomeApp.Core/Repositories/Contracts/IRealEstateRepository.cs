@@ -4,7 +4,7 @@ using HomeApp.Core.Db.Entities;
 using HomeApp.Core.Db.Entities.Models.Enums;
 using HomeApp.Core.Extentions.Filters.Models;
 using HomeApp.Core.Extentions.Sorts.Models.Enums;
-using HomeApp.Core.ViewModels;
+using HomeApp.Core.Models;
 using MongoDB.Bson;
 
 namespace HomeApp.Core.Repositories.Contracts
@@ -21,7 +21,7 @@ namespace HomeApp.Core.Repositories.Contracts
         /// <param name="filter">Фильтер</param>
         /// <param name="sortType">Тпи сортировки</param>
         /// <returns>Возвращает объект RealEstateWrapper</returns>
-        Task<RealEstateList> GetRealEstates(UnitBaseFilter filter, RealEstateSort sortType);
+        Task<RealEstatesModel> GetRealEstates(UnitBaseFilter filter, RealEstateSort sortType);
 
         /// <summary>
         /// Возвращает топ объектов недвижимости
@@ -29,7 +29,7 @@ namespace HomeApp.Core.Repositories.Contracts
         /// <param name="operationTypes">Типы операций</param>
         /// <param name="take">Сколько записей взять</param>
         /// <returns></returns>
-        Task<RealEstateList> GetTopRealEstates(List<OperationType> operationTypes, int take);
+        Task<RealEstatesModel> GetTopRealEstates(List<OperationType> operationTypes, int take);
 
         /// <summary>
         /// Детальная информация по объекту недвижимости. Объект содержит все имеющиеся поля

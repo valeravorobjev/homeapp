@@ -1,8 +1,8 @@
 ﻿@using HomeApp.Core.Db.Entities.Models
 @using HomeApp.Core.Db.Entities.Models.Enums
 @using HomeApp.Core.Extentions
-@using HomeApp.Core.ViewModels
-@model HomeApp.Core.ViewModels.UserOverview
+@using HomeApp.Site.ViewModels
+@model HomeApp.Site.ViewModels.UserOverviewViewModel
 
 <section class="section">
     <div class="container">
@@ -13,7 +13,7 @@
         <div class="row">
             <div class="col-md-8">
                 <div class="card profile">
-                    @Html.Partial("ProfilePartial", new UserWithAd {User = Model.User , Ad = Model.Ad})
+                    @Html.Partial("ProfilePartial", new UserWithAdViewModel {User = Model.User , Ad = Model.Ad})
                 </div>
 
                 <div class="card">

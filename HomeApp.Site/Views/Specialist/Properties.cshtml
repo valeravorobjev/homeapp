@@ -1,6 +1,7 @@
 ﻿@using HomeApp.Core.Db.Entities
 @using HomeApp.Core.ViewModels
-@model HomeApp.Core.ViewModels.UserProperties
+@using HomeApp.Site.ViewModels
+@model HomeApp.Site.ViewModels.UserPropertiesViewModel
 
 <section class="section">
     <div class="container">
@@ -11,7 +12,7 @@
         <div class="row">
             <div class="col-md-8">
                 <div class="card profile">
-                    @Html.Partial("ProfilePartial", new UserWithAd { User = Model.User, Ad = Model.Ad })
+                    @Html.Partial("ProfilePartial", new UserWithAdViewModel { User = Model.User, Ad = Model.Ad })
                 </div>
 
                 <div class="card">

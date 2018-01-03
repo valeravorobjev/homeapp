@@ -1,12 +1,12 @@
 ﻿using HomeApp.Core.Db.Entities;
 using HomeApp.Core.Db.Entities.Models;
 
-namespace HomeApp.Core.ViewModels
+namespace HomeApp.Core.Models
 {
     /// <summary>
     /// Модель представление. Комментарии пользователя
     /// </summary>
-    public class UserComment
+    public class UserCommentModel
     {
         /// <summary>
         /// Пользователь

@@ -4,7 +4,7 @@ using HomeApp.Core.Db.Entities;
 using HomeApp.Core.Db.Entities.Models.Enums;
 using HomeApp.Core.Extentions.Filters.Models;
 using HomeApp.Core.Extentions.Sorts.Models.Enums;
-using HomeApp.Core.ViewModels;
+using HomeApp.Core.Models;
 using MongoDB.Bson;
 
 namespace HomeApp.Core.Repositories.Contracts
@@ -26,35 +26,35 @@ namespace HomeApp.Core.Repositories.Contracts
         /// <param name="filter">Фильтр</param>
         /// <param name="sortType">Сортировка</param>
         /// <returns></returns>
-        Task<UserList> GetUsers(UserFilter filter, UserSort sortType);
+        Task<UsersModel> GetUsers(UserFilter filter, UserSort sortType);
         /// <summary>
         /// Возвращает топ пользователей
         /// </summary>
         /// <param name="userTypes">Типы пользователей</param>
         /// <param name="take">Сколько записей взять</param>
         /// <returns></returns>
-        Task<UserList> GetTopUsers(List<UserType> userTypes, int take);
+        Task<UsersModel> GetTopUsers(List<UserType> userTypes, int take);
         /// <summary>
         /// Возвращает топ пользователей, с количеством размещенных, активных объявлений
         /// </summary>
         /// <param name="userTypes"></param>
         /// <param name="take"></param>
         /// <returns></returns>
-        Task<UserWithRealEstateCountList> GetTopUsersWithRealEstateCount(List<UserType> userTypes, int take);
+        Task<UsersWithRealEstateCountModel> GetTopUsersWithRealEstateCount(List<UserType> userTypes, int take);
         /// <summary>
         /// Возвращает список профессионалов (агенства, застройщики)
         /// </summary>
         /// <param name="filter">Фильтр</param>
         /// <param name="sortType">Сортировка</param>
         /// <returns></returns>
-        Task<UserList> GetProfessionals(ProfessionalFilter filter, ProfessionalSort sortType);
+        Task<UsersModel> GetProfessionals(ProfessionalFilter filter, ProfessionalSort sortType);
         /// <summary>
         /// Возвращает список профессионалов (риэлторы)
         /// </summary>
         /// <param name="filter">Фильтр</param>
         /// <param name="sortType">Сортировка</param>
         /// <returns></returns>
-        Task<UserList> GetPersonProfessionals(PersonProfessionalFilter filter, PersonProfessionalSort sortType);
+        Task<UsersModel> GetPersonProfessionals(PersonProfessionalFilter filter, PersonProfessionalSort sortType);
         /// <summary>
         /// Возвращает список комментариев для пользователя
         /// </summary>
@@ -62,6 +62,6 @@ namespace HomeApp.Core.Repositories.Contracts
         /// <param name="skip">Сколько записей пропустить</param>
         /// <param name="take">Сколько записей взять</param>
         /// <returns></returns>
-        Task<CommentList> GetComments(ObjectId userId, int skip, int take);
+        Task<CommentsModel> GetComments(ObjectId userId, int skip, int take);
     }
 }

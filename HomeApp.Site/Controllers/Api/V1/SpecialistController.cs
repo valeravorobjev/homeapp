@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using HomeApp.Core.Db.Entities.Models.Enums;
 using HomeApp.Core.Extentions.Filters.Models;
 using HomeApp.Core.Extentions.Sorts.Models.Enums;
+using HomeApp.Core.Models;
 using HomeApp.Core.Repositories.Contracts;
 using HomeApp.Core.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -28,7 +29,7 @@ namespace HomeApp.Site.Controllers.Api.V1
         [HttpGet]
         public async Task<IActionResult> GetSpecialists(UserType userType, int take, int skip, string sort = "FeaturedListings")
         {
-            UserList userList = null;
+            UsersModel userList = null;
 
             if (userType == UserType.Realtor)
             {
