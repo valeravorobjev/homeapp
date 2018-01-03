@@ -16,7 +16,7 @@
         <ul class="navigation">
             <li class="visible-xs visible-sm"><a class="navigation__close" data-rmd-action="navigation-close" href=""><i class="zmdi zmdi-long-arrow-right"></i></a></li>
 
-            <li class="@(ViewContext.RouteData.Values["Controller"].ToString() + ViewContext.RouteData.Values["Action"].ToString() == "HomeIndex"  ? "active" : "")">
+            <li class="@(ViewContext.RouteData.Values["Controller"] + ViewContext.RouteData.Values["Action"].ToString() == "HomeIndex"  ? "active" : "")">
                 <a asp-controller="Home" asp-action="Index">Главная</a>
             </li>
 
@@ -24,16 +24,16 @@
                 <a asp-controller="RealEstate" asp-action="Grid" class="prevent-default">Недвижимость</a>
 
                 <ul class="navigation__drop-menu">
-                    <li class="@(ViewContext.RouteData.Values["Controller"].ToString() + ViewContext.RouteData.Values["operationType"] == "RealEstateRent"  ? "active" : "")">
+                    <li class="@(ViewContext.RouteData.Values["Controller"].ToString() + ViewContext.RouteData.Values["operationType"] == "RealEstaterent"  ? "active" : "")">
                         <a asp-controller="RealEstate" asp-action="Grid" asp-route-operationType="@OperationType.Rent">Аренда</a>
                     </li>
-                    <li class="@(ViewContext.RouteData.Values["Controller"].ToString() + ViewContext.RouteData.Values["operationType"] == "RealEstateLongTermRental"  ? "active" : "")">
+                    <li class="@(ViewContext.RouteData.Values["Controller"].ToString() + ViewContext.RouteData.Values["operationType"] == "RealEstatelongtermrental"  ? "active" : "")">
                         <a a asp-controller="RealEstate" asp-action="Grid" asp-route-operationType="@OperationType.LongTermRental">Длительная аренда</a>
                     </li>
-                    <li class="@(ViewContext.RouteData.Values["Controller"].ToString() + ViewContext.RouteData.Values["operationType"] == "RealEstateDailyRent"  ? "active" : "")">
+                    <li class="@(ViewContext.RouteData.Values["Controller"].ToString() + ViewContext.RouteData.Values["operationType"] == "RealEstatedailyrent"  ? "active" : "")">
                         <a a asp-controller="RealEstate" asp-action="Grid" asp-route-operationType="@OperationType.DailyRent">Посуточная аренда</a>
                     </li>
-                    <li class="@(ViewContext.RouteData.Values["Controller"].ToString() + ViewContext.RouteData.Values["operationType"] == "RealEstateSale"  ? "active" : "")">
+                    <li class="@(ViewContext.RouteData.Values["Controller"].ToString() + ViewContext.RouteData.Values["operationType"] == "RealEstatesale"  ? "active" : "")">
                         <a a asp-controller="RealEstate" asp-action="Grid" asp-route-operationType="@OperationType.Sale">Продажа</a>
                     </li>
                 </ul>
@@ -43,13 +43,13 @@
                 <a asp-controller="Specialist" asp-action="Grid" class="prevent-default">Специалисты</a>
 
                 <ul class="navigation__drop-menu">
-                    <li class="@(ViewContext.RouteData.Values["Controller"].ToString() + ViewContext.RouteData.Values["userType"] == "SpecialistAgency"  ? "active" : "")">
+                    <li class="@(ViewContext.RouteData.Values["Controller"].ToString() + ViewContext.RouteData.Values["userType"] == "Specialistagency"  ? "active" : "")">
                         <a asp-controller="Specialist" asp-action="Grid" asp-route-userType="@UserType.Agency">Агенства</a>
                     </li>
-                    <li class="@(ViewContext.RouteData.Values["Controller"].ToString() + ViewContext.RouteData.Values["userType"] == "SpecialistRealtor" ? "active" : "")">
+                    <li class="@(ViewContext.RouteData.Values["Controller"].ToString() + ViewContext.RouteData.Values["userType"] == "Specialistrealtor" ? "active" : "")">
                         <a asp-controller="Specialist" asp-action="Grid" asp-route-userType="@UserType.Realtor">Риэлторы</a>
                     </li>
-                    <li class="@(ViewContext.RouteData.Values["Controller"].ToString() + ViewContext.RouteData.Values["userType"] == "SpecialistDeveloper" ? "active" : "")">
+                    <li class="@(ViewContext.RouteData.Values["Controller"].ToString() + ViewContext.RouteData.Values["userType"] == "Specialistdeveloper" ? "active" : "")">
                         <a asp-controller="Specialist" asp-action="Grid" asp-route-userType="@UserType.Developer">Застройщики</a>
                     </li>
                 </ul>
