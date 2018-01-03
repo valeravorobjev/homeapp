@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using HomeApp.Core.Repositories;
 using HomeApp.Core.Repositories.Contracts;
 using HomeApp.Core.Repositories.Fake;
 using HomeApp.Site.Utils;
@@ -33,9 +34,13 @@ namespace HomeApp.Site
                 options.SerializerSettings.Converters = new List<JsonConverter> { new BsonIdConverter() };
             });
 
+            services.AddScoped<ISessionRepository, SessionRepository>(options => new SessionRepository(con));
+            services.AddScoped<IAuthRepository, AuthRepository>(options=>new AuthRepository(options.GetService<ISessionRepository>(), con));
+
             services.AddSingleton<IAdRepository, AdFakeRepository>();
             services.AddSingleton<IUserRepository, UserFakeRepository>(options=> new UserFakeRepository(con));
             services.AddSingleton<IRealEstateRepository, RealEstateFakeRepository>(options=> new RealEstateFakeRepository(con));
+
             services.AddResponseCompression();
             services.AddResponseCaching();
         }

@@ -1,0 +1,48 @@
+﻿@using HomeApp.Core.Db.Entities
+@model HomeApp.Core.Db.Entities.Session
+<section class="section">
+    <div class="container">
+        <header class="section__title">
+            <h2>@ViewBag.Title</h2>
+            @if (ViewData.ModelState.IsValid)
+            {
+                <small>Благодарим вас за регистрацию на сайте homeapp.pro</small>
+            }
+            else
+            {
+                <small>Нам не удалось активировать вашу учетную запись</small>
+            }
+        </header>
+        <div class="submit-property">
+            <div class="tab-content submit-property__content">
+                <div class="tab-pane fade active in" id="submit-property-5">
+                    <div class="card">
+                        @if (ViewData.ModelState.IsValid)
+                        {
+                            <div class="submit-property__success">
+                                <i class="zmdi zmdi-check"></i>
+                                <h2>Ваш акаунт активирован!</h2>
+                                <p>
+                                    Мы активировали ваш аккаунт. Спасибо за регистрацию на сайте homeapp.pro.
+                                    Теперь вы можете перейти на сайт, нажав на синюю кнопку ниже и продолжить работу.
+                                </p>
+                                <a href="http://localhost:63903?sessionId=@Model.Id&token=@Model.Token" class="btn btn-primary">Перейти на сайт</a>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="submit-property__error">
+                                <i class="zmdi zmdi-alert-triangle"></i>
+                                <h2>Акаунт не активирован!</h2>
+                                <p>
+                                    Мы не смоги активировать ваш акаунт. Пожалуйста попробуйте перейти по ссылке которую
+                                    вы получили в письме еще раз или обратитесь в службу поддержки.
+                                </p>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
