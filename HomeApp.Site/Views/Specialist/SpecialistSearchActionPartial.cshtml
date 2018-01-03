@@ -1,0 +1,25 @@
+﻿<div class="action-header">
+    <div class="container">
+        <div class="action-header__item action-header__item--search">
+            <form>
+                <input class="hidden-xs" type="text" placeholder="Имя агента, компании"><!-- For desktop -->
+                <input class="visible-xs" type="text" placeholder="Поиск..."><!-- For mobile -->
+            </form>
+        </div>
+        <div class="action-header__item action-header__views hidden-xs">
+            <a asp-controller="Specialist" asp-action="Grid" asp-route-userType="@ViewContext.RouteData.Values["userType"]" class="zmdi zmdi-apps @(ViewContext.RouteData.Values["action"].ToString() == "Grid" ? "active" : "" )"></a>
+            <a asp-controller="Specialist" asp-action="List" asp-route-userType="@ViewContext.RouteData.Values["userType"]" class="zmdi zmdi-view-list @(ViewContext.RouteData.Values["action"].ToString() == "List" ? "active" : "" )"></a>
+            <a href="listings-map.html" class="zmdi zmdi-map"></a>
+        </div>
+        <div class="action-header__item action-header__item--sort hidden-xs" style="padding-left: 90px">
+            <span class="action-header__small">Сортировать :</span>
+            <select class="select2" id="select-search-action">
+                <option value="FeaturedListings">По популярности</option>
+                <option value="Rating">По рейтингу</option>
+                <option value="Alphabet">По алфавиту</option>
+                <option value="FromYear">По опыту работы</option>
+                <option value="DateReg">По дате регистрации</option>
+            </select>
+        </div>
+    </div>
+</div>

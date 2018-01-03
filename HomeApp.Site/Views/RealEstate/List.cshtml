@@ -1,0 +1,85 @@
+﻿
+@using HomeApp.Core.Db.Entities
+@using HomeApp.Core.Db.Entities.Models.Enums
+@using HomeApp.Core.Extentions
+@model HomeApp.Core.ViewModels.RealEstateList
+
+@{
+    string op = Context.Request.Path.ToString().Split('/')[3];
+    OperationType operationType = (OperationType)Enum.Parse(typeof(OperationType), op);
+}
+
+@Html.Partial("SearchActionPartial")
+<form id="SortForm" asp-controller="RealEstate" asp-action="List" method="get">
+    <input type="hidden" name="sort" value="@ViewBag.Sort" />
+</form>
+<section class="section">
+    <div class="container">
+        <header class="section__title">
+            <h2><span style="font-weight: bold; color:lightcoral">@operationType.ToLocalString(Language.Ru).Single</span></h2>
+            <small>В нашей базе <b style="color:lightcoral">@Model.Count</b> актуальных предложений по вашему запросу</small>
+        </header>
+        <div class="row">
+            <div class="col-sm-8 listings-list">
+                @foreach (RealEstate realEstate in Model.RealEstates)
+                {
+                    @Html.Partial("RealEstateItemL", realEstate)
+                }
+
+                @if (Model.Count > 16)
+                {
+                    <nav class="text-center">
+                        @await Component.InvokeAsync("Pagination",
+                   new
+                   {
+                       dataCount = Model.Count,
+                       pageSize = 16,
+                       numbersCount = 9,
+                       currentPage = ViewBag.CurrentPage,
+                       controller = "RealEstate",
+                       action = "List",
+                       sort = ViewBag.Sort,
+                       filter = ViewBag.RealEstateBagFilter
+                   })
+                    </nav>
+                }
+            </div>
+            <aside class="col-sm-4 hidden-xs">
+                @*@Html.Partial("NearRestPartial")*@
+                @Html.Partial("TopAgentsPartial")
+                @Html.Partial("NewsSubscribePartial")
+            </aside>
+        </div>
+    </div>
+</section>
+@Html.Partial("FilterActionPartial")
+
+@section appscripts {
+    <script src="~/js/filter.js"></script>
+    <script>
+        $(document)
+            .ready(() => {
+                $("#AddressD")
+                    .keypress(function (e) {
+                        if (e.which === 13) {
+                            $("#AddressM").remove();
+                            $('#AddressForm').submit();
+                            return false;
+                        }
+
+                        return true;
+                    });
+                $("#AddressM")
+                    .keypress(function (e) {
+                        if (e.which === 13) {
+                            $("AddressD").remove();
+                            $('#AddressForm').submit();
+                            return false;
+                        }
+
+                        return true;
+                    });
+            });
+    </script>
+}
+

@@ -1,0 +1,39 @@
+﻿@using HomeApp.Core.Db.Entities.Models
+@model HomeApp.Core.Db.Entities.User
+
+<div class="listings-grid__item">
+    <a asp-controller="Specialist" asp-action="Overview" asp-route-realEstateId="@Model.Id" class="media">
+        <div class="listings-grid__main pull-left">
+            <img src="@Url.Content(Model.PhotoMinPath)" alt="">
+        </div>
+        <div class="media-body">
+            <div class="listings-grid__body">
+                <h5>
+                    @if (Model is PersonProfessional)
+                    {
+
+                        @(((Rialtor)Model).LastName?.Ru) @(((Rialtor)Model).FirstName?.Ru) @(((Rialtor)Model).MidName?.Ru)
+                    }
+                    else if (Model is Professional)
+                    {
+                        @(((Professional)Model).Name?.Ru)
+                    }
+                </h5>
+                <small>
+                    @Model.Membership.Email
+                    @Model.Phones.FirstOrDefault()
+                </small>
+            </div>
+            <ul class="listings-grid__attrs">
+                <li class="rmd-rate" data-rate-value="@Model.Seo.Rating" data-rate-readonly="true"></li>
+            </ul>
+        </div>
+    </a>
+    <div class="actions listings-grid__favorite">
+        <div class="actions__toggle">
+            <input type="checkbox">
+            <i class="zmdi zmdi-favorite-outline"></i>
+            <i class="zmdi zmdi-favorite"></i>
+        </div>
+    </div>
+</div>

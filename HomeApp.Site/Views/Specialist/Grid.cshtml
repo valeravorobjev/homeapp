@@ -1,0 +1,96 @@
+﻿@using HomeApp.Core.Db.Entities
+@using HomeApp.Core.Db.Entities.Models.Enums
+@using HomeApp.Core.Extentions
+@model HomeApp.Core.ViewModels.UserList
+
+@{
+    string ut = Context.Request.Path.ToString().Split('/')[3];
+    UserType userType = (UserType)Enum.Parse(typeof(UserType), ut);
+}
+
+@Html.Partial("SpecialistSearchActionPartial")
+<form id="SortForm" asp-controller="Specialist" asp-action="Grid" method="get">
+    <input type="hidden" name="sort" value="@ViewBag.Sort" />
+</form>
+<section class="section">
+    <div class="container">
+        <header class="section__title">
+            <h2><span style="font-weight: bold; color:lightcoral">@userType.ToLocalString(Language.Ru).Plural</span></h2>
+            <small>В нашей базе <b style="color:lightcoral">@Model.Count</b> специалистов по вашему запросу</small>
+        </header>
+        <div class="row listings-grid">
+
+            @foreach (User user in Model.Users)
+            {
+                <div class="col-sm-6 col-md-3">
+                    @Html.Partial("UserItemG", user)
+                </div>
+            }
+        </div>
+        <div class="load-more">
+            <a href="#LoadMore" id="LoadMore"><i class="zmdi zmdi-refresh-alt"></i> Показать еще</a>
+            <input type="hidden" name="userType" value="@ut" />
+            <input type="hidden" name="url" value="@($"{Context.Request.Scheme}://{Context.Request.Host}/Api/V1/Specialist{Context.Request.QueryString}")" />
+            <unput type="hidden" name="host" value=""></unput>
+        </div>
+    </div>
+</section>
+@*@Html.Partial("UserFilterAction")*@
+
+<script id="UserItemTemplateG" type="text/x-jsrender">
+    {{for}}
+    <div class="col-sm-6 col-md-3">
+        <div class="listings-grid__item">
+            <a href="@($"{Context.Request.Scheme}://{Context.Request.Host}")/Specialist/Overview/{{:id}}">
+                <div class="listings-grid__main">
+                    <img src="{{:photoMinPath}}" alt="">
+                </div>
+                <div class="listings-grid__body">
+                    <h5>
+                        {{if firstName != null && firstName != 'undefined'}}
+                        {{:firstName.ru}}
+                        {{/if}}
+                        {{if lastName != null && lastName != 'undefined'}}
+                        {{:lastName.ru}}
+                        {{/if}}
+                        {{if midName != null && midName != 'undefined'}}
+                        {{:midName.ru}}
+                        {{/if}}
+                        {{if name != null && name != 'undefined'}}
+                        {{:name.ru}}
+                        {{/if}}
+                    </h5>
+                    <small>{{:membership.email}}</small>
+                    <small>{{:phones[0]}}</small>
+                </div>
+                <ul class="listings-grid__attrs">
+                    <li class="rmd-rate" data-rate-value="{{:seo.rating}}" data-rate-readonly="true"></li>
+                </ul>
+            </a>
+            <div class="actions listings-grid__favorite">
+                <div class="actions__toggle">
+                    <input type="checkbox">
+                    <i class="zmdi zmdi-favorite-outline"></i>
+                    <i class="zmdi zmdi-favorite"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{/for}}
+</script>
+
+@section appscripts {
+    <script src="~/lib/jsrender/jsrender.min.js"></script>
+    <script src="~/js/converters.js"></script>
+    <script src="~/js/helpers.js"></script>
+    <script src="~/js/filter.js"></script>
+    <script src="~/js/jsrender.js"></script>
+    <script src="~/js/pagination_user.js"></script>
+    
+<script>
+        $(document)
+            .ready(function() {
+                pagination("#UserItemTemplateG", ".row.listings-grid");
+            });
+</script>
+}

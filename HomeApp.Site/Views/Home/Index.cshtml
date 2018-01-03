@@ -1,0 +1,98 @@
+﻿@using HomeApp.Core.Db.Entities
+@using HomeApp.Core.ViewModels
+@using HomeApp.Core.ViewModels.Enums
+@model HomeApp.Core.ViewModels.MainPage
+
+@section styles {
+    <link rel="stylesheet" href="~/vendors/roost/vendors/bower_components/slick-carousel/slick/slick.css">
+}
+<section class="section">
+    <div class="container">
+        <header class="section__title">
+            <h2>@Model.AllActiveRealEstateCount.ToString("##,###") предложений на сайте homeapp.pro</h2>
+            <small>Квартиры, Дома, Комерческая недвижимость, Офисы и д.р.</small>
+        </header>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card__header card__header--minimal">
+                        <h2>Продажа недвижимости</h2>
+                        <small>Самые популярные предложения по продаже недвижимости</small>
+                    </div>
+                    <div class="grid-widget grid-widget--listings">
+                        @foreach (RealEstate realEstate in Model.RealEstatesTop4Sale?.RealEstates ?? new List<RealEstate>())
+                        {
+                            <div class="col-xs-6">
+                                @Html.Partial("RealEstateWidgetItemG", new GridWidgetItemModel(realEstate, GridWidgetItemWidth.PhotoMinPath400X266))
+                            </div>
+                        }
+                    </div>
+                    <a asp-controller="RealEstate" asp-action="Grid" asp-route-operationType="Sale" class="view-more">
+                        Смотреть все предложения по продаже недвижимости <i class="zmdi zmdi-long-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card__header card__header--minimal">
+                        <h2>Аренда недвижимости</h2>
+                        <small>Самые популярные предложения по аренде недвижимости</small>
+                    </div>
+                    <div class="grid-widget grid-widget--listings">
+                        @foreach (RealEstate realEstate in Model.RealEstatesTop4Rent?.RealEstates ?? new List<RealEstate>())
+                        {
+                            <div class="col-xs-6">
+                                @Html.Partial("RealEstateWidgetItemG", new GridWidgetItemModel(realEstate, GridWidgetItemWidth.PhotoMinPath400X266))
+                            </div>
+                        }
+                    </div>
+                    <a asp-controller="RealEstate" asp-action="Grid" asp-route-operationType="Rent" class="view-more">
+                        Смотреть все предложения по аренде недвижимости <i class="zmdi zmdi-long-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card__header card__header--minimal">
+                        <h2>Недвижимость в регионах</h2>
+                        <small>Лучшие предложения купли-продажи недвижимости в регионах</small>
+                    </div>
+                    <div class="grid-widget grid-widget--listings">
+                        @foreach (RealEstate realEstate in Model.RealEstatesTopLocation?.RealEstates ?? new List<RealEstate>())
+                        {
+                            <div class="col-xs-4">
+                                @Html.Partial("RealEstateWidgetItemG", new GridWidgetItemModel(realEstate, GridWidgetItemWidth.PhotoMinPath500X500))
+                            </div>
+                        }
+                    </div>
+                    <a class="view-more" asp-controller="RealEstate" asp-action="Grid" asp-route-operationType="Rent">
+                        Смотреть все регионы <i class="zmdi zmdi-long-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card__header card__header--minimal">
+                        <h2>Лучшие специалисты</h2>
+                        <small>Топ 9 специалистов на homeapp.pro</small>
+                    </div>
+                    <div class="grid-widget grid-widget--listings">
+                        @foreach (UserWithRealEstateCount agentTop in Model.AgentTops?.UsersWithRealEstateCount ?? new List<UserWithRealEstateCount>())
+                        {
+                            <div class="col-xs-4">
+                                @Html.Partial("UserWidgetItemG", agentTop)
+                            </div>
+                        }
+                    </div>
+                    <a class="view-more" asp-controller="Specialist" asp-action="Grid" asp-route-userType="Realtor">
+                        Все агенты <i class="zmdi zmdi-long-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section scripts {
+    <script src="~/vendors/roost/vendors/bower_components/slick-carousel/slick/slick.min.js"></script>
+}

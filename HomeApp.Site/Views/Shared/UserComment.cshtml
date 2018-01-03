@@ -1,0 +1,9 @@
+﻿@using HomeApp.Core.Db.Entities.Models
+@model HomeApp.Core.ViewModels.UserComment
+
+<div class="agent-reviews__item">
+    <div class="text-strong">От @(((Person)Model.User).FirstName?.Ru) @(((Person)Model.User).LastName?.Ru) @(((Person)Model.User).MidName?.Ru) за @Model.Comment.Date</div>
+    <div class="rmd-rate" data-rate-value="@Model.Comment?.Eval" data-rate-readonly="true"></div>
+
+    <p>@Model.Comment?.Text</p>
+</div>

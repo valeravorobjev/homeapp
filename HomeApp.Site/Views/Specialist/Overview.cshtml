@@ -1,0 +1,200 @@
+﻿@using HomeApp.Core.Db.Entities.Models
+@using HomeApp.Core.Db.Entities.Models.Enums
+@using HomeApp.Core.Extentions
+@using HomeApp.Core.ViewModels
+@model HomeApp.Core.ViewModels.UserOverview
+
+<section class="section">
+    <div class="container">
+        <header class="section__title text-left">
+            @Html.Partial("HeaderPartial", Model.User)
+        </header>
+
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card profile">
+                    @Html.Partial("ProfilePartial", new UserWithAd {User = Model.User , Ad = Model.Ad})
+                </div>
+
+                <div class="card">
+                    <div class="tab-nav tab-nav--justified" data-rmd-breakpoint="500">
+                        <div class="tab-nav__inner">
+                            <ul>
+                                <li class="active"><a asp-controller="Specialist" asp-action="Overview" asp-route-userId="@Model.User.Id">Обзор</a></li>
+                                <li><a asp-controller="Specialist" asp-action="Properties" asp-route-userId="@Model.User.Id">Позиции</a></li>
+                                <li><a asp-controller="Specialist" asp-action="Reviews" asp-route-userId="@Model.User.Id">Отзывы</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="card__body">
+                        <div class="card__sub row rmd-stats">
+                            <div class="col-xs-4">
+                                <div class="rmd-stats__item mdc-bg-teal-400">
+                                    <h2>@Model.SoldRentEstateCount</h2>
+                                    <small>Продано</small>
+                                </div>
+                            </div>
+                            <div class="col-xs-4">
+                                <div class="rmd-stats__item mdc-bg-purple-400">
+                                    <h2>@(Model.SoldRentEstateCount + Model.ActiveRentEstateCount)</h2>
+                                    <small>Всего объявлений</small>
+                                </div>
+                            </div>
+                            <div class="col-xs-4">
+                                <div class="rmd-stats__item mdc-bg-red-400">
+                                    <h2>3413</h2>
+                                    <small>Понравился раз</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card__sub">
+                            @if (Model.User is PersonProfessional)
+                            {
+
+                                <h4>@(((PersonProfessional)Model.User).LastName?.Ru) @(((PersonProfessional)Model.User).FirstName?.Ru) @(((PersonProfessional)Model.User).MidName?.Ru)</h4>
+                            }
+                            else if (Model.User is Professional)
+                            {
+                                <h4>@(((Professional)Model.User).Name?.Ru)</h4>
+                            }
+
+                            @if (Model.User is PersonProfessional)
+                            {
+                                <p>@(((PersonProfessional)Model.User).Description?.Ru)</p>
+                            }
+
+                            @if (Model.User is Professional)
+                            {
+                                <p>@(((Professional)Model.User).Description?.Ru)</p>
+                            }
+
+
+                        </div>
+
+                        <div class="card__sub">
+                            @if ((Model.User as PersonProfessional)?.Specialization != null)
+                            {
+                                <h4>Специализация</h4>
+
+                                if (((PersonProfessional)Model.User).Specialization.EstateSales?.Count > 0)
+                                {
+                                    <p>
+                                        <b>Продажа недвижимости:</b> @string.Join(", ", ((PersonProfessional)Model.User).Specialization.EstateSales.Where(r=>r != UnitCategory.None).Select(r => r.ToLocalString(Language.Ru).Single))
+                                    </p>
+                                }
+
+                                if (((PersonProfessional)Model.User).Specialization.RentalProperties?.Count > 0)
+                                {
+                                    <p>
+                                        <b>Аренда недвижимости:</b> @string.Join(", ", ((PersonProfessional)Model.User).Specialization.RentalProperties.Where(r=>r != UnitCategory.None).Select(r => r.ToLocalString(Language.Ru).Single))
+                                    </p>
+                                }
+
+                                if (((PersonProfessional)Model.User).Specialization.AddServices?.Count > 0)
+                                {
+                                    <p>
+                                        <b>Услуги:</b> @string.Join(", ", ((PersonProfessional)Model.User).Specialization.AddServices.Where(s=>s != AddService.None).Select(s => s.ToLocalString(Language.Ru).Single))
+                                    </p>
+                                }
+                            }
+
+                            @if ((Model.User as Professional)?.Specialization != null)
+                            {
+                                <h4>Специализация</h4>
+
+                                if (((Professional)Model.User).Specialization.EstateSales?.Count > 0)
+                                {
+                                    <p>
+                                        <b>Продажа недвижимости:</b> @(string.Join(", ", ((Professional)Model.User).Specialization.EstateSales.Where(r => r != UnitCategory.None).Select(r => r.ToLocalString(Language.Ru).Single)))
+                                    </p>
+                                }
+
+                                if (((Professional)Model.User).Specialization.RentalProperties?.Count > 0)
+                                {
+                                    <p>
+                                        <b>Аренда недвижимости:</b> @string.Join(", ", ((Professional)Model.User).Specialization.RentalProperties.Where(r=>r != UnitCategory.None).Select(r => r.ToLocalString(Language.Ru).Single))
+                                    </p>
+                                }
+
+                                if (((Professional)Model.User).Specialization.AddServices?.Count > 0)
+                                {
+                                    <p>
+                                        <b>Услуги:</b> @string.Join(", ", ((Professional)Model.User).Specialization.AddServices.Where(s=>s != AddService.None).Select(s => s.ToLocalString(Language.Ru).Single))
+                                    </p>
+                                }
+                            }
+                        </div>
+
+                        <div class="card__sub">
+                            @if ((Model.User as PersonProfessional)?.Education != null)
+                            {
+                                <h4>Образование</h4>
+                                <p>
+                                    @(((PersonProfessional)Model.User).Education.Ru)
+                                </p>
+                            }
+                        </div>
+
+                        <div class="card__sub">
+                            <h4>Контактная информация</h4>
+
+                            <ul class="rmd-contact-list">
+                                @if (Model.User.Phones?.Count > 0)
+                                {
+                                    <li><i class="zmdi zmdi-phone"></i>@Model.User.Phones.FirstOrDefault()</li>
+                                }
+                                <li><i class="zmdi zmdi-email"></i>@Model.User.Membership.Email</li>
+                                @if (Model.User.SocialMedia?.Facebook != null)
+                                {
+                                    <li><i class="zmdi zmdi-facebook"></i>@Model.User.SocialMedia?.Facebook</li>
+                                }
+
+                                @if (Model.User.SocialMedia?.Twitter != null)
+                                {
+                                    <li><i class="zmdi zmdi-twitter"></i>@Model.User.SocialMedia?.Twitter</li>
+                                }
+                                @if (Model.User.SocialMedia?.GooglePlus != null)
+                                {
+                                    <li><i class="zmdi zmdi-google-plus"></i>@Model.User.SocialMedia?.GooglePlus</li>
+                                }
+                                @if (Model.User.SocialMedia?.Ok != null)
+                                {
+                                    <li><i class="zmdi zmdi-odnoklassniki"></i>@Model.User.SocialMedia?.Ok</li>
+                                }
+                                @if (Model.User.SocialMedia?.Vk != null)
+                                {
+                                    <li><i class="zmdi zmdi-vk"></i>@Model.User.SocialMedia?.Vk</li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            @Html.Partial("QuestionPartial")
+        </div>
+    </div>
+</section>
+
+<!-- Contact Button for mobile -->
+<button class="btn btn--action btn--circle visible-sm visible-xs" data-rmd-action="block-open" data-rmd-target="#agent-question">
+    <i class="zmdi zmdi-comment-alt-text"></i>
+</button>
+
+@*@section appscripts {
+    <script src="~/lib/jsrender/jsrender.min.js"></script>
+    <script src="~/js/converters.js"></script>
+    <script src="~/js/helpers.js"></script>
+    <script src="~/js/filter.js"></script>
+    <script src="~/js/jsrender.js"></script>
+    <script src="~/js/pagination_realestate.js"></script>
+
+    <script>
+        $(document)
+            .ready(function () {
+                pagination("#RealEstateItemTemplateL", "#reContainer");
+            });
+    </script>
+}*@

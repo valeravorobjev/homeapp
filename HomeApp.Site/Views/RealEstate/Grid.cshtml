@@ -1,0 +1,119 @@
+﻿
+@using HomeApp.Core.Db.Entities
+@using HomeApp.Core.Db.Entities.Models.Enums
+@using HomeApp.Core.Extentions
+@using HomeApp.Core.ViewModels
+@model HomeApp.Core.ViewModels.RealEstateList
+
+@{
+    string op = Context.Request.Path.ToString().Split('/')[3];
+    RealEstateBagFilter filter = ViewBag.RealEstateBagFilter as RealEstateBagFilter;
+    OperationType operationType = (OperationType)Enum.Parse(typeof(OperationType), op);
+}
+
+@Html.Partial("SearchActionPartial")
+<form id="SortForm" asp-controller="RealEstate" asp-action="Grid" method="get">
+    <input type="hidden" name="sort" value="@ViewBag.Sort" />
+</form>
+<section class="section">
+    <div class="container">
+        <header class="section__title">
+            <h2><span style="font-weight: bold; color:lightcoral">@operationType.ToLocalString(Language.Ru).Single</span></h2>
+            <small>В нашей базе <b style="color:lightcoral">@Model.Count</b> актуальных предложений по вашему запросу</small>
+        </header>
+        <div class="row listings-grid">
+            @foreach (RealEstate realEstate in Model.RealEstates)
+            {
+                <div class="col-sm-6 col-md-3">
+                    @Html.Partial("RealEstateItemG", realEstate)
+                </div>
+            }
+        </div>
+        @if (Model.Count > 16)
+        {
+            <div class="load-more">
+                <a href="#LoadMore" id="LoadMore"><i class="zmdi zmdi-refresh-alt"></i> Показать еще</a>
+                <input type="hidden" name="operationType" value="@op" />
+                <input type="hidden" name="url" value="@($"{Context.Request.Scheme}://{Context.Request.Host}/Api/V1/RealEstate{Context.Request.QueryString}")" />
+                <unput type="hidden" name="host" value=""></unput>
+                <input type="hidden" name="address" value="@filter?.Address" />
+                <input type="hidden" name="unitType" value="@filter?.UnitType" />
+                <input type="hidden" name="bathCount" value="@filter?.BathCount" />
+                <input type="hidden" name="bedCount" value="@filter?.BedCount" />
+                <input type="hidden" name="costLow" value="@filter?.CostLow" />
+                <input type="hidden" name="costHight" value="@filter?.CostHight" />
+                <input type="hidden" name="areaHight" value="@filter?.AreaHight" />
+                <input type="hidden" name="areaLow" value="@filter?.AreaLow" />
+            </div>
+        }
+    </div>
+</section>
+@Html.Partial("FilterActionPartial")
+
+<script id="RealEstateItemTemplateG" type="text/x-jsrender">
+    {{for}}
+    <div class="col-sm-6 col-md-3">
+        <div class="listings-grid__item">
+            <a href="@($"{Context.Request.Scheme}://{Context.Request.Host}")/RealEstate/Detail/{{:id}}">
+                <div class="listings-grid__main">
+                    <img src="{{:unit.photoMinPath400X266}}" alt="">
+                    <div class="listings-grid__price">{{money:unit.cost}}</div>
+                </div>
+                <div class="listings-grid__body">
+                    <small>
+                        {{if unit.unitType != null || unit.unitType != 'undefined'}}
+                        {{unitTypeLocal:unit.unitType}}
+                        {{/if}}
+                        {{if unit.oldType != null || unit.oldType != 'undefined'}}
+                        {{oldTypeLocal:unit.oldType}}
+                        {{/if}}
+                        {{if unit.houseType != null || unit.houseType != 'undefined'}}
+                        {{houseTypeLocal:unit.houseType}}
+                        {{/if}}
+                    </small>
+                    <h5>
+                        {{:unit.address.country ? unit.address.country.ru + ',' : ''}}
+                        {{:unit.address.sity ? unit.address.sity.ru + ',' : ''}}
+                        {{:unit.address.street ? unit.address.street.ru + ',' : ''  }}
+                        {{:unit.address.streetNumber ? unit.address.streetNumber.ru : ''}}
+                    </h5>
+                </div>
+                <ul class="listings-grid__attrs">
+                    {{if unit.roomCount}}
+                    <li><i class="listings-grid__icon listings-grid__icon--bed"></i>{{:unit.roomCount}}</li>
+                    {{/if}}
+                    {{if unit.bathroomCount}}
+                    <li><i class="listings-grid__icon listings-grid__icon--bath"></i>{{:unit.bathroomCount}}</li>
+                    {{/if}}
+                    {{if unit.freightLiftCount}}
+                    <li><i class="listings-grid__icon listings-grid__icon--parking"></i>{{:unit.freightLiftCount}}</li>
+                    {{/if}}
+                </ul>
+            </a>
+            <div class="actions listings-grid__favorite">
+                <div class="actions__toggle">
+                    <input type="checkbox">
+                    <i class="zmdi zmdi-favorite-outline"></i>
+                    <i class="zmdi zmdi-favorite"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{/for}}
+</script>
+
+@section appscripts {
+    <script src="~/lib/jsrender/jsrender.min.js"></script>
+    <script src="~/js/converters.js"></script>
+    <script src="~/js/helpers.js"></script>
+    <script src="~/js/filter.js"></script>
+    <script src="~/js/jsrender.js"></script>
+    <script src="~/js/pagination_realestate.js"></script>
+
+    <script>
+        $(document)
+            .ready(function () {
+                pagination("#RealEstateItemTemplateG", ".row.listings-grid");
+            });
+    </script>
+}

@@ -1,0 +1,26 @@
+﻿<div class="action-header">
+    <div class="container">
+        <div class="action-header__item action-header__item--search">
+            <form id="AddressForm" asp-controller="RealEstate" asp-action="@ViewContext.RouteData.Values["action"]" method="get">
+                <input id="AddressD" name="address" class="hidden-xs" type="text" placeholder="Поиск, укажите город, улицу ..."><!-- For desktop -->
+                <input id="AddressM" name="address" class="visible-xs" type="text" placeholder="Поиск..."><!-- For mobile -->
+            </form>
+        </div>
+        <div class="action-header__item action-header__views hidden-xs">
+            <a asp-controller="RealEstate" asp-action="Grid" asp-route-operationType="@ViewContext.RouteData.Values["operationType"]" class="zmdi zmdi-apps @(ViewContext.RouteData.Values["action"].ToString() == "Grid" ? "active" : "" )"></a>
+            <a asp-controller="RealEstate" asp-action="List" asp-route-operationType="@ViewContext.RouteData.Values["operationType"]" class="zmdi zmdi-view-list @(ViewContext.RouteData.Values["action"].ToString() == "List" ? "active" : "" )"></a>
+            <a href="" class="zmdi zmdi-map"></a>
+        </div>
+        <div class="action-header__item action-header__item--sort hidden-xs" style="padding-left: 90px">
+            <span class="action-header__small">Сортировать :</span>
+            <select class="select2" id="select-search-action">
+                <option value="FeaturedListings">По популярности</option>
+                <option value="Rating">По рейтингу</option>
+                <option value="NewestToOldest">По дате добавления (по убыванию)</option>
+                <option value="OldestToNewest">По дате добавления (по возрастанию)</option>
+                <option value="PriceHightToLow">По убыванию цены</option>
+                <option value="PriceLowToHigh">По возрастанию цены</option>
+            </select>
+        </div>
+    </div>
+</div>

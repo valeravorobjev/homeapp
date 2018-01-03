@@ -1,0 +1,73 @@
+﻿@using System.Globalization
+@using HomeApp.Core.Db.Entities.Models
+@using HomeApp.Core.Db.Entities.Models.Enums
+@using HomeApp.Core.Extentions
+@model HomeApp.Core.Db.Entities.RealEstate
+
+@{
+    string soldCss = "";
+    if (Model.RealEstateStatus == RealEstateStatus.Sold)
+    {
+        soldCss = "listings-grid__item--sold";
+    }
+}
+
+<div class="listings-grid__item @soldCss">
+    <a asp-controller="RealEstate" asp-action="Detail" asp-route-realEstateId="@Model.Id" class="media">
+        <div class="listings-grid__main pull-left">
+            <img src="@Url.Content(Model.Unit.PhotoMinPath400X266)" alt="">
+            <div class="listings-grid__price">@Model.Unit.Cost.ToString("C", new CultureInfo("Ru-ru"))</div>
+        </div>
+        <div class="media-body">
+            <div class="listings-grid__body">
+                <small>
+                    @Model.Unit.UnitType.ToLocalString(Language.Ru).Single
+                    @if (Model.Unit is Flat)
+                    {
+                        <span>,</span>
+                        @(((Flat)Model.Unit).OldType.ToLocalString(Language.Ru).Single)
+                    }
+                    @if (Model.Unit is Room)
+                    {
+                        <span>,</span>
+                        @(((Room)Model.Unit).HouseType.ToLocalString(Language.Ru).Single)
+                    }
+                </small>
+                <h5>
+                    @Model.Unit.Address.Country?.Ru,
+                    @Model.Unit.Address.Sity?.Ru,
+                    @Model.Unit.Address.Street?.Ru
+                    @Model.Unit.Address.StreetNumber?.Ru
+                </h5>
+            </div>
+            <ul class="listings-grid__attrs">
+                @if (Model.Unit is Room)
+                {
+                    if (((Room) Model.Unit).RoomCount != null && ((Room) Model.Unit).RoomCount > 0)
+                    {
+                        <li><i class="listings-grid__icon listings-grid__icon--bed"></i> @(((Room) Model.Unit).RoomCount)</li>
+                    }
+                    if (((Room) Model.Unit).BathroomCount != null && ((Room) Model.Unit).BathroomCount > 0)
+                    {
+                        <li><i class="listings-grid__icon listings-grid__icon--bath"></i> @(((Room) Model.Unit).BathroomCount)</li>
+                    }
+
+                }
+                @if (Model.Unit is Flat)
+                {
+                    if (((Flat) Model.Unit).FreightLiftCount != null && ((Flat) Model.Unit).FreightLiftCount > 0)
+                    {
+                        <li><i class="listings-grid__icon listings-grid__icon--parking"></i> @(((Flat) Model.Unit).FreightLiftCount)</li>
+                    }
+                }
+            </ul>
+        </div>
+    </a>
+    <div class="actions listings-grid__favorite">
+        <div class="actions__toggle">
+            <input type="checkbox">
+            <i class="zmdi zmdi-favorite-outline"></i>
+            <i class="zmdi zmdi-favorite"></i>
+        </div>
+    </div>
+</div>

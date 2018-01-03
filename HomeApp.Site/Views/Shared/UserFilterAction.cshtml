@@ -1,0 +1,73 @@
+﻿<button class="btn btn--action btn--circle" data-rmd-action="block-open" data-rmd-target="#agent-search">
+    <i class="zmdi zmdi-search-for"></i>
+</button>
+<aside id="agent-search" class="rmd-sidebar">
+    <form class="card">
+        <div class="card__header">
+            <h2>Advanced Agent Search</h2>
+        </div>
+        <div class="card__body">
+            <div class="form-group">
+                <label>Looking for (Agents)</label>
+                <div class="btn-group btn-group-justified" data-toggle="buttons">
+                    <label class="btn active">
+                        <input type="radio" name="advanced-search-beds" id="lf-all" checked>All
+                    </label>
+                    <label class="btn">
+                        <input type="radio" name="advanced-search-beds" id="lf-buyers">Buyer's
+                    </label>
+                    <label class="btn">
+                        <input type="radio" name="advanced-search-beds" id="lf-sellers">Seller's
+                    </label>
+                </div>
+            </div>
+            <div class="form-group form-group--float">
+                <input type="text" class="form-control" value="New York, NY">
+                <label>Location</label>
+                <i class="form-group__bar"></i>
+            </div>
+            <div class="form-group">
+                <label>Agent Type</label>
+                <select class="select2">
+                    <option value="">Agents</option>
+                    <option value="">Brokers</option>
+                    <option value="">Mortgage Lenders</option>
+                    <option value="">Developers</option>
+                    <option value="">Builders</option>
+                </select>
+            </div>
+            <div class="form-group form-group--range">
+                <label>Works in Price Range</label>
+                <div class="input-slider-values clearfix">
+                    <div class="pull-left"><span>$</span><span id="property-price-upper"></span></div>
+                    <div class="pull-right"><span>$</span><span id="property-price-lower"></span></div>
+                </div>
+                <div id="property-price-range"></div>
+            </div>
+            <div class="form-group">
+                <label>Specialities</label>
+                <select class="select2" multiple>
+                    <option value="" selected>Sollicitudin</option>
+                    <option value="" selected>Pellentesque</option>
+                    <option value="" selected>Inceptos</option>
+                    <option value="" selected>Dapibus</option>
+                    <option value="" selected>Mollis</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Languages</label>
+                <select class="select2" multiple>
+                    <option value="" selected>English</option>
+                    <option value="">Spanish</option>
+                    <option value="">French</option>
+                    <option value="">Russian</option>
+                    <option value="">Chinese</option>
+                </select>
+            </div>
+        </div>
+        <div class="card__footer">
+            <button class="btn btn-sm btn-primary">Search</button>
+            <a href="" class="btn btn-sm btn-link" data-rmd-action="block-close" data-rmd-target="#agent-search">Cancel</a>
+        </div>
+    </form>
+</aside>

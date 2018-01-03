@@ -1,0 +1,73 @@
+﻿@using HomeApp.Core.ViewModels
+
+@{
+    RealEstateBagFilter filter = ViewBag.RealEstateBagFilter as RealEstateBagFilter;
+}
+
+<ul class="pagination">
+    <li>
+        <a asp-controller="@ViewBag.Controller" asp-action="@ViewBag.Action" asp-route-page="@ViewBag.PrevPage"
+           asp-route-sort="@ViewBag.Sort"
+           asp-route-address="@filter?.Address"
+           asp-route-unitType="@filter?.UnitType"
+           asp-route-costLow="@filter?.CostLow"
+           asp-route-costHight="@filter?.CostHight"
+           asp-route-areaLow="@filter?.AreaLow"
+           asp-route-areaHight="@filter?.AreaHight"
+           asp-route-bathCount="@filter?.BathCount"
+           asp-route-bedCount="@filter?.BedCount"
+           aria-label="Previous">
+            <i class="zmdi zmdi-chevron-left"></i>
+        </a>
+    </li>
+    @for (int i = ViewBag.Start; i < ViewBag.NumbersCount + ViewBag.Offset; i++)
+    {
+        int p = ViewBag.TotalPage - (ViewBag.TotalPage - i) + 1;
+
+        if (p == ViewBag.CurrentPage)
+        {
+            <li class="active">
+                <a asp-controller="@ViewBag.Controller" asp-action="@ViewBag.Action" asp-route-page="@p"
+                   asp-route-sort="@ViewBag.Sort"
+                   asp-route-address="@filter?.Address"
+                   asp-route-unitType="@filter?.UnitType"
+                   asp-route-costLow="@filter?.CostLow"
+                   asp-route-costHight="@filter?.CostHight"
+                   asp-route-areaLow="@filter?.AreaLow"
+                   asp-route-areaHight="@filter?.AreaHight"
+                   asp-route-bathCount="@filter?.BathCount"
+                   asp-route-bedCount="@filter?.BedCount">@p</a>
+            </li>
+        }
+        else
+        {
+            <li>
+                <a asp-controller="@ViewBag.Controller" asp-action="@ViewBag.Action" asp-route-page="@p"
+                   asp-route-sort="@ViewBag.Sort"
+                   asp-route-address="@filter?.Address"
+                   asp-route-unitType="@filter?.UnitType"
+                   asp-route-costLow="@filter?.CostLow"
+                   asp-route-costHight="@filter?.CostHight"
+                   asp-route-areaLow="@filter?.AreaLow"
+                   asp-route-areaHight="@filter?.AreaHight"
+                   asp-route-bathCount="@filter?.BathCount"
+                   asp-route-bedCount="@filter?.BedCount">@p</a>
+            </li>
+        }
+    }
+    <li>
+        <a asp-controller="@ViewBag.Controller" asp-action="@ViewBag.Action" asp-route-page="@ViewBag.NextPage"
+           asp-route-sort="@ViewBag.Sort"
+           asp-route-address="@filter?.Address"
+           asp-route-unitType="@filter?.UnitType"
+           asp-route-costLow="@filter?.CostLow"
+           asp-route-costHight="@filter?.CostHight"
+           asp-route-areaLow="@filter?.AreaLow"
+           asp-route-areaHight="@filter?.AreaHight"
+           asp-route-bathCount="@filter?.BathCount"
+           asp-route-bedCount="@filter?.BedCount"
+           aria-label="Next">
+            <i class="zmdi zmdi-chevron-right"></i>
+        </a>
+    </li>
+</ul>

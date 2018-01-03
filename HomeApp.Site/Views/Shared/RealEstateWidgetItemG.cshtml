@@ -1,0 +1,23 @@
+﻿@using System.Globalization
+@using HomeApp.Core.ViewModels.Enums
+@model HomeApp.Core.ViewModels.GridWidgetItemModel
+
+<a class="grid-widget__item" asp-controller="RealEstate" asp-action="Detail" asp-route-realEstateId="@Model.RealEstate.Id">
+    @if (Model.GridWidgetItemWidth == GridWidgetItemWidth.PhotoMinPath400X266)
+    {
+        <img src="@Url.Content(Model.RealEstate.Unit.PhotoMinPath400X266)" alt="">
+    }
+    else if (Model.GridWidgetItemWidth == GridWidgetItemWidth.PhotoMinPath500X500)
+    {
+        <img src="@Url.Content(Model.RealEstate.Unit.PhotoMinPath500X500)" alt="">
+    }
+    <div class="grid-widget__info">
+        <h3>@Model.RealEstate.Unit.Cost.ToString("C", new CultureInfo("Ru-ru"))</h3>
+        <small>
+            @Model.RealEstate.Unit.Address.Country?.Ru,
+            @Model.RealEstate.Unit.Address.Sity?.Ru,
+            @Model.RealEstate.Unit.Address.Street?.Ru
+            @Model.RealEstate.Unit.Address.StreetNumber?.Ru
+        </small>
+    </div>
+</a>

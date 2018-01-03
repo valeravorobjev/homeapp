@@ -1,0 +1,30 @@
+﻿@using HomeApp.Core.Db.Entities.Models
+@model HomeApp.Core.Db.Entities.User
+
+<div class="card hidden-xs hidden-sm hidden-print">
+    <div class="card__header">
+        <h2>Агент</h2>
+        <small>Информация об агенте</small>
+    </div>
+    <div class="list-group">
+        <a class="list-group-item media" asp-controller="Specialist" asp-action="Overview" asp-route-userId="@Model.Id">
+            <div class="pull-left">
+                <img src="@Url.Content(Model.PhotoMinPath)" alt="" class="list-group__img img-circle" width="65" height="65">
+            </div>
+            <div class="media-body list-group__text">
+                @if (Model is PersonProfessional)
+                {
+                    <strong>@(((Rialtor)Model).LastName?.Ru) @(((Rialtor)Model).FirstName?.Ru) @(((Rialtor)Model).MidName?.Ru)</strong>
+                }
+                else if (Model is Professional)
+                {
+                    <strong>@(((Professional)Model).Name?.Ru)</strong>
+                }
+
+                <small class="list-group__text">@Model.Phones.FirstOrDefault()</small>
+                <div class="rmd-rate" data-rate-value="5" data-rate-readonly="true"></div>
+            </div>
+        </a>
+        <div class="p-10"></div>
+    </div>
+</div>

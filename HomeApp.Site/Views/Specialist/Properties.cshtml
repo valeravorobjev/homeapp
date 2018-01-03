@@ -1,0 +1,127 @@
+﻿@using HomeApp.Core.Db.Entities
+@using HomeApp.Core.ViewModels
+@model HomeApp.Core.ViewModels.UserProperties
+
+<section class="section">
+    <div class="container">
+        <header class="section__title text-left">
+            @Html.Partial("HeaderPartial", Model.User)
+        </header>
+
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card profile">
+                    @Html.Partial("ProfilePartial", new UserWithAd { User = Model.User, Ad = Model.Ad })
+                </div>
+
+                <div class="card">
+                    <div class="tab-nav tab-nav--justified" data-rmd-breakpoint="500">
+                        <div class="tab-nav__inner">
+                            <ul>
+                                <li><a asp-controller="Specialist" asp-action="Overview" asp-route-userId="@Model.User.Id">Обзор</a></li>
+                                <li class="active"><a asp-controller="Specialist" asp-action="Properties" asp-route-userId="@Model.User.Id">Позиции</a></li>
+                                <li><a asp-controller="Specialist" asp-action="Reviews" asp-route-userId="@Model.User.Id">Отзывы</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div id="reContainer" class="listings-list listings-list--alt">
+                        @foreach (RealEstate realEstate in Model.RealEstateList.RealEstates)
+                        {
+                        @Html.Partial("RealEstateItemL", realEstate)
+                        }
+                    </div>
+
+                    @if (Model.RealEstateList?.Count > 12)
+                    {
+                        <div class="load-more m-b-30">
+                            <a href="#LoadMore" id="LoadMore"><i class="zmdi zmdi-refresh-alt"></i> Показать еще</a>
+                            <input type="hidden" name="url" value="@($"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}{Context.Request.QueryString}")" />
+                            <unput type="hidden" name="host" value=""></unput>
+                        </div>
+                    }
+
+                </div>
+            </div>
+            @Html.Partial("QuestionPartial")
+        </div>
+    </div>
+</section>
+
+<button class="btn btn--action btn--circle visible-sm visible-xs" data-rmd-action="block-open" data-rmd-target="#agent-question">
+    <i class="zmdi zmdi-comment-alt-text"></i>
+</button>
+
+<script id="RealEstateItemTemplateL" type="text/x-jsrender">
+    {{for}}
+    <div class="listings-grid__item">
+
+        <a href="@($"{Context.Request.Scheme}://{Context.Request.Host}")/RealEstate/Detail/{{:user.id}}">
+            <div class="listings-grid__main pull-left">
+                <img src="{{:unit.photoMinPath400X266}}" alt="">
+                <div class="listings-grid__price">{{money:unit.cost}}</div>
+            </div>
+            <div class="media-body">
+                <div class="listings-grid__body">
+                    <small>
+                        {{if unit.unitType != null || unit.unitType != 'undefined'}}
+                        {{unitTypeLocal:unit.unitType}},
+                        {{/if}}
+                        {{if unit.oldType != null || unit.oldType != 'undefined'}}
+                        {{oldTypeLocal:unit.oldType}},
+                        {{/if}}
+                        {{if unit.houseType != null || unit.houseType != 'undefined'}}
+                        {{houseTypeLocal:unit.houseType}}
+                        {{/if}}
+                    </small>
+                    <h5>
+                        {{:unit.address.country.ru}},
+                        {{:unit.address.sity.ru}},
+                        {{:unit.address.street.ru}},
+                        {{:unit.address.streetNumber.ru}}
+                    </h5>
+                </div>
+                <ul class="listings-grid__attrs">
+                    {{if unit.roomCount}}
+                    <li><i class="listings-grid__icon listings-grid__icon--bed"></i>{{:unit.roomCount}}</li>
+                    {{/if}}
+                    {{if unit.bathroomCount}}
+                    <li><i class="listings-grid__icon listings-grid__icon--bath"></i>{{:unit.bathroomCount}}</li>
+                    {{/if}}
+                    {{if unit.freightLiftCount}}
+                    <li><i class="listings-grid__icon listings-grid__icon--parking"></i>{{:unit.freightLiftCount}}</li>
+                    {{/if}}
+                </ul>
+            </div>
+        </a>
+        <div class="actions listings-grid__favorite">
+            <div class="actions__toggle">
+                <input type="checkbox">
+                <i class="zmdi zmdi-favorite-outline"></i>
+                <i class="zmdi zmdi-favorite"></i>
+            </div>
+        </div>
+    </div>
+    {{/for}}
+</script>
+
+@section appscripts {
+
+    @if (Model.RealEstateList?.Count > 12)
+    {
+
+        <script src="~/lib/jsrender/jsrender.min.js"></script>
+        <script src="~/js/converters.js"></script>
+        <script src="~/js/helpers.js"></script>
+        <script src="~/js/filter.js"></script>
+        <script src="~/js/jsrender.js"></script>
+        <script src="~/js/pagination_realestate.js"></script>
+
+        <script>
+            $(document)
+                .ready(function () {
+                    pagination("#RealEstateItemTemplateL", "#reContainer");
+                });
+        </script>
+    }
+}

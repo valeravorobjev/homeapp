@@ -1,0 +1,58 @@
+﻿@using HomeApp.Core.Db.Entities.Models
+@model HomeApp.Core.Db.Entities.User
+
+@if (Model is PersonProfessional)
+            {
+
+    <h2>@(((Rialtor)Model).LastName?.Ru) @(((Rialtor)Model).FirstName?.Ru) @(((Rialtor)Model).MidName?.Ru)</h2>
+}
+else if (Model is Professional)
+{
+    <h2>@(((Professional)Model).Name?.Ru)</h2>
+}
+
+@if (Model.Address != null)
+            {
+    <small>
+        @if (Model.Address.Country != null)
+        {
+            @Model.Address.Country.Ru<span>,</span>
+        }
+        @if (Model.Address.Region != null)
+        {
+            @Model.Address.Region.Ru<span>,</span>
+        }
+        @if (Model.Address.Area != null)
+        {
+            @Model.Address.Area.Ru<span>,</span>
+        }
+        @if (Model.Address.Sity != null)
+        {
+            @Model.Address.Sity.Ru<span>,</span>
+        }
+        @if (Model.Address.Street != null)
+        {
+            @Model.Address.Street.Ru
+        }
+        @if (Model.Address.StreetNumber != null)
+        {
+            @Model.Address.StreetNumber.Ru
+        }
+    </small>
+}
+
+<div class="actions actions--section">
+    <div class="actions__toggle">
+        <input type="checkbox">
+        <i class="zmdi zmdi-favorite-outline"></i>
+        <i class="zmdi zmdi-favorite"></i>
+    </div>
+
+    <div class="dropdown">
+        <a href="" data-toggle="dropdown"><i class="zmdi zmdi-share"></i></a>
+
+        <div class="dropdown-menu pull-right rmd-share">
+            <div></div>
+        </div>
+    </div>
+</div>

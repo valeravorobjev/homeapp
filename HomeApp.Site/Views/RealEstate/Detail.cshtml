@@ -1,0 +1,275 @@
+﻿@using System.Globalization
+@using HomeApp.Core.Db.Entities
+@using HomeApp.Core.Db.Entities.Models
+@using HomeApp.Core.Db.Entities.Models.Enums
+@using HomeApp.Core.Extentions
+@using HomeApp.Site.Utils
+@model HomeApp.Core.ViewModels.DetailModel
+
+@{
+    RealEstate realEstate = Model.RealEstate;
+    User agent = Model.Agent;
+}
+
+@section styles {
+    <link rel="stylesheet" href="~/vendors/roost/vendors/bower_components/lightgallery/dist/css/lightgallery.min.css">
+}
+
+<section class="section">
+    <div class="container">
+        <header class="section__title section__title-alt">
+            <h2>
+                <span style="font-weight: bold; color:lightcoral">@realEstate.Unit.OperationType.ToLocalString(Language.Ru).Single:</span>
+                @realEstate.Unit.Address?.Country?.Ru,
+                @realEstate.Unit.Address?.Sity?.Ru,
+                @realEstate.Unit.Address?.Street?.Ru,
+                Дом @(realEstate.Unit.Address?.StreetNumber?.Ru)
+            </h2>
+            <small>
+                @realEstate.Unit.UnitType.ToLocalString(Language.Ru).Single
+                @if (realEstate.Unit is Flat)
+                {
+                    <span>,</span>
+                    @(((Flat)realEstate.Unit).OldType.ToLocalString(Language.Ru).Single)
+                }
+                @if (realEstate.Unit is Room)
+                {
+                    <span>,</span>
+                    @(((Room)realEstate.Unit).HouseType.ToLocalString(Language.Ru).Single)
+                }
+            </small>
+            @Html.Partial("SomethingActionsPartial")
+        </header>
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="detail-media">
+                        <div class="tab-content">
+                            <div class="tab-pane fade in active light-gallery" id="detail-media-images">
+                                @foreach (string path in realEstate.Unit.PhotoPaths)
+                                {
+                                    <a href="@path">
+                                        <img src="@path" alt="">
+                                    </a>
+                                }
+                            </div>
+
+                            @if (!string.IsNullOrEmpty((realEstate.Unit as Flat)?.FloorPlanPath))
+                            {
+                                <div class="tab-pane fade light-gallery" id="detail-media-floorplan">
+                                    <a href="@(((Flat)realEstate.Unit).FloorPlanPath)">
+                                        <img src="@(((Flat)realEstate.Unit).FloorPlanPath)" alt="">
+                                    </a>
+                                </div>
+                            }
+
+                            <div class="tab-pane fade" id="detail-media-map">
+                                <div id="listing-map"></div>
+                            </div>
+                        </div>
+                        <ul class="detail-media__nav hidden-print">
+                            <li class="active"><a href="#detail-media-images" data-toggle="tab"><i class="zmdi zmdi-collection-image"></i></a></li>
+                            @if (!string.IsNullOrEmpty(((Flat)realEstate.Unit).FloorPlanPath))
+                            {
+                                <li><a href="#detail-media-floorplan" data-toggle="tab"><i class="zmdi zmdi-view-dashboard"></i></a></li>
+                            }
+                            <li><a href="#detail-media-map" data-toggle="tab"><i class="zmdi zmdi-map"></i></a></li>
+                        </ul>
+                    </div>
+                    <div class="detail-info">
+
+                        <div class="detail-info__header clearfix">
+                            <strong>@realEstate.Unit.Cost.ToString("C", new CultureInfo("Ru-ru"))</strong>
+                            @if (realEstate.Unit.IsMortgage)
+                            {
+                                <small>Есть эпотека</small>
+                            }
+                            <span>@realEstate.Unit.OperationType.ToLocalString(Language.Ru).Single</span>
+                        </div>
+
+                        <ul class="detail-info__list new_info_list clearfix">
+                            <li>
+                                <span>Тип недвижимости</span>
+                                <span>@realEstate.Unit.UnitCategory.ToLocalString(Language.Ru).Single</span>
+                            </li>
+                            <li>
+                                <span>Тип объекта недвижимости</span>
+                                <span>@realEstate.Unit.UnitType.ToLocalString(Language.Ru).Single</span>
+                            </li>
+
+                            @if (realEstate.Unit is BedSpace)
+                            {
+                                if (((BedSpace)realEstate.Unit).Floor > 0)
+                                {
+                                    <li>
+                                        <span>Этаж</span>
+                                        <span>@(((BedSpace)realEstate.Unit).Floor)</span>
+                                    </li>
+                                }
+
+                                if (((BedSpace)realEstate.Unit).TotalArea > 0)
+                                {
+                                    <li>
+                                        <span>Общая площадь</span>
+                                        <span>@(((BedSpace)realEstate.Unit).TotalArea) м<sup>2</sup></span>
+                                    </li>
+                                }
+
+                                if (((BedSpace)realEstate.Unit).LivingArea > 0)
+                                {
+                                    <li>
+                                        <span>Жилая площадь</span>
+                                        <span>@(((BedSpace)realEstate.Unit).LivingArea) м<sup>2</sup></span>
+                                    </li>
+                                }
+
+                                if (((BedSpace)realEstate.Unit).KitchenArea > 0)
+                                {
+                                    <li>
+                                        <span>Площадь кухни</span>
+                                        <span>@(((BedSpace)realEstate.Unit).KitchenArea) м<sup>2</sup></span>
+                                    </li>
+                                }
+
+
+                                if (((BedSpace)realEstate.Unit).PassengerLiftCount > 0)
+                                {
+                                    <li>
+                                        <span>Количество пассажирских лифтов</span>
+                                        <span>@(((BedSpace)realEstate.Unit).PassengerLiftCount)</span>
+                                    </li>
+                                }
+
+                                if (((BedSpace)realEstate.Unit).FreightLiftCount > 0)
+                                {
+                                    <li>
+                                        <span>Количество грузовых лифтов</span>
+                                        <span>@(((BedSpace)realEstate.Unit).FreightLiftCount)</span>
+                                    </li>
+                                }
+                            }
+
+                            @if (realEstate.Unit is Room)
+                            {
+                                if (((Room)realEstate.Unit).RoomCount > 0)
+                                {
+                                    <li>
+                                        <span>Количество комнат</span>
+                                        <span>@(((Room)realEstate.Unit).RoomCount)</span>
+                                    </li>
+                                }
+
+                                <li>
+                                    <span>Тип строения</span>
+                                    <span>@(((Room)realEstate.Unit).HouseType.ToLocalString(Language.Ru).Single)</span>
+                                </li>
+
+                                if (((Room)realEstate.Unit).RoomAreas?.Count > 0)
+                                {
+                                    <li>
+                                        <span>Площадь комнат</span>
+                                        <span>
+                                            @foreach (int area in ((Room)realEstate.Unit).RoomAreas)
+                                            {
+                                                <span>@area&nbsp;</span>
+                                            }
+                                            м<sup>2</sup>
+                                        </span>
+                                    </li>
+                                }
+
+
+                                if (((Room)realEstate.Unit).BathroomCount > 0)
+                                {
+                                    <li>
+                                        <span>Количество санузлов</span>
+                                        <span>@(((Room)realEstate.Unit).BathroomCount)</span>
+                                    </li>
+                                }
+
+                                if (((Room)realEstate.Unit).CombinedBathroomCount > 0)
+                                {
+                                    <li>
+                                        <span>Количество совмещенных санузлов</span>
+                                        <span>@(((Room)realEstate.Unit).CombinedBathroomCount)</span>
+                                    </li>
+                                }
+
+                                if (((Room)realEstate.Unit).CeilingHeight > 0)
+                                {
+                                    <li>
+                                        <span>Высота потолков</span>
+                                        <span>@(((Room)realEstate.Unit).CeilingHeight) м</span>
+                                    </li>
+                                }
+                            }
+
+                        </ul>
+                    </div>
+                </div>
+
+                @if (realEstate.Unit is BedSpace)
+                {
+                    if (((BedSpace)realEstate.Unit).TermOfRents?.Count > 0)
+                    {
+                        <div class="card detail-amenities">
+                            <div class="card__header">
+                                <h2>Условия аренды</h2>
+                                <small>Здесь перечислены дополнительные условия аренды</small>
+                            </div>
+                            <div class="card__body">
+                                <ul class="detail-amenities__list">
+                                    @foreach (TermOfRent termOfRent in ((BedSpace)realEstate.Unit).TermOfRents)
+                                    {
+                                        <li class="@termOfRent.GetRoostColor()">@termOfRent.ToLocalString(Language.Ru).Single</li>
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    }
+
+                    if (((BedSpace)realEstate.Unit).UnitProperties?.Count > 0)
+                    {
+                        <div class="card detail-amenities">
+                            <div class="card__header">
+                                <h2>Свойства недвижимости</h2>
+                                <small>Здесь указано что имеется в квартире</small>
+                            </div>
+                            <div class="card__body">
+                                <ul class="detail-amenities__list">
+                                    @foreach (UnitProperty property in ((BedSpace)realEstate.Unit).UnitProperties)
+                                    {
+                                        <li class="@property.GetRoostColor()">@property.ToLocalString(Language.Ru).Single</li>
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    }
+                }
+
+                <div class="card">
+                    <div class="card__header">
+                        <h2>Описание</h2>
+                    </div>
+                    <div class="card__body">
+                        @realEstate.Unit.Description?.Ru
+                    </div>
+                </div>
+            </div>
+            <div id="inquire" class="col-md-4 rmd-sidebar-mobile">
+                @Html.Partial("ContactFormPartial", @agent)
+                @Html.Partial("AgentInfoPartial", @agent)
+                @*@Html.Partial("AdditionalRealEstatesPartial") //TODO:: нужно реализовать*@
+            </div>
+        </div>
+    </div>
+</section>
+<button class="btn btn--action btn--circle hidden-md hidden-lg" data-rmd-action="block-open" data-rmd-target="#inquire">
+    <i class="zmdi zmdi-phone"></i>
+</button>
+
+@section Scripts {
+    @*<script src="https://maps.googleapis.com/maps/api/js?callback=initMap&key=AIzaSyD_nanUpVqytOmHHfuW4htZsiLH7YUzJ1A" async></script>*@
+    <script src="~/vendors/roost/vendors/bower_components/lightgallery/dist/js/lightgallery-all.min.js"></script>
+    @*<script src="~/vendors/roost/js/demo/maps/listing-detail-location-map.js"></script>*@
+}

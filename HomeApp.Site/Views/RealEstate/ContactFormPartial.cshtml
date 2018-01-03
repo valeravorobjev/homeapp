@@ -1,0 +1,41 @@
+﻿@model HomeApp.Core.Db.Entities.User
+<form class="card hidden-print">
+    <div class="card__header">
+        <h2>Контактная информация</h2>
+        <small>Позвоните или отправте сообщение</small>
+    </div>
+    <div class="card__body">
+        <div class="inquire__number">
+            <i class="zmdi zmdi-phone"></i>
+            @Model.Phones?.FirstOrDefault()
+        </div>
+        <div class="form-group form-group--float">
+            <input type="text" class="form-control">
+            <label>Как к вам обращаться</label>
+            <i class="form-group__bar"></i>
+        </div>
+        <div class="form-group form-group--float">
+            <input type="text" class="form-control">
+            <label>Электронная почта</label>
+            <i class="form-group__bar"></i>
+        </div>
+        <div class="form-group form-group--float">
+            <input type="text" class="form-control">
+            <label>Телефон</label>
+            <i class="form-group__bar"></i>
+        </div>
+        <div class="form-group form-group--float">
+            <textarea class="form-control textarea-autoheight"></textarea>
+            <label>Сообщение</label>
+            <i class="form-group__bar"></i>
+        </div>
+        <small class="text-muted">
+            Отправляя сообщение с вашими данными, вы соглашаетесь с условиями использования и политикой
+            конфиденциальности homeapp.pro.
+        </small>
+    </div>
+    <div class="card__footer">
+        <button type="submit" class="btn btn-primary">Отправить</button>
+        <button class="btn btn-link hidden-lg hidden-md" data-rmd-action="block-close" data-rmd-target="#inquire">Отмена</button>
+    </div>
+</form>

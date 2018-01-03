@@ -1,0 +1,60 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Международная площадка недвижимости.Покупка и аренда квартир, офисов, домов, нежилых помещений, загородной недвижимости по всему миру. Быстрый и удобный поиск недвижимости.">
+    <meta name="keywords" content="Объявления, аренда, сдача, съем, квартиры, дома, офисы, нежелая недвижимость, загородная недвижимость, однокомнатные, двухкомнатные, Москва, homeapp, поискжилья, эксперты, недвижимость">
+    <title>Homeapp.pro - профессиональная работа с недвижимостью</title>
+    <link rel="shortcut icon" href="~/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="~/favicon.ico" type="image/x-icon">
+    <link href="~/vendors/roost/vendors/bower_components/material-design-iconic-font/dist/css/material-design-iconic-font.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/vendors/roost/vendors/bower_components/animate.css/animate.min.css">
+    <link rel="stylesheet" href="~/vendors/roost/vendors/bower_components/select2/dist/css/select2.min.css">
+    <link rel="stylesheet" href="~/vendors/roost/vendors/bower_components/nouislider/distribute/nouislider.min.css">
+    <link rel="stylesheet" href="~/vendors/roost/vendors/bower_components/rateYo/src/jquery.rateyo.css">
+    @RenderSection("styles", false)
+    <link rel="stylesheet" href="~/vendors/roost/css/app_1.min.css">
+    <link rel="stylesheet" href="~/vendors/roost/css/app_2.min.css">
+    <link rel="stylesheet" href="~/css/site.css" />
+    <script src="~/vendors/roost/js/page-loader.min.js" async></script>
+</head>
+
+<body>
+    <div id="page-loader">
+        <div class="page-loader__spinner"></div>
+    </div>
+
+    <header id="header">
+        @Html.Partial("TopMenuPartial")
+        @Html.Partial("MainMenuPartial")
+
+        @if (ViewContext.RouteData.Values["controller"].ToString() == "Home" && ViewContext.RouteData.Values["action"].ToString() == "Index")
+        {
+            @Html.Partial("SearchEnginPartial")
+            @await Component.InvokeAsync("RealEstateHeadList");
+        }
+
+    </header>
+
+    @RenderBody()
+
+    <footer id="footer">
+        @Html.Partial("FooterPartial")
+    </footer>
+
+    <script src="~/vendors/roost/vendors/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="~/vendors/roost/vendors/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="~/vendors/roost/vendors/bower_components/Waves/dist/waves.min.js"></script>
+    <script src="~/vendors/roost/vendors/bower_components/select2/dist/js/select2.full.min.js"></script>
+    <script src="~/vendors/roost/vendors/bower_components/nouislider/distribute/nouislider.min.js"></script>
+    <script src="~/vendors/roost/vendors/bower_components/rateYo/src/jquery.rateyo.js"></script>
+    <script src="~/vendors/roost/vendors/bower_components/autosize/dist/autosize.min.js"></script>
+    @*<script src="~/vendors/roost/vendors/bower_components/jssocials/dist/jssocials.min.js"></script>*@
+    @RenderSection("scripts", required: false)
+    <script src="~/vendors/roost/js/app.js"></script>
+    <script src="~/vendors/roost/js/demo/demo.js"></script>
+    @RenderSection("appscripts", required: false)
+</body>
+</html>

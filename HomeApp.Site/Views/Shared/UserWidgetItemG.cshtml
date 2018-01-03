@@ -1,0 +1,20 @@
+﻿@using HomeApp.Core.Db.Entities.Models
+@model HomeApp.Core.ViewModels.UserWithRealEstateCount
+
+<a class="grid-widget__item" asp-controller="Specialist" asp-action="Overview" asp-route-userId="@Model.User.Id">
+    <img src="@Url.Content(@Model.User.PhotoMinPath)" alt="">
+    <div class="grid-widget__info">
+        <h4>
+            @if (Model.User is PersonProfessional)
+            {
+
+                @(((PersonProfessional)Model.User).LastName?.Ru) @(((PersonProfessional)Model.User).FirstName?.Ru) @(((PersonProfessional)Model.User).MidName?.Ru)
+            }
+            else if (Model.User is Professional)
+            {
+                @(((Professional)Model.User).Name?.Ru)
+            }
+        </h4>
+        <small>@Model.RealEstateCount Объявлений</small>
+    </div>
+</a>

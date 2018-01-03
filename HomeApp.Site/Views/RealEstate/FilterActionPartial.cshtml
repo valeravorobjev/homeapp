@@ -1,0 +1,174 @@
+﻿<button class="btn btn--action btn--circle" data-rmd-action="block-open" data-rmd-target="#advanced-search">
+    <i class="zmdi zmdi-search-for"></i>
+</button>
+<aside id="advanced-search" class="rmd-sidebar">
+    <form id="advanced-search-form" asp-controller="RealEstate" asp-action="@ViewContext.RouteData.Values["action"]" asp-route-operationType="@Context.Request.Path.ToString().Split('/').LastOrDefault()" method="get">
+        <div class="card__header">
+            <h2>Расширенный поиск</h2>
+            @*<div class="dropdown m-t-5">
+                <a data-toggle="dropdown" href="" class="text-muted">08 Saved Searches<i class="caret"></i></a>
+                <ul class="dropdown-menu dropdown-menu--block dropdown-menu--icon">
+                    <li><a href=""><i class="zmdi zmdi-time"></i>10/08/2014 at 08:10 PM</a></li>
+                    <li><a href=""><i class="zmdi zmdi-time"></i>01/08/2014 at 10:12 PM</a></li>
+                    <li><a href=""><i class="zmdi zmdi-time"></i>01/08/2014 at 10:13 PM</a></li>
+                    <li><a href=""><i class="zmdi zmdi-time"></i>22/07/2014 at 09:34 AM</a></li>
+                    <li><a href=""><i class="zmdi zmdi-time"></i>14/07/2014 at 05:43 AM</a></li>
+                </ul>
+            </div>*@
+        </div>
+        <div class="card__body m-t-20">
+            <div class="form-group form-group--float">
+                <input type="text" name="address" class="form-control">
+                <label class="fg-float">Адрес</label>
+                <i class="form-group__bar"></i>
+            </div>
+            <div class="form-group">
+                <label>Тип операции</label>
+                <div id="operation-type-options" class="btn-group btn-group-justified" data-toggle="buttons">
+                    <label class="btn active">
+                        <input type="radio" name="advanced-search-beds" value="Rent" id="rent" checked>Аренда
+                    </label>
+                    <label class="btn">
+                        <input type="radio" name="advanced-search-beds" value="Sale" id="sale">Продажа
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Тип недвижимости</label>
+                <select class="select2" name="unitType">
+                    <option value="Flat">Квартира</option>
+                    <option value="Room">Комната</option>
+                    <option value="House">Дом</option>
+                    <option value="BedSpace">Койко место</option>
+                    <option value="Townhouse">Таунхауз</option>
+                    <option value="PartOfHouse">Часть дома</option>
+                    <option value="RetailSpace">Торговая площадь</option>
+                    <option value="Warehouse">Склад</option>
+                    <option value="Guesthouse">Пансионат</option>
+                    <option value="Hotel">Отель</option>
+                    <option value="Catering">Общепит</option>
+                    <option value="Garage">Гараж</option>
+                    <option value="Industry">Производство</option>
+                    <option value="CarService">Автосервис</option>
+                    <option value="ReadyBusiness">Готовый бизнес</option>
+                    <option value="Building">Здание</option>
+                </select>
+            </div>
+            @*<div class="form-group form-group--range">
+                <label>Price Range</label>
+                <div class="input-slider-values clearfix">
+                    <div class="pull-left"><span>$</span><span id="property-price-upper"></span></div>
+                    <div class="pull-right"><span>$</span><span id="property-price-lower"></span></div>
+                </div>
+                <div id="property-price-range"></div>
+            </div>*@
+            <div class="form-group form-group--float">
+                <input name="costLow" type="text" class="form-control" value="">
+                <label>Цена от</label>
+                <i class="form-group__bar"></i>
+            </div>
+            <div class="form-group form-group--float">
+                <input name="costHight" type="text" class="form-control" value="">
+                <label>Цена до</label>
+                <i class="form-group__bar"></i>
+            </div>
+            <div class="form-group form-group--range">
+                <label>Площадь (м2)</label>
+                <div class="input-slider-values clearfix">
+                    <div class="pull-left" id="property-area-upper"></div>
+                    <div class="pull-right" id="property-area-lower"></div>
+                    <input type="hidden" name="areaLow" id="areaLow" />
+                    <input type="hidden" name="areaHight" id="areaHight" />
+                </div>
+                <div id="property-area-range"></div>
+            </div>
+            <div class="form-group">
+                <label>Количество комнат</label>
+                <div class="btn-group btn-group-justified" data-toggle="buttons" id="bed-groups">
+                    <label class="btn">
+                        <input type="checkbox" id="bed1" value="1">1
+                    </label>
+                    <label class="btn active">
+                        <input type="checkbox" id="bed2" value="2" checked>2
+                    </label>
+                    <label class="btn">
+                        <input type="checkbox" id="bed3" value="3">3
+                    </label>
+                    <label class="btn">
+                        <input type="checkbox" id="bed4" value="4">4
+                    </label>
+                    <label class="btn">
+                        <input type="checkbox" id="bed5" value="5">4+
+                    </label>
+                    <input type="hidden" name="bedCount" id="bedCount" value="2" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Количество санузлов</label>
+                <div class="btn-group btn-group-justified" data-toggle="buttons" id="bath-groups">
+                    <label class="btn active">
+                        <input type="checkbox" id="bath1" value="1" checked>1
+                    </label>
+                    <label class="btn">
+                        <input type="checkbox" id="bath2" value="2">2
+                    </label>
+                    <label class="btn">
+                        <input type="checkbox" id="bath3" value="3">3
+                    </label>
+                    <label class="btn">
+                        <input type="checkbox" id="bath4" value="4">4
+                    </label>
+                    <label class="btn">
+                        <input type="checkbox" id="bath5" value="5">4+
+                    </label>
+                    <input type="hidden" name="bathCount" id="bathCount" value="1" />
+                </div>
+            </div>
+            @*<div class="form-group">
+                <label>Парковка</label>
+                <div class="btn-group btn-group-justified" data-toggle="buttons">
+                    <label class="btn">
+                        <input type="checkbox" name="inner-search-garage" id="garage1">1
+                    </label>
+                    <label class="btn active">
+                        <input type="checkbox" name="inner-search-garage" id="garage2" checked>2
+                    </label>
+                    <label class="btn">
+                        <input type="checkbox" name="inner-search-garage" id="garage3">3
+                    </label>
+                    <label class="btn">
+                        <input type="checkbox" name="inner-search-garage" id="garage4">4
+                    </label>
+                    <label class="btn">
+                        <input type="checkbox" name="inner-search-garage" id="garage5">4+
+                    </label>
+                </div>
+            </div>*@
+            <div class="form-group form-group--range">
+                <label>Жилая площадь</label>
+                <div class="input-slider-values clearfix">
+                    <div class="pull-left" id="property-lot-upper"></div>
+                    <div class="pull-right" id="property-lot-lower"></div>
+                    <input type="hidden" name="livingLow" id="livingLow" />
+                    <input type="hidden" name="livingHight" id="livingHight" />
+                </div>
+                <div id="property-lot-range"></div>
+            </div>
+            <div class="form-group form-group--range">
+                <label>Год постройки</label>
+                <div class="input-slider-values clearfix">
+                    <div class="pull-left" id="property-yb-upper"></div>
+                    <div class="pull-right" id="property-yb-lower"></div>
+                    <input type="hidden" name="yearBuiltLow" id="yearBuiltLow" />
+                    <input type="hidden" name="yearBuiltHight" id="yearBuiltHight" />
+                </div>
+                <div id="property-year-built"></div>
+            </div>
+        </div>
+        <div class="card__footer">
+            <button type="submit" class="btn btn-sm btn-primary">Найти</button>
+            @*<a href="" class="btn btn-link" data-rmd-action="block-close" data-rmd-target="#advanced-search">Save</a>*@
+            <a href="" class="btn btn-link" data-rmd-action="block-close" data-rmd-target="#advanced-search">Отмена</a>
+        </div>
+    </form>
+</aside>

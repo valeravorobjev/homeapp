@@ -1,0 +1,51 @@
+﻿@using HomeApp.Core.ViewModels
+@model HomeApp.Core.ViewModels.UserReviews
+
+<section class="section">
+    <div class="container">
+        <header class="section__title text-left">
+            @Html.Partial("HeaderPartial", Model.User)
+        </header>
+
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card profile">
+                    @Html.Partial("ProfilePartial", new UserWithAd { User = Model.User, Ad = Model.Ad })
+                </div>
+
+                <div class="card">
+                    <div class="tab-nav tab-nav--justified" data-rmd-breakpoint="500">
+                        <div class="tab-nav__inner">
+                            <ul>
+                                <li><a asp-controller="Specialist" asp-action="Overview" asp-route-userId="@Model.User.Id">Обзор</a></li>
+                                <li><a asp-controller="Specialist" asp-action="Properties" asp-route-userId="@Model.User.Id">Позиции</a></li>
+                                <li class="active"><a asp-controller="Specialist" asp-action="Reviews" asp-route-userId="@Model.User.Id">Отзывы</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="card__body">
+                        <div class="card__sub">
+                            <h4>@Model.CommentList.Count отзывов</h4>
+
+                            @foreach (UserComment userComment in Model.CommentList.UserComments)
+                            {
+                                @Html.Partial("UserComment", userComment)
+                            }
+                        </div>
+
+                        <div class="load-more">
+                            <a href=""><i class="zmdi zmdi-refresh-alt"></i> Показать еще</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            @Html.Partial("QuestionPartial")
+        </div>
+    </div>
+</section>
+
+<button class="btn btn--action btn--circle visible-sm visible-xs" data-rmd-action="block-open" data-rmd-target="#agent-question">
+    <i class="zmdi zmdi-comment-alt-text"></i>
+</button>

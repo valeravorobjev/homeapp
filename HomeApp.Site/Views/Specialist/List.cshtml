@@ -1,0 +1,43 @@
+﻿@using HomeApp.Core.Db.Entities
+@using HomeApp.Core.Db.Entities.Models.Enums
+@using HomeApp.Core.Extentions
+@model HomeApp.Core.ViewModels.UserList
+
+@{
+    string ut = Context.Request.Path.ToString().Split('/')[3];
+    UserType userType = (UserType)Enum.Parse(typeof(UserType), ut);
+}
+
+@Html.Partial("SpecialistSearchActionPartial")
+<form id="SortForm" asp-controller="Specialist" asp-action="List" method="get">
+    <input type="hidden" name="sort" value="@ViewBag.Sort" />
+</form>
+<section class="section">
+    <div class="container">
+        <header class="section__title">
+            <h2><span style="font-weight: bold; color:lightcoral">@userType.ToLocalString(Language.Ru).Plural</span></h2>
+            <small>В нашей базе <b style="color:lightcoral">@Model.Count</b> специалистов по вашему запросу</small>
+        </header>
+        <div class="row">
+            <div class="col-sm-8 listings-list">
+                @foreach (User user in Model.Users)
+                {
+                    @Html.Partial("UserItemL", user)
+                }
+
+                <nav class="text-center">
+                    @await Component.InvokeAsync("Pagination", new { dataCount = Model.Count, pageSize = 16, numbersCount = 9, currentPage = ViewBag.CurrentPage, controller = "Specialist", action = "List", sort = ViewBag.Sort })
+                </nav>
+            </div>
+            <aside class="col-sm-4 hidden-xs">
+                @Html.Partial("TopAgentsPartial")
+                @Html.Partial("NewsSubscribePartial")
+            </aside>
+        </div>
+    </div>
+</section>
+@*@Html.Partial("UserFilterAction")*@
+
+@section appscripts {
+    <script src="~/js/filter.js"></script>
+}

@@ -1,0 +1,142 @@
+﻿<div class="header__search container">
+    <form id="main-serach-form" asp-controller="RealEstate" asp-action="Grid" asp-route-operationType="Rent" method="get">
+        <div class="search">
+            <div class="search__type dropdown">
+                <a href="" data-toggle="dropdown">Аренда</a>
+                <div class="dropdown-menu">
+                    <div>
+                        <input type="radio" name="operationType" value="Rent" checked="checked">
+                        <span>Аренда</span>
+                    </div>
+                    <div>
+                        <input type="radio" name="operationType" value="Sale">
+                        <span>Продажа</span>
+                    </div>
+                </div>
+            </div>
+            <div class="search__body">
+                <input id="main-search-input-address" type="text" class="search__input" placeholder="Введите адрес..." data-rmd-action="advanced-search-open">
+                <div class="search__advanced">
+                    <div class="col-sm-6">
+                        <div class="form-group form-group--float">
+                            <input id="main-search-address" name="address" type="text" class="form-control" value="">
+                            <label>Адрес</label>
+                            <i class="form-group__bar"></i>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Тип недвижимости</label>
+                            <select class="select2" name="unitType">
+                                <option value="Flat">Квартира</option>
+                                <option value="Room">Комната</option>
+                                <option value="House">Дом</option>
+                                <option value="BedSpace">Койко место</option>
+                                <option value="Townhouse">Таунхауз</option>
+                                <option value="PartOfHouse">Часть дома</option>
+                                <option value="RetailSpace">Торговая площадь</option>
+                                <option value="Warehouse">Склад</option>
+                                <option value="Guesthouse">Пансионат</option>
+                                <option value="Hotel">Отель</option>
+                                <option value="Catering">Общепит</option>
+                                <option value="Garage">Гараж</option>
+                                <option value="Industry">Производство</option>
+                                <option value="CarService">Автосервис</option>
+                                <option value="ReadyBusiness">Готовый бизнес</option>
+                                <option value="Building">Здание</option>
+                            </select>
+                        </div>
+                    </div>
+                    @*<div class="col-sm-12">
+                        <div class="form-group form-group--range">
+                            <label>Цена</label>
+                            <div class="input-slider-values clearfix">
+                                <div class="pull-left"><span>$</span><span id="property-price-upper"></span></div>
+                                <div class="pull-right"><span>$</span><span id="property-price-lower"></span></div>
+                                <input type="hidden" name="costLow" id="costLow"/>
+                                <input type="hidden" name="costHight" id="costHight" />
+                            </div>
+                            <div id="property-price-range"></div>
+                        </div>
+                    </div>*@
+                    <div class="col-sm-6">
+                        <div class="form-group form-group--float">
+                            <input name="costLow" type="text" class="form-control" value="">
+                            <label>Цена от</label>
+                            <i class="form-group__bar"></i>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group form-group--float">
+                            <input name="costHight" type="text" class="form-control" value="">
+                            <label>Цена до</label>
+                            <i class="form-group__bar"></i>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="form-group form-group--range">
+                            <label>Площадь (м2)</label>
+                            <div class="input-slider-values clearfix">
+                                <div class="pull-left" id="property-area-upper"></div>
+                                <div class="pull-right" id="property-area-lower"></div>
+                                <input type="hidden" name="areaLow" id="areaLow" />
+                                <input type="hidden" name="areaHight" id="areaHight" />
+                            </div>
+                            <div id="property-area-range"></div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Количество комнат</label>
+                            <div class="btn-group btn-group-justified" data-toggle="buttons" id="bed-groups">
+                                <label class="btn">
+                                    <input type="checkbox" id="bed1" value="1">1
+                                </label>
+                                <label class="btn active">
+                                    <input type="checkbox" id="bed2" value="2" checked>2
+                                </label>
+                                <label class="btn">
+                                    <input type="checkbox" id="bed3" value="3">3
+                                </label>
+                                <label class="btn">
+                                    <input type="checkbox" id="bed4" value="4">4
+                                </label>
+                                <label class="btn">
+                                    <input type="checkbox" id="bed5" value="5">4+
+                                </label>
+                                <input type="hidden" name="bedCount" id="bedCount" value="2"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Количество санузлов</label>
+                            <div class="btn-group btn-group-justified" data-toggle="buttons" id="bath-groups">
+                                <label class="btn active">
+                                    <input type="checkbox" id="bath1" value="1" checked>1
+                                </label>
+                                <label class="btn">
+                                    <input type="checkbox" id="bath2" value="2" >2
+                                </label>                      
+                                <label class="btn">         
+                                    <input type="checkbox" id="bath3" value="3" >3
+                                </label>                 
+                                <label class="btn">        
+                                    <input type="checkbox" id="bath4" value="4" >4
+                                </label>
+                                <label class="btn">
+                                    <input type="checkbox" id="bath5" value="5" >4+
+                                </label>
+                                <input type="hidden" name="bathCount" id="bathCount" value="1" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 m-t-10">
+                        <button type="submit" class="btn btn-primary">Найти</button>
+                        <button class="btn btn-sm btn-link" data-rmd-action="advanced-search-close">Отмена</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

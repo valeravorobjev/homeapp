@@ -1,0 +1,39 @@
+﻿@using HomeApp.Core.Db.Entities.Models
+@using HomeApp.Core.Db.Entities.Models.Enums
+@model  HomeApp.Core.ViewModels.UserWithAd
+
+<div class="profile__img">
+    <img src="@Url.Content(Model.User.PhotoMinPath)" alt="">
+</div>
+
+<div class="profile__info">
+    @if (Model.User.UserMode == UserMode.Pro)
+    {
+        <span class="label label-warning">Pro Member</span>
+    }
+    @if (Model.Ad != null)
+    {
+        <span class="label label-success">Premium Agent</span>
+    }
+
+    <div class="profile__review">
+        <span class="rmd-rate" data-rate-value="@Model.User.Seo?.Rating" data-rate-readonly="true"></span>
+        <span>(@Model.User.Seo?.ShowCount просмотров)</span>
+    </div>
+
+    <ul class="rmd-contact-list">
+        @if (Model.User is Professional)
+        {
+            <li><i class="zmdi zmdi-assignment"></i>Сайт: @(((Professional)Model.User).Site)</li>
+        }
+        @if (Model.User is PersonProfessional)
+        {
+            <li><i class="zmdi zmdi-assignment"></i>Сайт: @(((PersonProfessional)Model.User).Site)</li>
+        }
+        @if (Model.User.Phones?.Count > 0)
+        {
+            <li><i class="zmdi zmdi-phone"></i>@Model.User.Phones.FirstOrDefault()</li>
+        }
+        <li><i class="zmdi zmdi-email"></i>@Model.User.Membership.Email</li>
+    </ul>
+</div>
