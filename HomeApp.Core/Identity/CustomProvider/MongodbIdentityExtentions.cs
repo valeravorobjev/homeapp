@@ -10,7 +10,10 @@ namespace HomeApp.Core.Identity.CustomProvider
         {
             IdentityBuilder builder = services.AddIdentity<CustomIdentityUser, CustomIdentityRole>(options =>
             {
-                options.Password.RequiredLength = 8;
+                options.Password.RequiredLength = 6;
+                options.Password.RequireDigit = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = false;
 
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
                 options.Lockout.MaxFailedAccessAttempts = 10;

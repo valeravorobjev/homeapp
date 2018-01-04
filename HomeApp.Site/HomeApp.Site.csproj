@@ -4397,4 +4397,10 @@
     <TypeScriptCompile Include="wwwroot\vendors\roost\vendors\bower_components\moment\moment.d.ts" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="RazorTemplates\Emails\ConfirmRu.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

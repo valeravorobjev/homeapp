@@ -153,6 +153,7 @@ namespace HomeApp.Core.Identity.CustomProvider
 
         public async Task<IList<string>> GetRolesAsync(CustomIdentityUser user, CancellationToken cancellationToken)
         {
+            if (user.Roles == null) user.Roles = new List<string>();
             return await Task.Run(() => user.Roles, cancellationToken);
         }
 
@@ -254,7 +255,9 @@ namespace HomeApp.Core.Identity.CustomProvider
 
         public async Task<IList<Claim>> GetClaimsAsync(CustomIdentityUser user, CancellationToken cancellationToken)
         {
-            return await Task.Run(() => user.Claims.Select(c => new Claim(c.Type, c.Value, c.ValueType, c.Issuer)).ToList(), cancellationToken);
+            if (user.Claims == null) user.Claims = new List<CustomIdentityUserClaim>();
+
+            return await Task.Run(() => user.Claims?.Select(c => new Claim(c.Type, c.Value, c.ValueType, c.Issuer)).ToList(), cancellationToken);
         }
 
         public async Task AddClaimsAsync(CustomIdentityUser user, IEnumerable<Claim> claims, CancellationToken cancellationToken)
@@ -303,7 +306,7 @@ namespace HomeApp.Core.Identity.CustomProvider
         {
             await Task.Run(() =>
                 {
-                    claims.Select(c => user.Claims.RemoveAll(uc =>
+                    claims?.Select(c => user.Claims.RemoveAll(uc =>
                         uc.Issuer == c.Issuer && uc.OriginalIssuer == c.OriginalIssuer && uc.Type == c.Type &&
                         uc.Value == c.Value && uc.ValueType == c.ValueType));
                 }, cancellationToken);

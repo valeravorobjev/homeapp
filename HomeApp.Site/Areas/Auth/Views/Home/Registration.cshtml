@@ -1,5 +1,6 @@
 ﻿@using HomeApp.Site.Areas.Auth.ViewModels
-@model HomeApp.Site.Areas.Auth.ViewModels.RegistrationModel
+@using Microsoft.AspNetCore.Mvc.ModelBinding
+@model HomeApp.Site.Areas.Auth.ViewModels.RegistrationViewModel
 <div class="row">
     <div class="col-sm-4"></div>
     <div class="col-sm-4 card">
@@ -9,6 +10,45 @@
                     <h2>@ViewBag.Title</h2>
                 </header>
                 <form asp-controller="Home" asp-action="Registration" method="post" class="stop-propagate">
+                    @if (!ViewData.ModelState.IsValid)
+                    {
+                        <div class="alert alert-danger" role="alert" style="color: white;">
+                            <ul>
+                                @if (ViewData.ModelState["Email"].ValidationState == ModelValidationState.Invalid)
+                                {
+                                    <li><span asp-validation-for="Email"></span></li>
+                                }
+                                @if (ViewData.ModelState["Password"].ValidationState == ModelValidationState.Invalid)
+                                {
+                                    <li><span asp-validation-for="Password"></span></li>
+                                }
+                                @if (ViewData.ModelState["ConfirmPassword"].ValidationState == ModelValidationState.Invalid)
+                                {
+                                    <li><span asp-validation-for="ConfirmPassword"></span></li>
+                                }
+                                @if (ViewData.ModelState["PasswordTooShort"]?.ValidationState == ModelValidationState.Invalid)
+                                {
+                                    <li><span>@ViewData.ModelState["PasswordTooShort"].Errors?.FirstOrDefault()?.ErrorMessage</span></li>
+                                }
+                                @if (ViewData.ModelState["PasswordRequiresNonAlphanumeric"]?.ValidationState == ModelValidationState.Invalid)
+                                {
+                                    <li><span>@ViewData.ModelState["PasswordRequiresNonAlphanumeric"].Errors?.FirstOrDefault()?.ErrorMessage</span></li>
+                                }
+                                @if (ViewData.ModelState["PasswordRequiresLower"]?.ValidationState == ModelValidationState.Invalid)
+                                {
+                                    <li><span>@ViewData.ModelState["PasswordRequiresLower"].Errors?.FirstOrDefault()?.ErrorMessage</span></li>
+                                }
+                                @if (ViewData.ModelState["PasswordRequiresUpper"]?.ValidationState == ModelValidationState.Invalid)
+                                {
+                                    <li><span>@ViewData.ModelState["PasswordRequiresUpper"].Errors?.FirstOrDefault()?.ErrorMessage</span></li>
+                                }
+                                @if (ViewData.ModelState["PasswordRequiresDigit"]?.ValidationState == ModelValidationState.Invalid)
+                                {
+                                    <li><span>@ViewData.ModelState["PasswordRequiresDigit"].Errors?.FirstOrDefault()?.ErrorMessage</span></li>
+                                }
+                            </ul>
+                        </div>
+                    }
                     <div class="form-group">
                         <input asp-for="Email" type="text" class="form-control" placeholder="Электронная почта">
                         <i class="form-group__bar"></i>
@@ -22,7 +62,7 @@
                         <i class="form-group__bar"></i>
                     </div>
                     <p>
-                        <small>Регистрируясь в <b>HomeApp pro</b>  вы соглашаетесь с нашими <a asp-action="Index">условиями</a>.</small>
+                        <small>Регистрируясь в <b>HomeApp pro</b> вы соглашаетесь с нашими <a asp-action="Index">условиями</a>.</small>
                     </p>
                     <button class="btn btn-primary btn-block m-t-10 m-b-10" type="submit">Готово</button>
                     <div class="top-nav__auth">

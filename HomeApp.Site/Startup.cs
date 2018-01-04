@@ -27,7 +27,6 @@ namespace HomeApp.Site
 
         public void ConfigureServices(IServiceCollection services)
         {
-
             AppOptions appOptions = Configuration.GetSection("AppOptions").Get<AppOptions>();
             string con = Configuration.GetConnectionString("MongoDb");
 
@@ -53,8 +52,13 @@ namespace HomeApp.Site
 
             services.AddRouting(options => { options.LowercaseUrls = true; });
 
-            services.AddScoped<ISessionRepository, SessionRepository>(options => new SessionRepository(con));
-            services.AddScoped<IAuthRepository, AuthRepository>(options=>new AuthRepository(options.GetService<ISessionRepository>(), con));
+            services.AddTransient<ISessionRepository, SessionRepository>(options => new SessionRepository(con));
+            services.AddTransient<IAuthRepository, AuthRepository>(options=>new AuthRepository(options.GetService<ISessionRepository>(), con));
+            services.AddTransient<IEmailSender, EmailSender>(options =>
+            {
+                IHostingEnvironment env = options.GetService<IHostingEnvironment>();
+                return new EmailSender($"{env.ContentRootPath}/RazorTemplates/Emails");
+            });
 
             services.AddSingleton<IAdRepository, AdFakeRepository>();
             services.AddSingleton<IUserRepository, UserFakeRepository>(options=> new UserFakeRepository(con));

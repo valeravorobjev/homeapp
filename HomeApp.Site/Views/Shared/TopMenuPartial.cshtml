@@ -1,13 +1,26 @@
-﻿<div class="header__top">
+﻿@using Microsoft.AspNetCore.Http
+<div class="header__top">
     <div class="container">
         <ul class="top-nav">
-            <li class="dropdown top-nav__guest">
-                <a asp-area="Auth" asp-controller="Home" asp-action="Registration">Регистрация</a>
-            </li>
 
-            <li class="dropdown top-nav__guest">
-                <a asp-area="Auth" asp-controller="Home" asp-action="Login">Войти</a>
-            </li>
+            @if (Context.User.Identity.IsAuthenticated)
+            {
+                <form asp-area="Auth" asp-controller="Home" asp-action="Logout" method="post" asp-antiforgery="true">
+                    <li class="dropdown top-nav__guest">
+                        <input type="submit" value="Выйти"/>
+                    </li>
+                </form>
+            }
+            else
+            {
+                <li class="dropdown top-nav__guest">
+                    <a asp-area="Auth" asp-controller="Home" asp-action="Registration">Регистрация</a>
+                </li>
+
+                <li class="dropdown top-nav__guest">
+                    <a asp-area="Auth" asp-controller="Home" asp-action="Login">Войти</a>
+                </li>
+            }
 
             <li class="pull-right top-nav__icon">
                 <a href=""><i class="zmdi zmdi-facebook"></i></a>
