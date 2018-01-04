@@ -30,5 +30,9 @@
         /// Список рекламных компаний
         /// </summary>
         public const string ADS_COLLECTION = "ads";
+
+
+        public const string IDENTITY_ROLES_COLLECTION = "identity_roles";
+        public const string IDENTITY_USERS_COLLECTION = "identity_users";
     }
 }

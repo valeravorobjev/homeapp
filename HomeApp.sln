@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeApp.Core", "HomeApp.Core\HomeApp.Core.csproj", "{73B8BB5F-AC82-4EA4-B33D-AF893360E70B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeApp.Core", "HomeApp.Core\HomeApp.Core.csproj", "{73B8BB5F-AC82-4EA4-B33D-AF893360E70B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeApp.Site", "HomeApp.Site\HomeApp.Site.csproj", "{EFBDC594-B8E3-4782-AFAA-A9585618FA80}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeApp.Site", "HomeApp.Site\HomeApp.Site.csproj", "{EFBDC594-B8E3-4782-AFAA-A9585618FA80}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
