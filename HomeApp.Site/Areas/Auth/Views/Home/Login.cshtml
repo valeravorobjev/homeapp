@@ -1,6 +1,6 @@
 ﻿@using HomeApp.Site.Areas.Auth.ViewModels
 @using Microsoft.AspNetCore.Mvc.ModelBinding
-@model HomeApp.Site.Areas.Auth.ViewModels.LoginModel
+@model HomeApp.Site.Areas.Auth.ViewModels.LoginViewModel
 <div class="row">
     <div class="col-sm-4"></div>
     <div class="col-sm-4 card">
@@ -23,6 +23,10 @@
                                     @if (ViewData.ModelState["Password"].ValidationState == ModelValidationState.Invalid)
                                     {
                                         <li><span asp-validation-for="Password"></span></li>
+                                    }
+                                    @if (ViewData.ModelState["Login"]?.ValidationState == ModelValidationState.Invalid)
+                                    {
+                                        <li><span>@ViewData.ModelState["Login"].Errors?.FirstOrDefault()?.ErrorMessage</span></li>
                                     }
                                 </ul>
                             </div>

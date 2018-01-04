@@ -9,16 +9,16 @@ using MongoDB.Driver.Linq;
 
 namespace HomeApp.Core.Identity.CustomProvider
 {
-    public class RoleStore: IQueryableRoleStore<IdentityRole>
+    public class CustomRoleStore : IQueryableRoleStore<CustomIdentityRole>
     {
-        private readonly IMongoCollection<IdentityRole> _roleCollection;
+        private readonly IMongoCollection<CustomIdentityRole> _roleCollection;
 
-        public RoleStore(string con)
+        public CustomRoleStore(string con)
         {
             IMongoClient client = new MongoClient(con);
             IMongoDatabase db = client.GetDatabase(DbSet.DB_NAME_FAKE); // TODO:: fake!!!
 
-            _roleCollection = db.GetCollection<IdentityRole>(DbSet.IDENTITY_ROLES_COLLECTION);
+            _roleCollection = db.GetCollection<CustomIdentityRole>(DbSet.IDENTITY_ROLES_COLLECTION);
         }
 
 
@@ -26,7 +26,7 @@ namespace HomeApp.Core.Identity.CustomProvider
         {
         }
 
-        public async Task<IdentityResult> CreateAsync(IdentityRole role, CancellationToken cancellationToken)
+        public async Task<IdentityResult> CreateAsync(CustomIdentityRole role, CancellationToken cancellationToken)
         {
             try
             {
@@ -40,7 +40,7 @@ namespace HomeApp.Core.Identity.CustomProvider
             return IdentityResult.Success;
         }
 
-        public async Task<IdentityResult> UpdateAsync(IdentityRole role, CancellationToken cancellationToken)
+        public async Task<IdentityResult> UpdateAsync(CustomIdentityRole role, CancellationToken cancellationToken)
         {
             try
             {
@@ -54,7 +54,7 @@ namespace HomeApp.Core.Identity.CustomProvider
             return IdentityResult.Success;
         }
 
-        public async Task<IdentityResult> DeleteAsync(IdentityRole role, CancellationToken cancellationToken)
+        public async Task<IdentityResult> DeleteAsync(CustomIdentityRole role, CancellationToken cancellationToken)
         {
             try
             {
@@ -68,43 +68,43 @@ namespace HomeApp.Core.Identity.CustomProvider
             return IdentityResult.Success;
         }
 
-        public async Task<string> GetRoleIdAsync(IdentityRole role, CancellationToken cancellationToken)
+        public async Task<string> GetRoleIdAsync(CustomIdentityRole role, CancellationToken cancellationToken)
         {
             return await Task.Run(() => role.Id.ToString(), cancellationToken);
         }
             
         
 
-        public async Task<string> GetRoleNameAsync(IdentityRole role, CancellationToken cancellationToken)
+        public async Task<string> GetRoleNameAsync(CustomIdentityRole role, CancellationToken cancellationToken)
         {
             return await Task.Run(() => role.Name, cancellationToken);
         }
 
-        public async Task SetRoleNameAsync(IdentityRole role, string roleName, CancellationToken cancellationToken)
+        public async Task SetRoleNameAsync(CustomIdentityRole role, string roleName, CancellationToken cancellationToken)
         {
             await Task.Run(() => { role.Name = roleName; }, cancellationToken);
         }
 
-        public async Task<string> GetNormalizedRoleNameAsync(IdentityRole role, CancellationToken cancellationToken)
+        public async Task<string> GetNormalizedRoleNameAsync(CustomIdentityRole role, CancellationToken cancellationToken)
         {
             return await Task.Run(() => role.NormalizedName, cancellationToken);
         }
 
-        public async Task SetNormalizedRoleNameAsync(IdentityRole role, string normalizedName, CancellationToken cancellationToken)
+        public async Task SetNormalizedRoleNameAsync(CustomIdentityRole role, string normalizedName, CancellationToken cancellationToken)
         {
             await Task.Run(() => { role.NormalizedName = normalizedName; }, cancellationToken);
         }
 
-        public async Task<IdentityRole> FindByIdAsync(string roleId, CancellationToken cancellationToken)
+        public async Task<CustomIdentityRole> FindByIdAsync(string roleId, CancellationToken cancellationToken)
         {
             return await _roleCollection.AsQueryable().FirstOrDefaultAsync(r => r.Id == ObjectId.Parse(roleId), cancellationToken);
         }
 
-        public async Task<IdentityRole> FindByNameAsync(string normalizedRoleName, CancellationToken cancellationToken)
+        public async Task<CustomIdentityRole> FindByNameAsync(string normalizedRoleName, CancellationToken cancellationToken)
         {
             return await _roleCollection.AsQueryable().FirstOrDefaultAsync(r => r.NormalizedName == normalizedRoleName, cancellationToken);
         }
 
-        public IQueryable<IdentityRole> Roles => _roleCollection.AsQueryable();
+        public IQueryable<CustomIdentityRole> Roles => _roleCollection.AsQueryable();
     }
 }

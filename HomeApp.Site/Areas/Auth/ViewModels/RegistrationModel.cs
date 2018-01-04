@@ -3,7 +3,7 @@ using HomeApp.Core.Db.Entities.Models.Enums;
 
 namespace HomeApp.Site.Areas.Auth.ViewModels
 {
-    public class RegistrationModel: LoginModel
+    public class RegistrationModel: LoginViewModel
     {
         [Required(ErrorMessage = "Пожалуйста, подтвердите пароль!")]
         public string ConfirmPassword { get; set; }

@@ -5,6 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Areas\Auth\Data\**" />
+    <Content Remove="Areas\Auth\Data\**" />
+    <EmbeddedResource Remove="Areas\Auth\Data\**" />
+    <None Remove="Areas\Auth\Data\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="wwwroot\vendors\roost\vendors\bower_components\animate.css\animate-config.json" />
     <Content Include="wwwroot\vendors\roost\vendors\bower_components\animate.css\animate.css" />
     <Content Include="wwwroot\vendors\roost\vendors\bower_components\animate.css\animate.min.css" />
@@ -404,10 +411,6 @@
 
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Areas\Auth\Data\" />
   </ItemGroup>
 
   <ItemGroup>

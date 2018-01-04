@@ -3,7 +3,7 @@
 namespace HomeApp.Core.Identity.CustomProvider
 {
     [BsonIgnoreExtraElements]
-    public class IdentityUserClaim
+    public class CustomIdentityUserClaim
     {
         [BsonElement("type")]
         [BsonIgnoreIfNull]

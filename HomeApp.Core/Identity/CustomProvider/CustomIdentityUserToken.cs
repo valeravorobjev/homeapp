@@ -3,7 +3,7 @@
 namespace HomeApp.Core.Identity.CustomProvider
 {
     [BsonIgnoreExtraElements]
-    public class IdentityUserToken
+    public class CustomIdentityUserToken
     {
         [BsonElement("login_provider")]
         [BsonIgnoreIfNull]

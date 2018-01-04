@@ -8,12 +8,14 @@ using HomeApp.Core.Models;
 using HomeApp.Core.Repositories.Contracts;
 using HomeApp.Site.Utils;
 using HomeApp.Site.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
 using Microsoft.Extensions.Options;
 
 namespace HomeApp.Site.Controllers
 {
+    [Authorize]
     [Route("RealEstate")]
     public class RealEstateController : Controller
     {

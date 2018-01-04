@@ -1,10 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using HomeApp.Core.Identity.CustomProvider;
 using HomeApp.Core.Repositories;
 using HomeApp.Core.Repositories.Contracts;
 using HomeApp.Core.Repositories.Fake;
 using HomeApp.Site.Utils;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
@@ -26,6 +30,19 @@ namespace HomeApp.Site
 
             AppOptions appOptions = Configuration.GetSection("AppOptions").Get<AppOptions>();
             string con = Configuration.GetConnectionString("MongoDb");
+
+            services.AddIdentityMongoDbStores(con).AddDefaultTokenProviders();
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.Cookie.Name = "HomeApp";
+                options.Cookie.HttpOnly = true;
+                options.ExpireTimeSpan = TimeSpan.FromDays(30);
+                options.LoginPath = "/auth/login";
+                options.LogoutPath = "/auth/logout";
+                options.AccessDeniedPath = "/auth";
+                options.SlidingExpiration = true;
+                options.ReturnUrlParameter = CookieAuthenticationDefaults.ReturnUrlParameter;
+            });
 
             services.AddMvc().AddJsonOptions(options =>
             {
@@ -60,6 +77,7 @@ namespace HomeApp.Site
             }
 
             app.UseStaticFiles();
+            app.UseAuthentication();
             app.UseMvc();
             app.UseResponseCompression();
             //app.UseResponseCaching();

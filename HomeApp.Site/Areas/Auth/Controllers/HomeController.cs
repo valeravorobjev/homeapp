@@ -2,20 +2,31 @@
 using HomeApp.Core.Db.Entities;
 using HomeApp.Core.Db.Entities.Models.Enums;
 using HomeApp.Core.Exceptions;
+using HomeApp.Core.Identity.CustomProvider;
 using HomeApp.Core.Repositories.Contracts;
 using HomeApp.Site.Areas.Auth.ViewModels;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace HomeApp.Site.Areas.Auth.Controllers
 {
     [Area("Auth")]
     [Route("[area]")]
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly IAuthRepository _authRepository;
+        private readonly UserManager<CustomIdentityUser> _userManager;
+        private readonly SignInManager<CustomIdentityUser> _signInManager;
 
-        public HomeController(IAuthRepository authRepository)
+        public HomeController(IAuthRepository authRepository, UserManager<CustomIdentityUser> userManager,
+            SignInManager<CustomIdentityUser> signInManager)
         {
+            _userManager = userManager;
+            _signInManager = signInManager;
             _authRepository = authRepository;
         }
 
@@ -27,39 +38,59 @@ namespace HomeApp.Site.Areas.Auth.Controllers
 
         [Route("Login")]
         [HttpGet]
-        public IActionResult Login()
+        [AllowAnonymous]
+        public async Task<IActionResult> Login(string returnUrl = null)
         {
             ViewBag.Title = "Авторизация";
+            ViewBag.ReturnUrl = returnUrl;
+            await HttpContext.SignOutAsync();
             return View();
         }
 
         [Route("Login")]
         [HttpPost]
+        [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginModel loginModel)
+        public async Task<IActionResult> Login(LoginViewModel loginViewModel, string returnUrl = null)
         {
             ViewBag.Title = "Авторизация";
-
             if (ModelState.IsValid)
             {
-                try
-                {
-                    Session session = await _authRepository.LogIn(loginModel.Email, loginModel.Password);
-                    string url = $"http://localhost:63903?sessionId={session.Id}&token={session.Token}";
+                var result = await _signInManager.PasswordSignInAsync(loginViewModel.Email, loginViewModel.Password, loginViewModel.RememberMe, lockoutOnFailure: false);
 
-                    return Redirect(url);
-                }
-                catch (UserNotFoundException)
+                if (result.Succeeded)
                 {
-                    ModelState.AddModelError("Email", "Пользователь с таким логином не найден");
+                    return RedirectToLocal(returnUrl);
                 }
-                catch (UserNotActivatedException)
+
+                if (result.IsLockedOut)
                 {
-                    ModelState.AddModelError("IsActive", "Пользователь заблокирован!");
+                    return View("Lockout");
                 }
+                else
+                {
+                    ModelState.AddModelError("Login", "Неправильный логин или пароль");
+                    return View(loginViewModel);
+                }
+
+                //try
+                //{
+                //    Session session = await _authRepository.LogIn(loginViewModel.Email, loginViewModel.Password);
+                //    string url = $"http://localhost:63903?sessionId={session.Id}&token={session.Token}";
+
+                //    return Redirect(url);
+                //}
+                //catch (UserNotFoundException)
+                //{
+                //    ModelState.AddModelError("Email", "Пользователь с таким логином не найден");
+                //}
+                //catch (UserNotActivatedException)
+                //{
+                //    ModelState.AddModelError("IsActive", "Пользователь заблокирован!");
+                //}
             }
 
-            return View(loginModel);
+            return View(loginViewModel);
         }
 
         [Route("Registration")]
@@ -143,5 +174,29 @@ namespace HomeApp.Site.Areas.Auth.Controllers
         {
             return View();
         }
+
+        #region Helpers
+
+        private void AddErrors(IdentityResult result)
+        {
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+        }
+
+        private IActionResult RedirectToLocal(string returnUrl)
+        {
+            if (Url.IsLocalUrl(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
+        }
+
+        #endregion
     }
 }

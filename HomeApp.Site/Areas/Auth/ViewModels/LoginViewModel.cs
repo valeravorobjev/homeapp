@@ -11,5 +11,7 @@ namespace HomeApp.Site.Areas.Auth.ViewModels
         [Required(ErrorMessage = "Пожалуйста, укажите пароль!")]
         [StringLength(100, MinimumLength = 6, ErrorMessage = "Минимальная длинна пароля 6 символов, максимальная 100")]
         public string Password { get; set; }
+
+        public bool RememberMe { get; set; }
     }
 }

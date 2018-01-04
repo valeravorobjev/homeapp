@@ -7,7 +7,7 @@ using MongoDB.Bson.Serialization.Attributes;
 namespace HomeApp.Core.Identity.CustomProvider
 {
     [BsonIgnoreExtraElements]
-    public class IdentityUser: IIdentity
+    public class CustomIdentityUser : IIdentity
     {
         [BsonId]
         public virtual ObjectId Id { get; set; }
@@ -37,13 +37,13 @@ namespace HomeApp.Core.Identity.CustomProvider
         public virtual List<IdentityUserLogin> Logins { get; set; }
         [BsonElement("claims")]
         [BsonIgnoreIfNull]
-        public virtual List<IdentityUserClaim> Claims { get; set; }
+        public virtual List<CustomIdentityUserClaim> Claims { get; set; }
         [BsonElement("lockout_end_date_utc")]
         [BsonIgnoreIfNull]
         public virtual DateTimeOffset? LockoutEndDateUtc { get; set; }
         [BsonElement("tokens")]
         [BsonIgnoreIfNull]
-        public virtual List<IdentityUserToken> Tokens { get; set; }
+        public virtual List<CustomIdentityUserToken> Tokens { get; set; }
         [BsonElement("access_faild_count")]
         [BsonIgnoreIfNull]
         public virtual int AccessFailedCount { get; set; }

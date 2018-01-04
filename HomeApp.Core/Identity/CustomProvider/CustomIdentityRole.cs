@@ -5,7 +5,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace HomeApp.Core.Identity.CustomProvider
 {
-    public class IdentityRole
+    public class CustomIdentityRole
     {
         [BsonId]
         public ObjectId Id { get; set; }
