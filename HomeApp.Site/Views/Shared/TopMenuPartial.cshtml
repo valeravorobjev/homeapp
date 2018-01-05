@@ -5,11 +5,21 @@
 
             @if (Context.User.Identity.IsAuthenticated)
             {
-                <form asp-area="Auth" asp-controller="Home" asp-action="Logout" method="post" asp-antiforgery="true">
-                    <li class="dropdown top-nav__guest">
-                        <input type="submit" value="Выйти"/>
-                    </li>
-                </form>
+                <li class="dropdown">
+                    <a href="" data-toggle="dropdown">@Context.User.Identity.Name</a>
+
+                    <ul class="dropdown-menu">
+                        <li><a href="">Профайл</a></li>
+                        <li><a href="">Личный кабинет</a></li>
+                        <li><a asp-action="Logout" asp-controller="Home" asp-area="Auth">Выход</a></li>
+                    </ul>
+                </li>
+                <li class="top-nav__icon">
+                    <a href="">
+                        <i class="zmdi zmdi-notifications"></i>
+                        <i class="top-nav__alert"></i>
+                    </a>
+                </li>
             }
             else
             {

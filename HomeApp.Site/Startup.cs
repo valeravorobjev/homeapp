@@ -72,6 +72,7 @@ namespace HomeApp.Site
         {
             if (env.IsDevelopment())
             {
+                app.UseStatusCodePages();
                 app.UseDeveloperExceptionPage();
                 app.UseBrowserLink();
             }

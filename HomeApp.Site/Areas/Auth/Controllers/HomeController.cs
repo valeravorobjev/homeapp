@@ -1,8 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using HomeApp.Core.Db.Entities;
+﻿using System.Threading.Tasks;
 using HomeApp.Core.Db.Entities.Models.Enums;
-using HomeApp.Core.Exceptions;
 using HomeApp.Core.Identity.CustomProvider;
 using HomeApp.Core.Repositories.Contracts;
 using HomeApp.Site.Areas.Auth.ViewModels;
@@ -10,7 +7,6 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 
 namespace HomeApp.Site.Areas.Auth.Controllers
 {
@@ -19,7 +15,6 @@ namespace HomeApp.Site.Areas.Auth.Controllers
     [Authorize]
     public class HomeController : Controller
     {
-        private readonly IAuthRepository _authRepository;
         private readonly UserManager<CustomIdentityUser> _userManager;
         private readonly SignInManager<CustomIdentityUser> _signInManager;
         private readonly IEmailSender _emailSender;
@@ -29,7 +24,6 @@ namespace HomeApp.Site.Areas.Auth.Controllers
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _authRepository = authRepository;
             _emailSender = emailSender;
         }
 
@@ -57,9 +51,11 @@ namespace HomeApp.Site.Areas.Auth.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginViewModel loginViewModel, string returnUrl = null)
+        public async Task<IActionResult> Login(LoginViewModel loginViewModel, [FromQuery]string returnUrl = null)
         {
             ViewBag.Title = "Авторизация";
+            ViewBag.ReturnUrl = returnUrl;
+
             if (ModelState.IsValid)
             {
                 var result = await _signInManager.PasswordSignInAsync(loginViewModel.Email, loginViewModel.Password, loginViewModel.RememberMe, lockoutOnFailure: false);
@@ -71,41 +67,24 @@ namespace HomeApp.Site.Areas.Auth.Controllers
 
                 if (result.IsLockedOut)
                 {
-                    return View("Lockout");
+                    //return View("Lockout");
                 }
                 else
                 {
                     ModelState.AddModelError("Login", "Неправильный логин или пароль");
                     return View(loginViewModel);
                 }
-
-                //try
-                //{
-                //    Session session = await _authRepository.LogIn(loginViewModel.Email, loginViewModel.Password);
-                //    string url = $"http://localhost:63903?sessionId={session.Id}&token={session.Token}";
-
-                //    return Redirect(url);
-                //}
-                //catch (UserNotFoundException)
-                //{
-                //    ModelState.AddModelError("Email", "Пользователь с таким логином не найден");
-                //}
-                //catch (UserNotActivatedException)
-                //{
-                //    ModelState.AddModelError("IsActive", "Пользователь заблокирован!");
-                //}
             }
 
             return View(loginViewModel);
         }
 
         [Route("Logout")]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpGet]
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Home", new { area = "" });
         }
 
         [Route("Registration")]
@@ -114,7 +93,7 @@ namespace HomeApp.Site.Areas.Auth.Controllers
         public IActionResult Registration(string returnUrl = null)
         {
             if (HttpContext.User.Identity.IsAuthenticated)
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home", new { area = "" });
 
             ViewBag.Title = "Регистрация";
             ViewBag.ReturnUrl = returnUrl;
@@ -141,36 +120,11 @@ namespace HomeApp.Site.Areas.Auth.Controllers
                 if (result.Succeeded)
                 {
                     string code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    string callbackUrl = Url.Action("Confirm","Home", new { userId = user.Id, code = code, area = "Auth" }, protocol: HttpContext.Request.Scheme);
+                    string callbackUrl = Url.Action("Confirm", "Home", new { userId = user.Id, code, area = "Auth" }, protocol: HttpContext.Request.Scheme);
                     await _emailSender.SendEmailConfirmationAsync(user.Email, callbackUrl, Language.Ru);
-                    return RedirectToLocal(returnUrl);
+                    return View("SendEmail");
                 }
                 AddErrors(result);
-
-                
-
-                //try
-                //{
-                //    await _authRepository.Register(registrationModel.Email, registrationModel.Password,
-                //        registrationModel.ConfirmPassword, registrationModel.Language);
-                //    return View();
-                //}
-                //catch (EmailInvalidException)
-                //{
-                //    ModelState.AddModelError("Email", "Электронная почта указана не верно");
-                //}
-                //catch (LoginOrPasswordException)
-                //{
-                //    ModelState.AddModelError("Password", "Логин или пароль указаны не верно");
-                //}
-                //catch (PasswordLengthException)
-                //{
-                //    ModelState.AddModelError("Password", "Минимальная длинна пароля 6 символов, максимальная 100");
-                //}
-                //catch (UserAllReadyExistException)
-                //{
-                //    ModelState.AddModelError("Email", "Пользователь с такой электронной почтой уже разегистрирован");
-                //}
             }
 
 
@@ -195,26 +149,7 @@ namespace HomeApp.Site.Areas.Auth.Controllers
             }
             IdentityResult result = await _userManager.ConfirmEmailAsync(user, code);
 
-            //try
-            //{
-            //    Session session = await _authRepository.ConfirmUser(userId, activeCode);
-            //    if (ModelState.IsValid)
-            //        return View(session);
-            //}
-            //catch (UserNotFoundException)
-            //{
-            //    ModelState.AddModelError("Email", "Пользователь с таким логином не найден");
-            //}
-            //catch (ActiveCodeException)
-            //{
-            //    ModelState.AddModelError("ActiveCode", "Код не верный код активации!");
-            //}
-            //catch (UpdateException)
-            //{
-            //    ModelState.AddModelError("ActiveCode", "Не получается активировать пользователя");
-            //}
-
-            return View(result.Succeeded ? "ConfirmEmail" : "Error");
+            return View(result.Succeeded ? "Confirm" : "Error");
         }
 
         [Route("Error")]

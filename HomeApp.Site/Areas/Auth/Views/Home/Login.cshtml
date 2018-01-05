@@ -10,7 +10,7 @@
                     <h2>@ViewBag.Title</h2>
                 </header>
                 <div class="tab-content">
-                    <form asp-controller="Home" asp-action="Login" asp-antiforgery="true" method="post" class="tab-pane active in fade" id="top-nav-login">
+                    <form asp-controller="Home" asp-action="Login" asp-antiforgery="true" asp-route-returnUrl="@ViewBag.ReturnUrl" method="post" class="tab-pane active in fade" id="top-nav-login">
                         @if (!ViewData.ModelState.IsValid)
                         {
                             <div class="alert alert-danger" role="alert" style="color: white;">
