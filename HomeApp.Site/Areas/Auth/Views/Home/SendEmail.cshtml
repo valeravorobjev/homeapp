@@ -2,21 +2,41 @@
     <div class="container">
         <header class="section__title">
             <h2>@ViewBag.Title</h2>
-                <small>Письмо для активации акаунта отправлено вам на почту.</small>
+            <small>Письмо для активации акаунта отправлено вам на почту.</small>
         </header>
         <div class="submit-property">
             <div class="tab-content submit-property__content">
                 <div class="tab-pane fade active in" id="submit-property-5">
                     <div class="card">
-                            <div class="submit-property__default">
-                                <i class="zmdi zmdi-alert-triangle"></i>
+                        @if (ViewData.ModelState.IsValid)
+                        {
+                            <div class="card__header">
                                 <h2>Проверьте почту!</h2>
+                                <small>Письмо для подтверждения аккаунта успешно отправлено на ваш Email адрес.</small>
+                            </div>
+                            <div class="card__body">
                                 <p>
                                     Письмо для активации учетной записи отправлено вам на почту. Если вы не нашли письмо
                                     в папке "Входящие", проверьте папку "Спам" и "Нежелательная почта" или обратитесь в службу поддержки
                                     сайта homeapp.pro.
                                 </p>
+                                <a href="@Url.Action("Index", "Home", new {area=""})" class="btn btn-primary">Вернуться на сайт</a>
                             </div>
+                        }
+                        else
+                        {
+                            <div class="card__header">
+                                <h2>Ошибка регистрации!</h2>
+                                <small>В процессе регистрации произошла ошибка.</small>
+                            </div>
+                            <div class="card__body">
+                                <p>
+                                    Нам не удалось завершить вашу регистрацию. Попробуйте еще раз или свяжитесь
+                                    со службой поддержки сайта homeapp.pro.
+                                </p>
+                                <a href="@Url.Action("Index", "Home", new {area=""})" class="btn btn-primary">Вернуться на сайт</a>
+                            </div>
+                        }
                     </div>
                 </div>
             </div>

@@ -28,6 +28,7 @@ namespace HomeApp.Site.Areas.Auth.Controllers
         }
 
         [Route("")]
+        [AllowAnonymous]
         public IActionResult Index()
         {
             return View();
@@ -39,7 +40,7 @@ namespace HomeApp.Site.Areas.Auth.Controllers
         public async Task<IActionResult> Login(string returnUrl = null)
         {
             if (HttpContext.User.Identity.IsAuthenticated)
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home", new { area = "" });
 
             ViewBag.Title = "Авторизация";
             ViewBag.ReturnUrl = returnUrl;
@@ -53,6 +54,9 @@ namespace HomeApp.Site.Areas.Auth.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel loginViewModel, [FromQuery]string returnUrl = null)
         {
+            if (HttpContext.User.Identity.IsAuthenticated)
+                return RedirectToAction("Index", "Home", new { area = "" });
+
             ViewBag.Title = "Авторизация";
             ViewBag.ReturnUrl = returnUrl;
 
@@ -62,7 +66,7 @@ namespace HomeApp.Site.Areas.Auth.Controllers
 
                 if (result.Succeeded)
                 {
-                    return RedirectToLocal(returnUrl);
+                    return RedirectToLocal(returnUrl ?? Url.Action("Index", "Home", new { area = "" }));
                 }
 
                 if (result.IsLockedOut)
@@ -106,6 +110,9 @@ namespace HomeApp.Site.Areas.Auth.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Registration(RegistrationViewModel registrationViewModel, string returnUrl = null)
         {
+            if (HttpContext.User.Identity.IsAuthenticated)
+                return RedirectToAction("Index", "Home", new { area = "" });
+
             ViewBag.Title = "Регистрация";
             ViewBag.ReturnUrl = returnUrl;
 
@@ -136,6 +143,9 @@ namespace HomeApp.Site.Areas.Auth.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Confirm(string userId, string code)
         {
+            if (HttpContext.User.Identity.IsAuthenticated)
+                return RedirectToAction("Index", "Home", new { area = "" });
+
             ViewBag.Title = "Подтверждение регистрации";
 
             if (userId == null || code == null)
@@ -150,12 +160,6 @@ namespace HomeApp.Site.Areas.Auth.Controllers
             IdentityResult result = await _userManager.ConfirmEmailAsync(user, code);
 
             return View(result.Succeeded ? "Confirm" : "Error");
-        }
-
-        [Route("Error")]
-        public IActionResult Error()
-        {
-            return View();
         }
 
         #region Helpers
