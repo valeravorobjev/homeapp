@@ -31,6 +31,12 @@ namespace HomeApp.Site
             string con = Configuration.GetConnectionString("MongoDb");
 
             services.AddIdentityMongoDbStores(con).AddDefaultTokenProviders();
+            services.AddAuthentication().AddFacebook(facebookOptions =>
+            {
+                facebookOptions.AppId = Configuration["Authentication:Facebook:AppId"];
+                facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
+            });
+
             services.ConfigureApplicationCookie(options =>
             {
                 options.Cookie.Name = "HomeApp";

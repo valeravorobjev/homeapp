@@ -1,12 +1,16 @@
-﻿@using Microsoft.AspNetCore.Http
+﻿@using HomeApp.Core.Identity.CustomProvider
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<CustomIdentityUser> UserManager
 <div class="header__top">
     <div class="container">
         <ul class="top-nav">
 
             @if (Context.User.Identity.IsAuthenticated)
             {
+               CustomIdentityUser user = UserManager.FindByNameAsync(Context.User.Identity.Name).Result;
+
                 <li class="dropdown">
-                    <a href="" data-toggle="dropdown">@Context.User.Identity.Name</a>
+                    <a href="" data-toggle="dropdown">@(user?.UserName ?? Context.User.Identity.Name)</a>
 
                     <ul class="dropdown-menu">
                         <li><a href="">Профайл</a></li>

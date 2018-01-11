@@ -1,4 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using HomeApp.Core.Db.Entities.Models.Enums;
 using HomeApp.Core.Identity.CustomProvider;
 using HomeApp.Core.Repositories.Contracts;
@@ -81,6 +84,104 @@ namespace HomeApp.Site.Areas.Auth.Controllers
             }
 
             return View(loginViewModel);
+        }
+
+        [Route("ExternalLogin")]
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public IActionResult ExternalLogin(string provider, string returnUrl = null)
+        {
+            var redirectUrl = Url.Action("ExternalLoginCallback", "Home", new { returnUrl });
+            var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+            return Challenge(properties, provider);
+        }
+
+        [Route("ExternalLoginCallback")]
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> ExternalLoginCallback(string returnUrl = null, string remoteError = null)
+        {
+            if (remoteError != null)
+            {
+                ModelState.AddModelError("ExternalLoginCallback", $"Error from external provider: {remoteError}");
+                return RedirectToAction("Login", "Home", new { area = "Auth" });
+            }
+            var info = await _signInManager.GetExternalLoginInfoAsync();
+            if (info == null)
+            {
+                return RedirectToAction(nameof(Login));
+            }
+
+            var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: true, bypassTwoFactor: true);
+            if (result.Succeeded)
+            {
+                return RedirectToLocal(returnUrl);
+            }
+            if (result.IsLockedOut)
+            {
+                return RedirectToAction("Lockout");
+            }
+            else
+            {
+                ViewBag.ReturnUrl = returnUrl;
+                ViewBag.Title = "Регистрация";  
+                ViewBag.LoginProvider = info.LoginProvider;
+
+                string email = info.Principal.FindFirstValue(ClaimTypes.Email);
+                string name = info.Principal.FindFirstValue(ClaimTypes.Name);
+
+                return View("ExternalLogin", new ExternalLoginViewModel { Email = email, UserName = name});
+            }
+        }
+
+        [Route("ExternalLoginConfirmation")]
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ExternalLoginConfirmation(ExternalLoginViewModel model, string returnUrl = null)
+        {
+            if (ModelState.IsValid)
+            {
+                ExternalLoginInfo info = await _signInManager.GetExternalLoginInfoAsync();
+                if (info == null)
+                {
+                    throw new ApplicationException("Error loading external login information during confirmation.");
+                }
+                CustomIdentityUser user = new CustomIdentityUser { Name = model.Email, Email = model.Email, UserName = model.UserName};
+
+                IdentityResult result = await _userManager.CreateAsync(user);
+                if (result.Succeeded)
+                {
+                    result = await _userManager.AddClaimsAsync(user, info.Principal.Claims);
+                    if (result.Succeeded)
+                    {
+                        result = await _userManager.AddLoginAsync(user, info);
+                        if (result.Succeeded)
+                        {
+                            string tokenEmail = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                            result = await _userManager.ConfirmEmailAsync(user, tokenEmail);
+                            if (result.Succeeded)
+                            {
+                                await _signInManager.SignInAsync(user, isPersistent: true);
+                                return RedirectToLocal(returnUrl);
+                            }
+                        }
+                    }
+                }
+                AddErrors(result);
+            }
+
+            ViewBag.ReturnUrl = returnUrl;
+            return View("ExternalLogin", model);
+        }
+
+        [Route("Lockout")]
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult Lockout()
+        {
+            return View();
         }
 
         [Route("Logout")]
@@ -180,7 +281,7 @@ namespace HomeApp.Site.Areas.Auth.Controllers
             }
             else
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home", new {area = ""});
             }
         }
 
