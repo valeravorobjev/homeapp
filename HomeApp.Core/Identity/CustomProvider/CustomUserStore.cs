@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using HomeApp.Core.Db;
+using HomeApp.Core.Db.Entities;
 using Microsoft.AspNetCore.Identity;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -22,14 +23,16 @@ namespace HomeApp.Core.Identity.CustomProvider
         IQueryableUserStore<CustomIdentityUser>,
         IUserAuthenticationTokenStore<CustomIdentityUser>
     {
-        private readonly IMongoCollection<CustomIdentityUser> _userCollection;
+        private readonly IMongoCollection<CustomIdentityUser> _identityUserCollection;
+        private readonly IMongoCollection<User> _userCollection;
 
         public CustomUserStore(string con)
         {
             IMongoClient client = new MongoClient(con);
-            IMongoDatabase db = client.GetDatabase(DbSet.DB_NAME_FAKE); // TODO:: fake!!!
+            IMongoDatabase db = client.GetDatabase(DbSet.DB_NAME); // TODO:: fake!!!
 
-            _userCollection = db.GetCollection<CustomIdentityUser>(DbSet.IDENTITY_USERS_COLLECTION);
+            _identityUserCollection = db.GetCollection<CustomIdentityUser>(DbSet.IDENTITY_USERS_COLLECTION);
+            _userCollection = db.GetCollection<User>(DbSet.USERS_COLLECTION);
         }
 
         public void Dispose()
@@ -65,7 +68,8 @@ namespace HomeApp.Core.Identity.CustomProvider
         {
             try
             {
-                await _userCollection.InsertOneAsync(user, cancellationToken: cancellationToken);
+                await _identityUserCollection.InsertOneAsync(user, cancellationToken: cancellationToken);
+
             }
             catch
             {
@@ -79,7 +83,7 @@ namespace HomeApp.Core.Identity.CustomProvider
         {
             try
             {
-                await _userCollection.ReplaceOneAsync(u => u.Id == user.Id, user, cancellationToken: cancellationToken);
+                await _identityUserCollection.ReplaceOneAsync(u => u.Id == user.Id, user, cancellationToken: cancellationToken);
             }
             catch
             {
@@ -93,7 +97,7 @@ namespace HomeApp.Core.Identity.CustomProvider
         {
             try
             {
-                await _userCollection.DeleteOneAsync(u => u.Id == user.Id, cancellationToken);
+                await _identityUserCollection.DeleteOneAsync(u => u.Id == user.Id, cancellationToken);
             }
             catch
             {
@@ -105,12 +109,12 @@ namespace HomeApp.Core.Identity.CustomProvider
 
         public async Task<CustomIdentityUser> FindByIdAsync(string userId, CancellationToken cancellationToken)
         {
-            return await _userCollection.AsQueryable().FirstOrDefaultAsync(u => u.Id == ObjectId.Parse(userId), cancellationToken: cancellationToken);
+            return await _identityUserCollection.AsQueryable().FirstOrDefaultAsync(u => u.Id == ObjectId.Parse(userId), cancellationToken: cancellationToken);
         }
 
         public async Task<CustomIdentityUser> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
         {
-            return await _userCollection.AsQueryable().FirstOrDefaultAsync(u => u.NormalizedUserName == normalizedUserName, cancellationToken: cancellationToken);
+            return await _identityUserCollection.AsQueryable().FirstOrDefaultAsync(u => u.NormalizedUserName == normalizedUserName, cancellationToken: cancellationToken);
         }
 
         public async Task SetPasswordHashAsync(CustomIdentityUser user, string passwordHash, CancellationToken cancellationToken)
@@ -164,7 +168,7 @@ namespace HomeApp.Core.Identity.CustomProvider
 
         public async Task<IList<CustomIdentityUser>> GetUsersInRoleAsync(string roleName, CancellationToken cancellationToken)
         {
-            return await _userCollection.AsQueryable().Where(u => u.Roles.Contains(roleName))
+            return await _identityUserCollection.AsQueryable().Where(u => u.Roles.Contains(roleName))
                 .ToListAsync(cancellationToken);
         }
 
@@ -202,7 +206,7 @@ namespace HomeApp.Core.Identity.CustomProvider
 
         public async Task<CustomIdentityUser> FindByLoginAsync(string loginProvider, string providerKey, CancellationToken cancellationToken)
         {
-            return await _userCollection.AsQueryable()
+            return await _identityUserCollection.AsQueryable()
                 .Where(u => u.Logins.Any(l => l.LoginProvider == loginProvider && l.ProviderKey == providerKey))
                 .FirstOrDefaultAsync(cancellationToken);
         }
@@ -239,7 +243,7 @@ namespace HomeApp.Core.Identity.CustomProvider
 
         public async Task<CustomIdentityUser> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken)
         {
-            return await _userCollection.AsQueryable().Where(u => u.NormalizedEmail == normalizedEmail)
+            return await _identityUserCollection.AsQueryable().Where(u => u.NormalizedEmail == normalizedEmail)
                 .FirstOrDefaultAsync(cancellationToken);
         }
 
@@ -314,7 +318,7 @@ namespace HomeApp.Core.Identity.CustomProvider
 
         public async Task<IList<CustomIdentityUser>> GetUsersForClaimAsync(Claim claim, CancellationToken cancellationToken)
         {
-            return await _userCollection.AsQueryable().Where(u => u.Claims.Any(c =>
+            return await _identityUserCollection.AsQueryable().Where(u => u.Claims.Any(c =>
                     c.Issuer == claim.Issuer && c.Type == claim.Type && c.Value == claim.Value &&
                     c.ValueType == claim.ValueType && c.OriginalIssuer == claim.OriginalIssuer))
                 .ToListAsync(cancellationToken);
@@ -393,6 +397,6 @@ namespace HomeApp.Core.Identity.CustomProvider
                 user.Tokens.FirstOrDefault(t => t.LoginProvider == loginProvider && t.Name == name).Value, cancellationToken);
         }
 
-        IQueryable<CustomIdentityUser> IQueryableUserStore<CustomIdentityUser>.Users => _userCollection.AsQueryable();
+        IQueryable<CustomIdentityUser> IQueryableUserStore<CustomIdentityUser>.Users => _identityUserCollection.AsQueryable();
     }
 }

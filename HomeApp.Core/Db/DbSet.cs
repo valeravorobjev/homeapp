@@ -10,11 +10,6 @@
         /// </summary>
         public const string DB_NAME = "homeapp";
         /// <summary>
-        /// Фейковая база данных homeapp
-        /// </summary>
-        public const string DB_NAME_FAKE = "homeapp_fake";
-
-        /// <summary>
         /// Пользователи
         /// </summary>
         public const string USERS_COLLECTION = "users";

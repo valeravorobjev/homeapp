@@ -9,10 +9,10 @@ using RazorLight;
 
 namespace HomeApp.Core.Repositories
 {
-    public class EmailSender : IEmailSender
+    public class EmailSenderRepository : IEmailSenderRepository
     {
-        private string _templatePath;
-        public EmailSender(string templatePath)
+        private readonly string _templatePath;
+        public EmailSenderRepository(string templatePath)
         {
             _templatePath = templatePath;
         }

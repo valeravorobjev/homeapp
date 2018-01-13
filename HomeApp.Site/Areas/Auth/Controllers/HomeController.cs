@@ -19,10 +19,10 @@ namespace HomeApp.Site.Areas.Auth.Controllers
     {
         private readonly UserManager<CustomIdentityUser> _userManager;
         private readonly SignInManager<CustomIdentityUser> _signInManager;
-        private readonly IEmailSender _emailSender;
+        private readonly IEmailSenderRepository _emailSender;
 
-        public HomeController(IAuthRepository authRepository, UserManager<CustomIdentityUser> userManager,
-            SignInManager<CustomIdentityUser> signInManager, IEmailSender emailSender)
+        public HomeController(UserManager<CustomIdentityUser> userManager,
+            SignInManager<CustomIdentityUser> signInManager, IEmailSenderRepository emailSender)
         {
             _userManager = userManager;
             _signInManager = signInManager;

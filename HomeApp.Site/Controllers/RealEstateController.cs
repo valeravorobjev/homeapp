@@ -15,7 +15,6 @@ using Microsoft.Extensions.Options;
 
 namespace HomeApp.Site.Controllers
 {
-    [Authorize]
     [Route("RealEstate")]
     public class RealEstateController : Controller
     {

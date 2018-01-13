@@ -4,7 +4,6 @@ using System.Security.Claims;
 using HomeApp.Core.Identity.CustomProvider;
 using HomeApp.Core.Repositories;
 using HomeApp.Core.Repositories.Contracts;
-using HomeApp.Core.Repositories.Fake;
 using HomeApp.Site.Utils;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -92,18 +91,15 @@ namespace HomeApp.Site
             });
 
             services.AddRouting(options => { options.LowercaseUrls = true; });
-
-            services.AddTransient<ISessionRepository, SessionRepository>(options => new SessionRepository(con));
-            services.AddTransient<IAuthRepository, AuthRepository>(options=>new AuthRepository(options.GetService<ISessionRepository>(), con));
-            services.AddTransient<IEmailSender, EmailSender>(options =>
+            services.AddTransient<IEmailSenderRepository, EmailSenderRepository>(options =>
             {
                 IHostingEnvironment env = options.GetService<IHostingEnvironment>();
-                return new EmailSender($"{env.ContentRootPath}/RazorTemplates/Emails");
+                return new EmailSenderRepository($"{env.ContentRootPath}/RazorTemplates/Emails");
             });
 
-            services.AddSingleton<IAdRepository, AdFakeRepository>();
-            services.AddSingleton<IUserRepository, UserFakeRepository>(options=> new UserFakeRepository(con));
-            services.AddSingleton<IRealEstateRepository, RealEstateFakeRepository>(options=> new RealEstateFakeRepository(con));
+            services.AddSingleton<IAdRepository, AdRepository>();
+            services.AddSingleton<IUserRepository, UserRepository>(options=> new UserRepository(con));
+            services.AddSingleton<IRealEstateRepository, RealEstateRepository>(options=> new RealEstateRepository(con));
 
             services.AddResponseCompression();
             services.AddResponseCaching();

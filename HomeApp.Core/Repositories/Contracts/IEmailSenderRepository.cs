@@ -6,7 +6,7 @@ using HomeApp.Core.Db.Entities.Models.Enums;
 
 namespace HomeApp.Core.Repositories.Contracts
 {
-    public interface IEmailSender
+    public interface IEmailSenderRepository
     {
         Task SendEmailConfirmationAsync(string email, string callbackUrl, Language language);
     }

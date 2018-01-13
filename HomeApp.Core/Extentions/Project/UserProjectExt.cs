@@ -37,10 +37,7 @@ namespace HomeApp.Core.Extentions.Project
                             Membership = new Membership
                             {
                                 Login = user.Membership.Login,
-                                Email = user.Membership.Email,
-                                UserRoles = user.Membership.UserRoles,
-                                UserStatus = user.Membership.UserStatus,
-                                DateReg = user.Membership.DateReg
+                                Email = user.Membership.Email
                             },
                             SocialMedia = user.SocialMedia,
                             PhotoMinPath = user.PhotoMinPath,
@@ -67,10 +64,7 @@ namespace HomeApp.Core.Extentions.Project
                             Membership = new Membership
                             {
                                 Login = user.Membership.Login,
-                                Email = user.Membership.Email,
-                                UserRoles = user.Membership.UserRoles,
-                                UserStatus = user.Membership.UserStatus,
-                                DateReg = user.Membership.DateReg
+                                Email = user.Membership.Email
                             },
                             SocialMedia = user.SocialMedia,
                             PhotoMinPath = user.PhotoMinPath,
@@ -100,10 +94,6 @@ namespace HomeApp.Core.Extentions.Project
         {
             if (settings == UserProjectSettings.Default)
             {
-                user.Membership.Password = null;
-                user.Membership.Salt = 0;
-                user.Membership.ActiveCode = Guid.Empty;
-
                 return user;
             }
 

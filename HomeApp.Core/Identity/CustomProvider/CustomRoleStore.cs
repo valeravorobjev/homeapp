@@ -16,7 +16,7 @@ namespace HomeApp.Core.Identity.CustomProvider
         public CustomRoleStore(string con)
         {
             IMongoClient client = new MongoClient(con);
-            IMongoDatabase db = client.GetDatabase(DbSet.DB_NAME_FAKE); // TODO:: fake!!!
+            IMongoDatabase db = client.GetDatabase(DbSet.DB_NAME);
 
             _roleCollection = db.GetCollection<CustomIdentityRole>(DbSet.IDENTITY_ROLES_COLLECTION);
         }

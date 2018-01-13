@@ -4406,4 +4406,10 @@
     </Content>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Areas\Office\Data\" />
+    <Folder Include="Areas\Office\Models\" />
+    <Folder Include="Areas\Office\Views\" />
+  </ItemGroup>
+
 </Project>
