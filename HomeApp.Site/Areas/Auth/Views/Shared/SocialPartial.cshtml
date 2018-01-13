@@ -1,0 +1,48 @@
+﻿@using HomeApp.Core.Identity.CustomProvider
+@using Microsoft.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<CustomIdentityUser> SignInManager
+
+@{
+    List<AuthenticationScheme> loginProviders = (await SignInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+}
+@if (loginProviders.Count > 0)
+{
+    <div class="top-nav__auth">
+        <span>или</span>
+        <div>Войдите используя</div>
+
+        @{
+            Dictionary<string, string> cssDic = new Dictionary<string, string>
+            {
+                {"facebook", "mdc-bg-blue-500"},
+                {"google", "mdc-bg-red-400"},
+                {"twitter", "mdc-bg-cyan-500"},
+                {"windows", "mdc-bg-green-500"},
+                {"vk", "mdc-bg-blue-700"}
+
+            };
+        }
+
+        @foreach (AuthenticationScheme provider in loginProviders)
+        {
+            string providerStr = provider.Name.ToLower();
+
+            if (providerStr == "microsoft")
+            {
+                providerStr = "windows";
+            }
+
+            string cls = $"zmdi-{providerStr}";
+            string ids = $"{providerStr}_form";
+
+
+            <a href="javascript:{}" onclick="document.getElementById('@ids').submit();" class="@cssDic[providerStr]">
+                <form id="@ids" asp-area="Auth" asp-controller="Home" asp-action="ExternalLogin" asp-route-returnurl="@ViewBag.ReturnUrl" method="post" asp-antiforgery="true">
+                    <input type="hidden" name="provider" value="@provider.Name" />
+                </form>
+                <i class="zmdi @cls"></i>
+            </a>
+        }
+    </div>
+}

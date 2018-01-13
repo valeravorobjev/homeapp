@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using HomeApp.Core.Db.Entities.Models.Enums;
@@ -129,7 +128,7 @@ namespace HomeApp.Site.Areas.Auth.Controllers
                 ViewBag.LoginProvider = info.LoginProvider;
 
                 string email = info.Principal.FindFirstValue(ClaimTypes.Email);
-                string name = info.Principal.FindFirstValue(ClaimTypes.Name);
+                string name = info.Principal.FindFirstValue(ClaimTypes.Name) ?? $"{info.Principal.FindFirstValue(ClaimTypes.Surname)} {info.Principal.FindFirstValue(ClaimTypes.GivenName)}";
 
                 return View("ExternalLogin", new ExternalLoginViewModel { Email = email, UserName = name});
             }

@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using HomeApp.Core.Identity.CustomProvider;
 using HomeApp.Core.Repositories;
 using HomeApp.Core.Repositories.Contracts;
 using HomeApp.Core.Repositories.Fake;
 using HomeApp.Site.Utils;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -35,6 +37,39 @@ namespace HomeApp.Site
             {
                 facebookOptions.AppId = Configuration["Authentication:Facebook:AppId"];
                 facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
+            });
+            services.AddAuthentication().AddGoogle(googleOptions =>
+            {
+                googleOptions.ClientId = Configuration["Authentication:Google:ClientId"];
+                googleOptions.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
+            });
+            services.AddAuthentication().AddTwitter(twitterOptions =>
+            {
+                twitterOptions.ConsumerKey = Configuration["Authentication:Twitter:ConsumerKey"];
+                twitterOptions.ConsumerSecret = Configuration["Authentication:Twitter:ConsumerSecret"];
+            });
+
+            services.AddAuthentication().AddMicrosoftAccount(microsoftOptions =>
+            {
+                microsoftOptions.ClientId = Configuration["Authentication:Microsoft:ApplicationId"];
+                microsoftOptions.ClientSecret = Configuration["Authentication:Microsoft:Password"];
+            });
+
+            services.AddAuthentication().AddVK(options =>
+            {
+                options.ClientId = Configuration["Authentication:Vk:ClientId"];
+                options.ClientSecret = Configuration["Authentication:Vk:ClientSecret"];
+
+                options.Scope.Add("email");
+
+                options.Fields.Add("uid");
+                options.Fields.Add("first_name");
+                options.Fields.Add("last_name");
+
+                options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "uid");
+                options.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
+                options.ClaimActions.MapJsonKey(ClaimTypes.GivenName, "first_name");
+                options.ClaimActions.MapJsonKey(ClaimTypes.Surname, "last_name");
             });
 
             services.ConfigureApplicationCookie(options =>

@@ -49,39 +49,7 @@
                             <a href="#top-nav-forgot-password" data-toggle="tab"><small>Забыли пароль?</small></a>
                         </div>
                     </form>
-
-                    @{
-                        List<AuthenticationScheme> loginProviders = (await SignInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-                    }
-                    @if (loginProviders.Count > 0)
-                    {
-                        <div class="top-nav__auth">
-                            <span>или</span>
-                            <div>Войдите используя</div>
-
-                            @foreach (AuthenticationScheme provider in loginProviders)
-                            {
-                                string cls = $"zmdi-{provider.Name.ToLower()}";
-                                string ids = $"{provider.Name.ToLower()}_form";
-
-
-                                <a href="javascript:{}" onclick="document.getElementById('@ids').submit();" class="mdc-bg-blue-500">
-                                    <form id="@ids" asp-area="Auth" asp-controller="Home" asp-action="ExternalLogin" asp-route-returnurl="@ViewBag.ReturnUrl" method="post" asp-antiforgery="true">
-                                    <input type="hidden" name="provider" value="@provider.Name"/>
-                                    </form>
-                                    <i class="zmdi @cls"></i>
-                                </a>
-                            }
-
-
-                            @*<a href="" class="mdc-bg-cyan-500">
-                                    <i class="zmdi zmdi-twitter"></i>
-                                </a>
-                                <a href="" class="mdc-bg-red-400">
-                                    <i class="zmdi zmdi-google"></i>
-                                </a>*@
-                        </div>
-                    }
+                    @Html.Partial("SocialPartial")
                     <form class="tab-pane fade forgot-password" id="top-nav-forgot-password">
                         <a href="#top-nav-login" class="top-nav__back" data-toggle="tab"></a>
                         <p>Для востановления пароля укажите вашу почту и нажмите "Сбросить пароль"</p>
