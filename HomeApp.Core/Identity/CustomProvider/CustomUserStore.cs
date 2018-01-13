@@ -6,6 +6,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using HomeApp.Core.Db;
 using HomeApp.Core.Db.Entities;
+using HomeApp.Core.Db.Entities.Models;
+using HomeApp.Core.Db.Entities.Models.Enums;
 using Microsoft.AspNetCore.Identity;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -68,7 +70,24 @@ namespace HomeApp.Core.Identity.CustomProvider
         {
             try
             {
+                // Сохраняется пользователь фреймворка identity
                 await _identityUserCollection.InsertOneAsync(user, cancellationToken: cancellationToken);
+
+                User homeAppUser = new User
+                {
+                    UserType = UserType.None,
+                    UserMode = UserMode.None,
+                    Language = Language.Ru,
+                    Membership = new Membership
+                    {
+                        DateReg = DateTime.UtcNow,
+                        Email = user.Email,
+                        Login = user.Email
+                    }
+                };
+
+                // Сохраняется пользователь (профайл) для работы с сайтом
+                await _userCollection.InsertOneAsync(homeAppUser, cancellationToken: cancellationToken);
 
             }
             catch
