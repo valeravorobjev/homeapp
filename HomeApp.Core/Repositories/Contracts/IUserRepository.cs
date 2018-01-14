@@ -21,6 +21,12 @@ namespace HomeApp.Core.Repositories.Contracts
         /// <returns></returns>
         Task<User> GetUser(ObjectId userId);
         /// <summary>
+        /// Возвращает пользователя по логину
+        /// </summary>
+        /// <param name="login">Логин пользователя</param>
+        /// <returns></returns>
+        Task<User> GetUser(string login);
+        /// <summary>
         /// Возвращает список пользователей
         /// </summary>
         /// <param name="filter">Фильтр</param>
@@ -63,5 +69,14 @@ namespace HomeApp.Core.Repositories.Contracts
         /// <param name="take">Сколько записей взять</param>
         /// <returns></returns>
         Task<CommentsModel> GetComments(ObjectId userId, int skip, int take);
+
+        /// <summary>
+        /// Установить тип пользователя. Меняет свойство UserType а так же сохраняет в базу новый объект, унаследованный от user.
+        /// Например, если тип Prson то создается класс Person.
+        /// </summary>
+        /// <param name="userId">Id пользователя</param>
+        /// <param name="userType">Тип пользователя</param>
+        /// <returns></returns>
+        Task SetUserType(ObjectId userId, UserType userType);
     }
 }

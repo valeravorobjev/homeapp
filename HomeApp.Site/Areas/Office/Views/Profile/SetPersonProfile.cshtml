@@ -1,0 +1,118 @@
+﻿@using HomeApp.Core.Identity.CustomProvider
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<CustomIdentityUser> UserManager
+
+@{
+    CustomIdentityUser user = UserManager.FindByNameAsync(Context.User.Identity.Name).Result;
+    string userName = user.UserName ?? user.Email;
+}
+
+<header class="main__title text-center">
+    <h2>Настройка профайла</h2>
+    <small>Уважаемый <b>@userName</b>, чтобы воспользоваться личным кабинетом вам необходимо активировать ваш профайл.</small>
+    <small>Следуйте инструкциям ниже, это займет совсем немного времени!</small>
+</header>
+
+<div class="submit-property">
+    <ul class="submit-property__steps">
+        <li class="passed"><a asp-area="Office" asp-controller="Profile" asp-action="SetUserType">1</a></li>
+        <li class="active"><a>2</a></li>
+        <li><a>3</a></li>
+        <li><a>4</a></li>
+        <li><a>5</a></li>
+        <li class="submit-property__caret"></li>
+    </ul>
+    <div class="tab-content submit-property__content">
+        <div class="tab-pane fade in active">
+            <div class="card">
+                <div class="card__header">
+                    <h2>Персональные данные</h2>
+                    <small>Поля помеченные звездочкой (*) являются обязательными для заполнения!</small>
+                </div>
+                <form class="card__body" asp-area="Office" asp-controller="Profile" asp-action="SetPersonProfile" method="post" id="person-form">
+
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group form-group--float form-group--float-center">
+                                <input type="text" class="form-control text-center">
+                                <i class="form-group__bar"></i>
+                                <label>Фамилия</label>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4">
+                            <div class="form-group form-group--float form-group--float-center">
+                                <input type="text" class="form-control text-center">
+                                <i class="form-group__bar"></i>
+                                <label>Имя</label>
+                            </div>
+                        </div>
+                        
+                        <div class="col-sm-4">
+                            <div class="form-group form-group--float form-group--float-center">
+                                <input type="text" class="form-control text-center">
+                                <i class="form-group__bar"></i>
+                                <label>Отчество</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group form-group--float form-group--float-center">
+                        <input type="text" class="form-control text-center">
+                        <i class="form-group__bar"></i>
+                        <label>Дата рождения</label>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Ваш пол</label>
+                        <div class="btn-group btn-group-justified" data-toggle="buttons">
+                            <label class="btn active">
+                                <input type="radio">Не указано
+                            </label>
+                            <label class="btn">
+                                <input type="radio">Мужчина
+                            </label>
+                            <label class="btn">
+                                <input type="radio">Женщина
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group form-group--float form-group--float-center">
+                                <input type="text" class="form-control text-center">
+                                <i class="form-group__bar"></i>
+                                <label>Основной телефон</label>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="form-group form-group--float form-group--float-center">
+                                <input type="text" class="form-control text-center">
+                                <i class="form-group__bar"></i>
+                                <label>Дополнительный телефон</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group form-group--float form-group--float-center">
+                        <input type="text" class="form-control text-center">
+                        <i class="form-group__bar"></i>
+                        <label>Адрес</label>
+                    </div>
+
+                    <a href="javascript:{}" onclick="document.getElementById('person-form').submit();" data-toggle="tab" class="btn btn--circle btn-primary submit-property__button">
+                        <i class="zmdi zmdi-long-arrow-right"></i>
+                    </a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Styles
+    {
+    <link rel="stylesheet" href="~/css/profile.css" />
+}

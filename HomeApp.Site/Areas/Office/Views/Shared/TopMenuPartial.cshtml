@@ -1,0 +1,35 @@
+﻿<header id="header-alt">
+    <a href="" class="header-alt__trigger hidden-lg" data-rmd-action="block-open" data-rmd-target="#main__sidebar">
+        <i class="zmdi zmdi-menu"></i>
+    </a>
+    <a asp-area="Office" asp-controller="Home" asp-action="Index" class="header-alt__logo hidden-xs">Личный кабинет</a>
+    <ul class="header-alt__menu">
+        <li>
+            <a href="" data-rmd-action="block-open" data-rmd-target=".header-alt__search-wrap" data-rmd-backdrop-class="backdrop--search">
+                <i class="zmdi zmdi-search"></i>
+            </a>
+        </li>
+        @Html.Partial("TopMenuNotificationPartial")
+        @Html.Partial("TopMenuMessagesPartial")
+        <li class="hidden-xs">
+            <a asp-area="" asp-controller="Home" asp-action="Index" as><i class="zmdi zmdi-home"></i></a>
+        </li>
+        <li class="header-alt__profile dropdown">
+            <a href="" data-toggle="dropdown">
+                <img src="https://placeholdit.imgix.net/~text?&w=500&h=500" alt="">
+            </a>
+            <ul class="dropdown-menu pull-right">
+                <li><a href="">Edit Profile</a></li>
+                <li><a href="">Account Settings</a></li>
+                <li><a href="">Other Settings</a></li>
+                <li><a href="">Logout</a></li>
+            </ul>
+        </li>
+    </ul>
+    <div class="header-alt__search-wrap">
+        <form class="header-alt__search">
+            <input type="text" placeholder="Search...">
+            <i class="zmdi zmdi-long-arrow-left" data-rmd-action="block-close"></i>
+        </form>
+    </div>
+</header>

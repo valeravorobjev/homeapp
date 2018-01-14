@@ -7,6 +7,7 @@ using HomeApp.Core.Db;
 using HomeApp.Core.Db.Entities;
 using HomeApp.Core.Db.Entities.Models;
 using HomeApp.Core.Db.Entities.Models.Enums;
+using HomeApp.Core.Extentions;
 using HomeApp.Core.Extentions.Filters;
 using HomeApp.Core.Extentions.Filters.Models;
 using HomeApp.Core.Extentions.Project;
@@ -41,6 +42,12 @@ namespace HomeApp.Core.Repositories
         async Task<User> IUserRepository.GetUser(ObjectId userId)
         {
             User user = await _usersCollection.AsQueryable().FirstOrDefaultAsync(u => u.Id == userId);
+            return user.Project(UserProjectSettings.Default);
+        }
+
+        public async Task<User> GetUser(string login)
+        {
+            User user = await _usersCollection.AsQueryable().FirstOrDefaultAsync(u => u.Membership.Login == login);
             return user.Project(UserProjectSettings.Default);
         }
 
@@ -198,6 +205,28 @@ namespace HomeApp.Core.Repositories
                 }).ToList()
             };
             return commentList;
+        }
+
+        public async Task SetUserType(ObjectId userId ,UserType userType)
+        {
+            FilterDefinitionBuilder<User> ufb = new FilterDefinitionBuilder<User>();
+
+            User user = await _usersCollection.AsQueryable().FirstOrDefaultAsync(u => u.Id == userId);
+
+            if (userType == UserType.Realtor)
+            {
+                user = user.ToRealtor();
+            }
+            else if (userType == UserType.Person)
+            {
+                user = user.ToPerson();
+            }
+            else
+            {
+                throw new Exception("UserType exception");
+            }
+
+            await _usersCollection.ReplaceOneAsync(ufb.Eq(u => u.Id, userId), user);
         }
     }
 }

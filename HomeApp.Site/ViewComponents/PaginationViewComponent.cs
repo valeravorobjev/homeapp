@@ -1,5 +1,4 @@
 ﻿using System;
-using HomeApp.Core.ViewModels;
 using HomeApp.Site.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 

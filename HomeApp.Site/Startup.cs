@@ -4,6 +4,7 @@ using System.Security.Claims;
 using HomeApp.Core.Identity.CustomProvider;
 using HomeApp.Core.Repositories;
 using HomeApp.Core.Repositories.Contracts;
+using HomeApp.Site.Filters;
 using HomeApp.Site.Utils;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -100,6 +101,8 @@ namespace HomeApp.Site
             services.AddSingleton<IAdRepository, AdRepository>();
             services.AddSingleton<IUserRepository, UserRepository>(options=> new UserRepository(con));
             services.AddSingleton<IRealEstateRepository, RealEstateRepository>(options=> new RealEstateRepository(con));
+
+            services.AddScoped<UserProfileFilter>();
 
             services.AddResponseCompression();
             services.AddResponseCaching();

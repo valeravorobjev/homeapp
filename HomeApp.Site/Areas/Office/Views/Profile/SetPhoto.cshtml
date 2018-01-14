@@ -1,0 +1,52 @@
+﻿@using HomeApp.Core.Identity.CustomProvider
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<CustomIdentityUser> UserManager
+
+@{
+    CustomIdentityUser user = UserManager.FindByNameAsync(Context.User.Identity.Name).Result;
+    string userName = user.UserName ?? user.Email;
+}
+
+<header class="main__title text-center">
+    <h2>Настройка профайла</h2>
+    <small>Уважаемый <b>@userName</b>, чтобы воспользоваться личным кабинетом вам необходимо активировать ваш профайл.</small>
+    <small>Следуйте инструкциям ниже, это займет совсем немного времени!</small>
+</header>
+
+<div class="submit-property">
+    <ul class="submit-property__steps">
+        <li class="passed"><a asp-area="Office" asp-controller="Profile" asp-action="SetUserType">1</a></li>
+        <li class="passed"><a asp-area="Office" asp-controller="Profile" asp-action="SetPersonProfile">2</a></li>
+        <li class="passed"><a asp-area="Office" asp-controller="Profile" asp-action="SetSocial">3</a></li>
+        <li class="active"><a>4</a></li>
+        <li><a>5</a></li>
+        <li class="submit-property__caret"></li>
+    </ul>
+    <div class="tab-content submit-property__content">
+        <div class="tab-pane fade in active">
+            <div class="card">
+                <div class="card__header">
+                    <h2>Фото профиля</h2>
+                    <small>Пожалуйста, загрузить вашу фотографию. Люди будут более доверительно к вам относиться, если в профайле будет ваша фотография!</small>
+                </div>
+                <form class="card__body" asp-area="Office" asp-controller="Profile" asp-action="SetSocial" method="post" id="social">
+
+                    <div class="form-group form-group--float form-group--float-center">
+                        <input type="file" class="form-control text-center">
+                        <i class="form-group__bar"></i>
+                    </div>
+
+                    <a href="javascript:{}" onclick="document.getElementById('social').submit();" data-toggle="tab" class="btn btn--circle btn-primary submit-property__button">
+                        <i class="zmdi zmdi-long-arrow-right"></i>
+                    </a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Styles
+    {
+    <link rel="stylesheet" href="~/css/profile.css" />
+}

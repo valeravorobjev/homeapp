@@ -6,7 +6,6 @@ using HomeApp.Core.Extentions.Filters.Models;
 using HomeApp.Core.Extentions.Sorts.Models.Enums;
 using HomeApp.Core.Models;
 using HomeApp.Core.Repositories.Contracts;
-using HomeApp.Core.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HomeApp.Site.Controllers.Api.V1

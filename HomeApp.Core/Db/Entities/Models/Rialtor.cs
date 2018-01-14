@@ -5,7 +5,7 @@ namespace HomeApp.Core.Db.Entities.Models
     /// <summary>
     /// Риэлтор
     /// </summary>
-    public class Rialtor: PersonProfessional
+    public class Realtor : PersonProfessional
     {
         /// <summary>
         /// Название специальности

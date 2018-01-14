@@ -4408,7 +4408,6 @@
 
   <ItemGroup>
     <Folder Include="Areas\Office\Data\" />
-    <Folder Include="Areas\Office\Models\" />
   </ItemGroup>
 
 </Project>

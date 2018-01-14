@@ -3,6 +3,7 @@ using HomeApp.Core.Db.Entities.Models;
 using HomeApp.Core.Db.Entities.Models.Enums;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Bson.Serialization.Serializers;
 
 namespace HomeApp.Core.Db.Entities
 {
@@ -11,7 +12,7 @@ namespace HomeApp.Core.Db.Entities
     /// </summary>
     [BsonIgnoreExtraElements]
     [BsonDiscriminator(RootClass = true)]
-    [BsonKnownTypes(typeof(Person), typeof(PersonProfessional), typeof(Rialtor), typeof(Agency), typeof(Professional), typeof(Developer))]
+    [BsonKnownTypes(typeof(Person), typeof(PersonProfessional), typeof(Realtor), typeof(Agency), typeof(Professional), typeof(Developer))]
     public class User
     {
         /// <summary>
