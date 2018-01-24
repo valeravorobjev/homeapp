@@ -24,7 +24,7 @@ namespace HomeApp.Site.Areas.Office.Controllers
         [HttpGet]
         public async Task<IActionResult> SetUserType(UserType? userType)
         {
-            User user = await _userRepository.GetUser(HttpContext.User.Identity.Name);
+            User user = await _userRepository.GetUserAsync(HttpContext.User.Identity.Name);
             bool isRealtor;
             if (userType != null)
             {
@@ -52,7 +52,7 @@ namespace HomeApp.Site.Areas.Office.Controllers
 
             try
             {
-                await _userRepository.SetUserType(new ObjectId(model.UserId), userType);
+                await _userRepository.SetUserTypeAsync(new ObjectId(model.UserId), userType);
             }
             catch
             {
@@ -65,8 +65,7 @@ namespace HomeApp.Site.Areas.Office.Controllers
         [HttpGet]
         public async Task<IActionResult> SetPersonProfile(UserType userType)
         {
-            SetPersonProfileViewModel model = new SetPersonProfileViewModel();
-            model.UserType = userType;
+            SetPersonProfileViewModel model = new SetPersonProfileViewModel {UserType = userType};
             return View(model);
         }
 

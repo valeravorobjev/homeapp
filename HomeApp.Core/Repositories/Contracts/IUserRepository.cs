@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using HomeApp.Core.Db.Entities;
+using HomeApp.Core.Db.Entities.Models;
 using HomeApp.Core.Db.Entities.Models.Enums;
 using HomeApp.Core.Extentions.Filters.Models;
 using HomeApp.Core.Extentions.Sorts.Models.Enums;
@@ -19,48 +20,48 @@ namespace HomeApp.Core.Repositories.Contracts
         /// </summary>
         /// <param name="userId">Идентификатор пользователя</param>
         /// <returns></returns>
-        Task<User> GetUser(ObjectId userId);
+        Task<User> GetUserAsync(ObjectId userId);
         /// <summary>
         /// Возвращает пользователя по логину
         /// </summary>
         /// <param name="login">Логин пользователя</param>
         /// <returns></returns>
-        Task<User> GetUser(string login);
+        Task<User> GetUserAsync(string login);
         /// <summary>
         /// Возвращает список пользователей
         /// </summary>
         /// <param name="filter">Фильтр</param>
         /// <param name="sortType">Сортировка</param>
         /// <returns></returns>
-        Task<UsersModel> GetUsers(UserFilter filter, UserSort sortType);
+        Task<UsersModel> GetUsersAsync(UserFilter filter, UserSort sortType);
         /// <summary>
         /// Возвращает топ пользователей
         /// </summary>
         /// <param name="userTypes">Типы пользователей</param>
         /// <param name="take">Сколько записей взять</param>
         /// <returns></returns>
-        Task<UsersModel> GetTopUsers(List<UserType> userTypes, int take);
+        Task<UsersModel> GetTopUsersAsync(List<UserType> userTypes, int take);
         /// <summary>
         /// Возвращает топ пользователей, с количеством размещенных, активных объявлений
         /// </summary>
         /// <param name="userTypes"></param>
         /// <param name="take"></param>
         /// <returns></returns>
-        Task<UsersWithRealEstateCountModel> GetTopUsersWithRealEstateCount(List<UserType> userTypes, int take);
+        Task<UsersWithRealEstateCountModel> GetTopUsersWithRealEstateCountAsync(List<UserType> userTypes, int take);
         /// <summary>
         /// Возвращает список профессионалов (агенства, застройщики)
         /// </summary>
         /// <param name="filter">Фильтр</param>
         /// <param name="sortType">Сортировка</param>
         /// <returns></returns>
-        Task<UsersModel> GetProfessionals(ProfessionalFilter filter, ProfessionalSort sortType);
+        Task<UsersModel> GetProfessionalsAsync(ProfessionalFilter filter, ProfessionalSort sortType);
         /// <summary>
         /// Возвращает список профессионалов (риэлторы)
         /// </summary>
         /// <param name="filter">Фильтр</param>
         /// <param name="sortType">Сортировка</param>
         /// <returns></returns>
-        Task<UsersModel> GetPersonProfessionals(PersonProfessionalFilter filter, PersonProfessionalSort sortType);
+        Task<UsersModel> GetPersonProfessionalsAsync(PersonProfessionalFilter filter, PersonProfessionalSort sortType);
         /// <summary>
         /// Возвращает список комментариев для пользователя
         /// </summary>
@@ -68,7 +69,7 @@ namespace HomeApp.Core.Repositories.Contracts
         /// <param name="skip">Сколько записей пропустить</param>
         /// <param name="take">Сколько записей взять</param>
         /// <returns></returns>
-        Task<CommentsModel> GetComments(ObjectId userId, int skip, int take);
+        Task<CommentsModel> GetCommentsAsync(ObjectId userId, int skip, int take);
 
         /// <summary>
         /// Установить тип пользователя. Меняет свойство UserType а так же сохраняет в базу новый объект, унаследованный от user.
@@ -77,6 +78,21 @@ namespace HomeApp.Core.Repositories.Contracts
         /// <param name="userId">Id пользователя</param>
         /// <param name="userType">Тип пользователя</param>
         /// <returns></returns>
-        Task SetUserType(ObjectId userId, UserType userType);
+        Task SetUserTypeAsync(ObjectId userId, UserType userType);
+
+        /// <summary>
+        /// Установить базовые данные пользователя
+        /// </summary>
+        /// <param name="userId">Идентификатор пользователя</param>
+        /// <param name="person">Профайл пользователя</param>
+        /// <returns></returns>
+        Task SetPersonAsync(ObjectId userId ,Person person);
+
+        /// <summary>
+        /// Добавляет профессиональную информацию о пользователе
+        /// </summary>
+        /// <param name="userId">Идентификатор пользователя</param>
+        /// <param name="personProfessional">Проф. данные пользователя</param>
+        Task SetPersonProfessionalAsync(ObjectId userId, PersonProfessional personProfessional);
     }
 }

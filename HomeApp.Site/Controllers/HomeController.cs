@@ -32,7 +32,7 @@ namespace HomeApp.Site.Controllers
             RealEstatesModel rents = await _realEstateRepository.GetTopRealEstates(new List<OperationType> { OperationType.Rent, OperationType.DailyRent, OperationType.LongTermRental }, 4);
             RealEstatesModel sale = await _realEstateRepository.GetTopRealEstates(new List<OperationType> { OperationType.Sale }, 4);
             RealEstatesModel locations = await _realEstateRepository.GetRealEstates(new UnitBaseFilter { Take = 9, Skip = 0 }, RealEstateSort.FeaturedListings);
-            UsersWithRealEstateCountModel agents = await _userRepository.GetTopUsersWithRealEstateCount(new List<UserType> { UserType.Agency, UserType.Realtor }, 9);
+            UsersWithRealEstateCountModel agents = await _userRepository.GetTopUsersWithRealEstateCountAsync(new List<UserType> { UserType.Agency, UserType.Realtor }, 9);
             long allRealEstateCount = await _realEstateRepository.RealEstateCount(new UnitBaseFilter
             {
                 RealEstateStatusList = new List<RealEstateStatus> { RealEstateStatus.Active }

@@ -21,7 +21,7 @@ namespace HomeApp.Site.Filters
 
         public override Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            User user = _userRepository.GetUser(context.HttpContext.User.Identity.Name).Result;
+            User user = _userRepository.GetUserAsync(context.HttpContext.User.Identity.Name).Result;
             if (user.Membership.UserStatus == UserStatus.None)
             {
                 context.Result = new RedirectToActionResult("SetUserType","Profile", new {});

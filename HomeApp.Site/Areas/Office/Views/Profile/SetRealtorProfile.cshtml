@@ -1,4 +1,5 @@
 ﻿@using HomeApp.Core.Db.Entities.Models.Enums
+@using HomeApp.Core.Extentions
 @using HomeApp.Site.Areas.Office.ViewModels
 @model SetRealtorProfileViewModel
 
@@ -13,7 +14,7 @@
                     <h2>Профессиональные данные</h2>
                     <small>Поля помеченные звездочкой (*) являются обязательными для заполнения!</small>
                 </div>
-                <form class="card__body" asp-area="Office" asp-controller="Profile" asp-action="SetRealtorProfile" method="post" id="person-form">
+                <form class="card__body" asp-area="Office" asp-controller="Profile" asp-action="SetRealtorProfile" method="post" id="person-prof-form">
 
                     <div class="row">
                         <div class="col-sm-6">
@@ -31,11 +32,47 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="form-group">
+                        <label style="font-size: 13px;"><b style="color:#03A9F4">Аренда</b>, выберите типы недвижимости арендой которых вы занимаетесь</label>
+                        <select class="select2" multiple>
+                            @foreach (object val in Enum.GetValues(typeof(UnitCategory)))
+                            {
+                                UnitCategory unitCategory = (UnitCategory)val;
+                                if (unitCategory == UnitCategory.None) {continue;}
+                                <option value="@unitCategory">@unitCategory.ToLocalString(Language.Ru).Single</option>
+                            }
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label style="font-size: 13px;"><b style="color:#03A9F4">Продажа</b>, выберите типы недвижимости продажей которых вы занимаетесь</label>
+                        <select class="select2" multiple>
+                            @foreach (object val in Enum.GetValues(typeof(UnitCategory)))
+                            {
+                                UnitCategory unitCategory = (UnitCategory)val;
+                                if (unitCategory == UnitCategory.None) {continue;}
+                                <option value="@unitCategory">@unitCategory.ToLocalString(Language.Ru).Single</option>
+                            }
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label style="font-size: 13px;">Укажите услуги, которые вы хотите предоставлять</label>
+                        <select class="select2" multiple>
+                            @foreach (object val in Enum.GetValues(typeof(AddService)))
+                            {
+                                AddService addService = (AddService)val;
+                                if (addService == AddService.None || addService == AddService.Credit || addService == AddService.Development || addService == AddService.Mortgage) {continue;}
+                                <option value="@addService">@addService.ToLocalString(Language.Ru).Single</option>
+                            }
+                        </select>
+                    </div>
                     
                     <div class="form-group form-group--float form-group--float-center">
                         <input type="text" class="form-control text-center">
                         <i class="form-group__bar"></i>
-                        <label>Ваша специализация</label>
+                        <label>Укажите города в которых вы работаете.</label>
                     </div>
 
                     <div class="form-group form-group--float form-group--float-center">
@@ -43,7 +80,7 @@
                         <i class="form-group__bar"></i>
                         <label>Образование</label>
                     </div>
-                    
+
                     <div class="form-group form-group--float form-group--float-center">
                         <input type="text" class="form-control text-center">
                         <i class="form-group__bar"></i>
@@ -56,7 +93,7 @@
                         <label>О себе</label>
                     </div>
 
-                    <a href="javascript:{}" onclick="document.getElementById('person-form').submit();" data-toggle="tab" class="btn btn--circle btn-primary submit-property__button">
+                    <a href="javascript:{}" onclick="document.getElementById('person-prof-form').submit();" data-toggle="tab" class="btn btn--circle btn-primary submit-property__button">
                         <i class="zmdi zmdi-long-arrow-right"></i>
                     </a>
                 </form>

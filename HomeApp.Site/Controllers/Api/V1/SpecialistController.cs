@@ -41,7 +41,7 @@ namespace HomeApp.Site.Controllers.Api.V1
 
                 PersonProfessionalSort personProfessionalSort =
                     (PersonProfessionalSort) Enum.Parse(typeof(PersonProfessionalSort), sort);
-                userList = await _userRepository.GetPersonProfessionals(filter, personProfessionalSort);
+                userList = await _userRepository.GetPersonProfessionalsAsync(filter, personProfessionalSort);
             }
             else if (userType == UserType.Agency || userType == UserType.Developer)
             {
@@ -54,7 +54,7 @@ namespace HomeApp.Site.Controllers.Api.V1
 
                 ProfessionalSort professionalSort =
                     (ProfessionalSort)Enum.Parse(typeof(ProfessionalSort), sort);
-                userList = await _userRepository.GetProfessionals(filter, professionalSort);
+                userList = await _userRepository.GetProfessionalsAsync(filter, professionalSort);
             }
 
 

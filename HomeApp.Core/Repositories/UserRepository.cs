@@ -22,7 +22,7 @@ using MongoDB.Driver.Linq;
 
 namespace HomeApp.Core.Repositories
 {
-    public class UserRepository: IUserRepository
+    public class UserRepository : IUserRepository
     {
         private readonly IMongoCollection<User> _usersCollection;
         private readonly IMongoCollection<RealEstate> _realEstateCollection;
@@ -39,19 +39,19 @@ namespace HomeApp.Core.Repositories
             _realEstateCollection = db.GetCollection<RealEstate>(DbSet.REAL_ESTATES_COLLECTION);
         }
 
-        async Task<User> IUserRepository.GetUser(ObjectId userId)
+        public async Task<User> GetUserAsync(ObjectId userId)
         {
             User user = await _usersCollection.AsQueryable().FirstOrDefaultAsync(u => u.Id == userId);
             return user.Project(UserProjectSettings.Default);
         }
 
-        public async Task<User> GetUser(string login)
+        public async Task<User> GetUserAsync(string login)
         {
             User user = await _usersCollection.AsQueryable().FirstOrDefaultAsync(u => u.Membership.Login == login);
             return user.Project(UserProjectSettings.Default);
         }
 
-        async Task<UsersModel> IUserRepository.GetUsers(UserFilter filter, UserSort sortType)
+        public async Task<UsersModel> GetUsersAsync(UserFilter filter, UserSort sortType)
         {
             List<User> users = await
                 _usersCollection.AsQueryable()
@@ -70,7 +70,7 @@ namespace HomeApp.Core.Repositories
             };
         }
 
-        async Task<UsersModel> IUserRepository.GetProfessionals(ProfessionalFilter filter, ProfessionalSort sortType)
+        public async Task<UsersModel> GetProfessionalsAsync(ProfessionalFilter filter, ProfessionalSort sortType)
         {
             IMongoQueryable<User> query = _usersCollection.AsQueryable().Filter(filter);
 
@@ -89,7 +89,7 @@ namespace HomeApp.Core.Repositories
             };
         }
 
-        async Task<UsersModel> IUserRepository.GetTopUsers(List<UserType> userTypes, int take)
+        public async Task<UsersModel> GetTopUsersAsync(List<UserType> userTypes, int take)
         {
 
             List<User> users = await
@@ -112,7 +112,7 @@ namespace HomeApp.Core.Repositories
             };
         }
 
-        async Task<UsersWithRealEstateCountModel> IUserRepository.GetTopUsersWithRealEstateCount(List<UserType> userTypes, int take)
+        public async Task<UsersWithRealEstateCountModel> GetTopUsersWithRealEstateCountAsync(List<UserType> userTypes, int take)
         {
             IMongoQueryable<UserWithRealEstateCountModel> joined = _usersCollection.AsQueryable()
                 .Filter(new UserFilter { UserTypes = userTypes })
@@ -159,7 +159,7 @@ namespace HomeApp.Core.Repositories
 
         }
 
-        async Task<UsersModel> IUserRepository.GetPersonProfessionals(PersonProfessionalFilter filter, PersonProfessionalSort sortType)
+        public async Task<UsersModel> GetPersonProfessionalsAsync(PersonProfessionalFilter filter, PersonProfessionalSort sortType)
         {
             List<User> users =
                 await _usersCollection.AsQueryable()
@@ -179,7 +179,7 @@ namespace HomeApp.Core.Repositories
             };
         }
 
-        async Task<CommentsModel> IUserRepository.GetComments(ObjectId userId, int skip, int take)
+        public async Task<CommentsModel> GetCommentsAsync(ObjectId userId, int skip, int take)
         {
             int count =
                 await _usersCollection.AsQueryable()
@@ -207,9 +207,9 @@ namespace HomeApp.Core.Repositories
             return commentList;
         }
 
-        public async Task SetUserType(ObjectId userId ,UserType userType)
+        public async Task SetUserTypeAsync(ObjectId userId, UserType userType)
         {
-            FilterDefinitionBuilder<User> ufb = new FilterDefinitionBuilder<User>();
+            FilterDefinitionBuilder<User> fb = new FilterDefinitionBuilder<User>();
 
             User user = await _usersCollection.AsQueryable().FirstOrDefaultAsync(u => u.Id == userId);
 
@@ -226,7 +226,38 @@ namespace HomeApp.Core.Repositories
                 throw new Exception("UserType exception");
             }
 
-            await _usersCollection.ReplaceOneAsync(ufb.Eq(u => u.Id, userId), user);
+            await _usersCollection.ReplaceOneAsync(fb.Eq(u => u.Id, userId), user);
+        }
+
+        public async Task SetPersonAsync(ObjectId userId, Person person)
+        {
+            FilterDefinitionBuilder<User> fb = new FilterDefinitionBuilder<User>();
+
+            Person user = (Person) await _usersCollection.AsQueryable().FirstOrDefaultAsync(u => u.Id == userId);
+            user.FirstName = person.FirstName;
+            user.LastName = person.LastName;
+            user.MidName = person.MidName;
+            user.DateBirth = person.DateBirth;
+            user.Sex = person.Sex;
+
+            await _usersCollection.ReplaceOneAsync(fb.Eq(u => u.Id, userId), user);
+
+        }
+
+        public async Task SetPersonProfessionalAsync(ObjectId userId, PersonProfessional personProfessional)
+        {
+            FilterDefinitionBuilder<User> fb = new FilterDefinitionBuilder<User>();
+
+            PersonProfessional user = (PersonProfessional)await _usersCollection.AsQueryable().FirstOrDefaultAsync(u => u.Id == userId);
+
+            user.Description = personProfessional.Description;
+            user.Education = personProfessional.Education;
+            user.FromYear = personProfessional.FromYear;
+            user.Site = personProfessional.Site;
+            user.Specialization = personProfessional.Specialization;
+            user.WorkRegions = personProfessional.WorkRegions;
+
+            await _usersCollection.ReplaceOneAsync(fb.Eq(u => u.Id, userId), user);
         }
     }
 }

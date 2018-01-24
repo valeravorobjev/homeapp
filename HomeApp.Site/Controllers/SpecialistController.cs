@@ -37,7 +37,7 @@ namespace HomeApp.Site.Controllers
                 PersonProfessionalSort personProfessionalSort =
                     (PersonProfessionalSort) Enum.Parse(typeof(PersonProfessionalSort), sort);
 
-                userList = await _userRepository.GetPersonProfessionals(filter, personProfessionalSort);
+                userList = await _userRepository.GetPersonProfessionalsAsync(filter, personProfessionalSort);
             }
             else if (userType == UserType.Agency || userType == UserType.Developer)
             {
@@ -45,7 +45,7 @@ namespace HomeApp.Site.Controllers
                 ProfessionalSort professionalSort =
                     (ProfessionalSort)Enum.Parse(typeof(ProfessionalSort), sort);
 
-                userList = await _userRepository.GetProfessionals(filter, professionalSort);
+                userList = await _userRepository.GetProfessionalsAsync(filter, professionalSort);
             }
 
             ViewBag.Sort = sort;
@@ -65,7 +65,7 @@ namespace HomeApp.Site.Controllers
                 PersonProfessionalSort personProfessionalSort =
                     (PersonProfessionalSort)Enum.Parse(typeof(PersonProfessionalSort), sort);
 
-                userList = await _userRepository.GetPersonProfessionals(filter, personProfessionalSort);
+                userList = await _userRepository.GetPersonProfessionalsAsync(filter, personProfessionalSort);
             }
             else if (userType == UserType.Agency || userType == UserType.Developer)
             {
@@ -73,7 +73,7 @@ namespace HomeApp.Site.Controllers
                 ProfessionalSort professionalSort =
                     (ProfessionalSort)Enum.Parse(typeof(ProfessionalSort), sort);
 
-                userList = await _userRepository.GetProfessionals(filter, professionalSort);
+                userList = await _userRepository.GetProfessionalsAsync(filter, professionalSort);
             }
 
             ViewBag.Sort = sort;
@@ -95,7 +95,7 @@ namespace HomeApp.Site.Controllers
                 PersonProfessionalSort personProfessionalSort =
                     (PersonProfessionalSort)Enum.Parse(typeof(PersonProfessionalSort), sort);
 
-                userList = await _userRepository.GetPersonProfessionals(filter, personProfessionalSort);
+                userList = await _userRepository.GetPersonProfessionalsAsync(filter, personProfessionalSort);
             }
             else if (userType == UserType.Agency || userType == UserType.Developer)
             {
@@ -103,7 +103,7 @@ namespace HomeApp.Site.Controllers
                 ProfessionalSort professionalSort =
                     (ProfessionalSort)Enum.Parse(typeof(ProfessionalSort), sort);
 
-                userList = await _userRepository.GetProfessionals(filter, professionalSort);
+                userList = await _userRepository.GetProfessionalsAsync(filter, professionalSort);
             }
 
             ViewBag.Sort = sort;
@@ -115,7 +115,7 @@ namespace HomeApp.Site.Controllers
         [Route("Overview/{userId}")]
         public async Task<IActionResult> Overview(string userId)
         {
-            User user = await _userRepository.GetUser(new ObjectId(userId));
+            User user = await _userRepository.GetUserAsync(new ObjectId(userId));
             Ad ad = await _adRepository.GetAdForUser(user.Id);
 
             int soldRentEstateCount = await _realEstateRepository.RealEstateCount(new UnitBaseFilter
@@ -142,7 +142,7 @@ namespace HomeApp.Site.Controllers
         [Route("Properties/{userId}")]
         public async Task<IActionResult> Properties(string userId)
         {
-            User user = await _userRepository.GetUser(new ObjectId(userId));
+            User user = await _userRepository.GetUserAsync(new ObjectId(userId));
             Ad ad = await _adRepository.GetAdForUser(user.Id);
 
             RealEstatesModel realEstateList = await _realEstateRepository.GetRealEstates(new UnitBaseFilter
@@ -164,9 +164,9 @@ namespace HomeApp.Site.Controllers
         [Route("Reviews/{userId}")]
         public async Task<IActionResult> Reviews(string userId)
         {
-            User user = await _userRepository.GetUser(new ObjectId(userId));
+            User user = await _userRepository.GetUserAsync(new ObjectId(userId));
             Ad ad = await _adRepository.GetAdForUser(user.Id);
-            CommentsModel commentList = await _userRepository.GetComments(user.Id, 0, 12);
+            CommentsModel commentList = await _userRepository.GetCommentsAsync(user.Id, 0, 12);
 
             UserReviewsViewModel reviews = new UserReviewsViewModel();
             reviews.User = user;

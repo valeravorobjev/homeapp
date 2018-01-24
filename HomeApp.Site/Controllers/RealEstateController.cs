@@ -210,7 +210,7 @@ namespace HomeApp.Site.Controllers
         public async Task<IActionResult> Detail(string realEstateId)
         {
             RealEstate result = await _realEstateRepository.GetRealEstate(new ObjectId(realEstateId));
-            User user = await _userRepository.GetUser(result.UserId);
+            User user = await _userRepository.GetUserAsync(result.UserId);
 
             DetailViewModel detailViewModel = new DetailViewModel();
             detailViewModel.RealEstate = result;
