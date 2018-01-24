@@ -12,11 +12,12 @@
                     <small>Поля помеченные звездочкой (*) являются обязательными для заполнения!</small>
                 </div>
                 <form class="card__body" asp-area="Office" asp-controller="Profile" asp-action="SetPersonProfile" method="post" id="person-form">
+                    <input type="hidden" name="UserId" value="@Model.UserId"/>
                     <input type="hidden" name="UserType" value="@Model.UserType"/>
                     <div class="row">
                         <div class="col-sm-4">
                             <div class="form-group form-group--float form-group--float-center">
-                                <input type="text" class="form-control text-center">
+                                <input type="text" name="LastName" class="form-control text-center">
                                 <i class="form-group__bar"></i>
                                 <label>Фамилия</label>
                             </div>
@@ -24,7 +25,7 @@
 
                         <div class="col-sm-4">
                             <div class="form-group form-group--float form-group--float-center">
-                                <input type="text" class="form-control text-center">
+                                <input type="text" name="FirstName" class="form-control text-center">
                                 <i class="form-group__bar"></i>
                                 <label>Имя</label>
                             </div>
@@ -32,7 +33,7 @@
 
                         <div class="col-sm-4">
                             <div class="form-group form-group--float form-group--float-center">
-                                <input type="text" class="form-control text-center">
+                                <input type="text" name="MidName" class="form-control text-center">
                                 <i class="form-group__bar"></i>
                                 <label>Отчество</label>
                             </div>
@@ -40,7 +41,7 @@
                     </div>
 
                     <div class="form-group form-group--float form-group--float-center">
-                        <input type="text" class="form-control text-center">
+                        <input type="datetime" name="DateBirth" class="form-control text-center">
                         <i class="form-group__bar"></i>
                         <label>Дата рождения</label>
                     </div>
@@ -52,10 +53,10 @@
                                 <input type="radio">Не указано
                             </label>
                             <label class="btn">
-                                <input type="radio">Мужчина
+                                <input type="radio" name="Sex" value="1">Мужчина
                             </label>
                             <label class="btn">
-                                <input type="radio">Женщина
+                                <input type="radio" name="Sex" value="0">Женщина
                             </label>
                         </div>
                     </div>
@@ -63,7 +64,7 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group form-group--float form-group--float-center">
-                                <input type="text" class="form-control text-center">
+                                <input type="text" name="Phones[0]" class="form-control text-center">
                                 <i class="form-group__bar"></i>
                                 <label>Основной телефон</label>
                             </div>
@@ -71,7 +72,7 @@
 
                         <div class="col-sm-6">
                             <div class="form-group form-group--float form-group--float-center">
-                                <input type="text" class="form-control text-center">
+                                <input type="text" name="Phones[1]" class="form-control text-center">
                                 <i class="form-group__bar"></i>
                                 <label>Дополнительный телефон</label>
                             </div>
@@ -79,7 +80,7 @@
                     </div>
 
                     <div class="form-group form-group--float form-group--float-center">
-                        <input type="text" class="form-control text-center">
+                        <input type="text" name="Address" class="form-control text-center">
                         <i class="form-group__bar"></i>
                         <label>Адрес</label>
                     </div>
