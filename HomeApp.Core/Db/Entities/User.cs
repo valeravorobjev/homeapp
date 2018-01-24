@@ -3,6 +3,7 @@ using HomeApp.Core.Db.Entities.Models;
 using HomeApp.Core.Db.Entities.Models.Enums;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Bson.Serialization.Options;
 using MongoDB.Bson.Serialization.Serializers;
 
 namespace HomeApp.Core.Db.Entities
@@ -23,9 +24,9 @@ namespace HomeApp.Core.Db.Entities
         /// <summary>
         /// Полиморфизм
         /// </summary>
-        [BsonElement("_t")]
-        [BsonIgnoreIfNull]
-        public List<string> T { get; private set; }
+        //[BsonElement("_t")]
+        //[BsonIgnoreIfNull]
+        //public List<string> T { get; private set; }
         /// <summary>
         /// Тип пользователя
         /// </summary>
@@ -40,6 +41,7 @@ namespace HomeApp.Core.Db.Entities
         /// Идентификатор рекламной компании
         /// </summary>
         [BsonElement("ad_id")]
+        [BsonIgnoreIfDefault]
         public ObjectId AdId { get; set; }
         /// <summary>
         /// Телефон

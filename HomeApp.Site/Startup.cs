@@ -48,13 +48,11 @@ namespace HomeApp.Site
                 twitterOptions.ConsumerKey = Configuration["Authentication:Twitter:ConsumerKey"];
                 twitterOptions.ConsumerSecret = Configuration["Authentication:Twitter:ConsumerSecret"];
             });
-
             services.AddAuthentication().AddMicrosoftAccount(microsoftOptions =>
             {
                 microsoftOptions.ClientId = Configuration["Authentication:Microsoft:ApplicationId"];
                 microsoftOptions.ClientSecret = Configuration["Authentication:Microsoft:Password"];
             });
-
             services.AddAuthentication().AddVK(options =>
             {
                 options.ClientId = Configuration["Authentication:Vk:ClientId"];
@@ -92,12 +90,13 @@ namespace HomeApp.Site
             });
 
             services.AddRouting(options => { options.LowercaseUrls = true; });
+
+            services.AddSingleton<IConfiguration>(Configuration);
             services.AddTransient<IEmailSenderRepository, EmailSenderRepository>(options =>
             {
                 IHostingEnvironment env = options.GetService<IHostingEnvironment>();
                 return new EmailSenderRepository($"{env.ContentRootPath}/RazorTemplates/Emails");
             });
-
             services.AddSingleton<IAdRepository, AdRepository>();
             services.AddSingleton<IUserRepository, UserRepository>(options=> new UserRepository(con));
             services.AddSingleton<IRealEstateRepository, RealEstateRepository>(options=> new RealEstateRepository(con));

@@ -2,10 +2,12 @@
 using HomeApp.Core.Db.Entities;
 using HomeApp.Core.Db.Entities.Models;
 using HomeApp.Core.Db.Entities.Models.Enums;
+using HomeApp.Core.Extentions;
 using HomeApp.Core.Repositories.Contracts;
 using HomeApp.Site.Areas.Office.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using MongoDB.Bson;
 
 namespace HomeApp.Site.Areas.Office.Controllers
@@ -16,10 +18,12 @@ namespace HomeApp.Site.Areas.Office.Controllers
     public class ProfileController : Controller
     {
         private readonly IUserRepository _userRepository;
+        private readonly IConfiguration _configuration;
 
-        public ProfileController(IUserRepository userRepository)
+        public ProfileController(IUserRepository userRepository, IConfiguration configuration)
         {
             _userRepository = userRepository;
+            _configuration = configuration;
         }
 
         [HttpGet]
@@ -76,7 +80,9 @@ namespace HomeApp.Site.Areas.Office.Controllers
                 LastName = user.LastName?.Ru,
                 MidName = user.MidName?.Ru,
                 DateBirth = user.DateBirth,
-                Sex = user.Sex
+                Sex = user.Sex,
+                Address = user.Address?.ToStr(Language.Ru),
+                Phones = user.Phones
             };
             return View(model);
         }
@@ -87,10 +93,24 @@ namespace HomeApp.Site.Areas.Office.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            _userRepository.SetPersonAsync(new ObjectId(model.UserId), new Person
-            {
+            model.Phones.RemoveAll(string.IsNullOrEmpty);
 
-            });
+            Person person = new Person
+            {
+                FirstName = new Element {Ru = model.FirstName},
+                LastName = new Element {Ru = model.LastName},
+                MidName = new Element {Ru = model.MidName},
+                DateBirth = model.DateBirth,
+                Sex = model.Sex,
+                Phones = model.Phones,
+                Address = new Address()
+            };
+
+            AppOptions appOptions = _configuration.GetSection("AppOptions").Get<AppOptions>();
+
+            person.Address.GoogleGeoCode(model.Address, Language.Ru, appOptions.Geocode.GoogleKey);
+
+            await _userRepository.SetPersonAsync(new ObjectId(model.UserId), person);
 
             if (model.UserType == UserType.Realtor)
                 return RedirectToAction("SetRealtorProfile", new { model.UserType });

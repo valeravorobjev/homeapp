@@ -3,7 +3,7 @@
 @Html.Partial("Partials/Header")
 
 <div class="submit-property">
-    @Html.Partial("Partials/Steps",new StepViewModel {Step = 2, UserType = Model.UserType})
+    @Html.Partial("Partials/Steps", new StepViewModel { Step = 2, UserType = Model.UserType })
     <div class="tab-content submit-property__content">
         <div class="tab-pane fade in active">
             <div class="card">
@@ -12,12 +12,12 @@
                     <small>Поля помеченные звездочкой (*) являются обязательными для заполнения!</small>
                 </div>
                 <form class="card__body" asp-area="Office" asp-controller="Profile" asp-action="SetPersonProfile" method="post" id="person-form">
-                    <input type="hidden" name="UserId" value="@Model.UserId"/>
-                    <input type="hidden" name="UserType" value="@Model.UserType"/>
+                    <input type="hidden" name="UserId" value="@Model.UserId" />
+                    <input type="hidden" name="UserType" value="@Model.UserType" />
                     <div class="row">
                         <div class="col-sm-4">
                             <div class="form-group form-group--float form-group--float-center">
-                                <input type="text" name="LastName" class="form-control text-center">
+                                <input type="text" name="LastName" value="@Model.LastName" class="form-control text-center">
                                 <i class="form-group__bar"></i>
                                 <label>Фамилия</label>
                             </div>
@@ -25,7 +25,7 @@
 
                         <div class="col-sm-4">
                             <div class="form-group form-group--float form-group--float-center">
-                                <input type="text" name="FirstName" class="form-control text-center">
+                                <input type="text" name="FirstName" value="@Model.FirstName" class="form-control text-center">
                                 <i class="form-group__bar"></i>
                                 <label>Имя</label>
                             </div>
@@ -33,7 +33,7 @@
 
                         <div class="col-sm-4">
                             <div class="form-group form-group--float form-group--float-center">
-                                <input type="text" name="MidName" class="form-control text-center">
+                                <input type="text" name="MidName" value="@Model.MidName" class="form-control text-center">
                                 <i class="form-group__bar"></i>
                                 <label>Отчество</label>
                             </div>
@@ -41,7 +41,7 @@
                     </div>
 
                     <div class="form-group form-group--float form-group--float-center">
-                        <input type="datetime" name="DateBirth" class="form-control text-center">
+                        <input type="datetime" name="DateBirth" value="@Model.DateBirth" class="form-control text-center">
                         <i class="form-group__bar"></i>
                         <label>Дата рождения</label>
                     </div>
@@ -49,14 +49,28 @@
                     <div class="form-group">
                         <label>Ваш пол</label>
                         <div class="btn-group btn-group-justified" data-toggle="buttons">
-                            <label class="btn active">
-                                <input type="radio">Не указано
+                            <label class="btn @(Model.Sex == null ? "active" : "")">
+                                    <input type="radio">Не указано
                             </label>
-                            <label class="btn">
-                                <input type="radio" name="Sex" value="1">Мужчина
+                            <label class="btn @(Model.Sex == true ? "active" : "")">
+                                @if (Model.Sex == true)
+                                {
+                                    <input type="radio" asp-for="Sex" value="true" checked="checked">@:Мужчина
+                                }
+                                else
+                                {
+                                    <input type="radio" asp-for="Sex" value="true">@:Мужчина
+                                }
                             </label>
-                            <label class="btn">
-                                <input type="radio" name="Sex" value="0">Женщина
+                            <label class="btn @(Model.Sex == false ? "active" : "")">
+                                @if (Model.Sex == false)
+                                {
+                                    <input type="radio" asp-for="Sex" value="false" checked="checked">@:Женщина
+                                }
+                                else
+                                {
+                                    <input type="radio" asp-for="Sex" value="false">@:Женщина
+                                }
                             </label>
                         </div>
                     </div>
@@ -64,7 +78,7 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group form-group--float form-group--float-center">
-                                <input type="text" name="Phones[0]" class="form-control text-center">
+                                <input type="text" name="Phones[0]" value="@Model.Phones?.FirstOrDefault()" class="form-control text-center">
                                 <i class="form-group__bar"></i>
                                 <label>Основной телефон</label>
                             </div>
@@ -72,7 +86,7 @@
 
                         <div class="col-sm-6">
                             <div class="form-group form-group--float form-group--float-center">
-                                <input type="text" name="Phones[1]" class="form-control text-center">
+                                <input type="text" name="Phones[1]" value="@Model.Phones?.LastOrDefault()" class="form-control text-center">
                                 <i class="form-group__bar"></i>
                                 <label>Дополнительный телефон</label>
                             </div>
@@ -80,7 +94,7 @@
                     </div>
 
                     <div class="form-group form-group--float form-group--float-center">
-                        <input type="text" name="Address" class="form-control text-center">
+                        <input type="text" name="Address" value="@Model.Address" class="form-control text-center">
                         <i class="form-group__bar"></i>
                         <label>Адрес</label>
                     </div>
@@ -99,3 +113,4 @@
     {
     <link rel="stylesheet" href="~/css/profile.css" />
 }
+

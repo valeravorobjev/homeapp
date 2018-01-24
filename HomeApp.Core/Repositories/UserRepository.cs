@@ -212,6 +212,7 @@ namespace HomeApp.Core.Repositories
             FilterDefinitionBuilder<User> fb = new FilterDefinitionBuilder<User>();
 
             User user = await _usersCollection.AsQueryable().FirstOrDefaultAsync(u => u.Id == userId);
+            if (user.UserType == userType) return;
 
             if (userType == UserType.Realtor)
             {
@@ -239,6 +240,8 @@ namespace HomeApp.Core.Repositories
             user.MidName = person.MidName;
             user.DateBirth = person.DateBirth;
             user.Sex = person.Sex;
+            user.Address = person.Address;
+            user.Phones = person.Phones;
 
             await _usersCollection.ReplaceOneAsync(fb.Eq(u => u.Id, userId), user);
 

@@ -1,4 +1,6 @@
-﻿using HomeApp.Core.Db.Entities;
+﻿using System;
+using System.Text;
+using HomeApp.Core.Db.Entities;
 using HomeApp.Core.Db.Entities.Models;
 using HomeApp.Core.Db.Entities.Models.Enums;
 
@@ -54,6 +56,40 @@ namespace HomeApp.Core.Extentions
                 SocialMedia = user.SocialMedia
             };
             return person;
+        }
+
+        /// <summary>
+        /// Переводит объект адреса в строку
+        /// </summary>
+        /// <param name="address">Объект адреса</param>
+        /// <param name="language">Язык</param>
+        /// <returns></returns>
+        public static string ToStr(this Address address, Language language)
+        {
+            if (language == Language.Ru)
+            {
+                StringBuilder sb = new StringBuilder();
+
+                if (address.Country != null)
+                    sb.Append($"{address.Country.Ru}, ");
+                if (address.Region != null)
+                    sb.Append($"{address.Region.Ru}, ");
+                if (address.Area != null)
+                    sb.Append($"{address.Area.Ru}, ");
+                if (address.Sity != null)
+                    sb.Append($"{address.Sity.Ru}, ");
+                if (address.Street != null)
+                    sb.Append($"{address.Street.Ru}, ");
+                if (address.StreetNumber != null)
+                    sb.Append($"{address.StreetNumber.Ru}, ");
+                if (address.Metro != null)
+                    sb.Append($"{address.Metro.Ru}, ");
+
+                string addr = sb.ToString().Remove(sb.Length - 2, 2);
+                return addr;
+            }
+
+            return string.Empty;
         }
     }
 }

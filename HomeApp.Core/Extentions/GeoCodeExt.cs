@@ -22,6 +22,8 @@ namespace HomeApp.Core.Extentions
         /// <param name="key">Секретный ключ доступа к api</param>
         public static Address GoogleGeoCode(this Address address, string str, Language language, string key)
         {
+            if (string.IsNullOrEmpty(str)) return null;
+
             string lng = "en";
             if (language == Language.Ru)
                 lng = "ru";

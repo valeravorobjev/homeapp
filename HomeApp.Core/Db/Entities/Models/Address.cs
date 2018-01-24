@@ -54,7 +54,7 @@ namespace HomeApp.Core.Db.Entities.Models
         /// </summary>
         [BsonElement("metro_time")]
         [BsonIgnoreIfDefault]
-        public int MetroTime { get; set; }
+        public int? MetroTime { get; set; }
         /// <summary>
         /// Гео данные
         /// </summary>

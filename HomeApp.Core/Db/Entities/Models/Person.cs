@@ -31,11 +31,12 @@ namespace HomeApp.Core.Db.Entities.Models
         /// </summary>
         [BsonElement("date_birth")]
         [BsonIgnoreIfDefault]
-        public DateTime DateBirth { get; set; }
+        public DateTime? DateBirth { get; set; }
         /// <summary>
         /// Пол
         /// </summary>
         [BsonElement("sex")]
-        public bool Sex { get; set; }
+        [BsonIgnoreIfDefault]
+        public bool? Sex { get; set; }
     }
 }
