@@ -1,7 +1,9 @@
-﻿@Html.Partial("Partials/Header")
+﻿@using HomeApp.Site.Areas.Office.ViewModels
+@model SetPersonProfileViewModel
+@Html.Partial("Partials/Header")
 
 <div class="submit-property">
-    @Html.Partial("Partials/Steps",2)
+    @Html.Partial("Partials/Steps",new StepViewModel {Step = 2, UserType = Model.UserType})
     <div class="tab-content submit-property__content">
         <div class="tab-pane fade in active">
             <div class="card">
@@ -10,7 +12,7 @@
                     <small>Поля помеченные звездочкой (*) являются обязательными для заполнения!</small>
                 </div>
                 <form class="card__body" asp-area="Office" asp-controller="Profile" asp-action="SetPersonProfile" method="post" id="person-form">
-
+                    <input type="hidden" name="UserType" value="@Model.UserType"/>
                     <div class="row">
                         <div class="col-sm-4">
                             <div class="form-group form-group--float form-group--float-center">

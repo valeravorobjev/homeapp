@@ -1,7 +1,11 @@
-﻿@Html.Partial("Partials/Header")
+﻿@using HomeApp.Core.Db.Entities.Models.Enums
+@using HomeApp.Site.Areas.Office.ViewModels
+@model SetSocialViewModel
+
+@Html.Partial("Partials/Header")
 
 <div class="submit-property">
-    @Html.Partial("Partials/Steps", 3)
+    @Html.Partial("Partials/Steps", new StepViewModel { Step = Model.UserType == UserType.Person ? 3 : 4, UserType = Model.UserType })
     <div class="tab-content submit-property__content">
         <div class="tab-pane fade in active">
             <div class="card">

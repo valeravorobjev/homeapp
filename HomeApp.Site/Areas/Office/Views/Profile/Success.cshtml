@@ -1,17 +1,11 @@
-﻿@using HomeApp.Core.Identity.CustomProvider
-@using Microsoft.AspNetCore.Identity
-@inject UserManager<CustomIdentityUser> UserManager
-
-@{
-    CustomIdentityUser user = UserManager.FindByNameAsync(Context.User.Identity.Name).Result;
-    string userName = user.UserName ?? user.Email;
-}
-
+﻿@using HomeApp.Core.Db.Entities.Models.Enums
+@using HomeApp.Site.Areas.Office.ViewModels
+@model UserType
 
 @Html.Partial("Partials/Header")
 
 <div class="submit-property">
-    @Html.Partial("Partials/Steps", 5)
+    @Html.Partial("Partials/Steps", new StepViewModel { Step = Model == UserType.Person ? 5 : 6, UserType = Model })
     <div class="tab-content submit-property__content">
         <div class="tab-pane fade in active">
             <div class="card">

@@ -6,7 +6,7 @@ using HomeApp.Core.Db.Entities.Models.Enums;
 
 namespace HomeApp.Site.Areas.Office.ViewModels
 {
-    public class SetSocialViewModel
+    public class SetPhotoViewModel
     {
         public UserType UserType { get; set; }
     }

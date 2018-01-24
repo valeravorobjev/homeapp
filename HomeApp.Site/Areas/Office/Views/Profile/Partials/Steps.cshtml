@@ -1,57 +1,100 @@
-﻿@model int
+﻿@using HomeApp.Core.Db.Entities.Models.Enums
+@model HomeApp.Site.Areas.Office.ViewModels.StepViewModel
 
-@if (Model == 1)
+@{
+    Dictionary<int, string> ad = new Dictionary<int, string>
 {
-    <ul class="submit-property__steps">
-        <li class="active"><a>1</a></li>
-        <li><a>2</a></li>
-        <li><a>3</a></li>
-        <li><a>4</a></li>
-        <li><a>5</a></li>
-        <li class="submit-property__caret"></li>
-    </ul>
+{1, "SetUserType"},
+{2, "SetPersonProfile"},
+{3, "SetSocial"},
+{4, "SetPhoto"},
+{5, ""},
+};
+
+    if (Model.UserType == UserType.Realtor)
+    {
+        ad.Remove(3);
+        ad.Remove(4);
+        ad.Remove(5);
+
+        ad.Add(3, "SetRealtorProfile");
+        ad.Add(4, "SetSocial");
+        ad.Add(5, "SetPhoto");
+        ad.Add(6, "");
+    }
 }
-else if (Model == 2)
-{
-    <ul class="submit-property__steps">
-        <li class="passed"><a asp-area="Office" asp-controller="Profile" asp-action="SetUserType">1</a></li>
-        <li class="active"><a>2</a></li>
-        <li><a>3</a></li>
-        <li><a>4</a></li>
-        <li><a>5</a></li>
-        <li class="submit-property__caret"></li>
-    </ul>
-}
-else if (Model == 3)
-{
-    <ul class="submit-property__steps">
-        <li class="passed"><a asp-area="Office" asp-controller="Profile" asp-action="SetUserType">1</a></li>
-        <li class="passed"><a asp-area="Office" asp-controller="Profile" asp-action="SetPersonProfile">2</a></li>
-        <li class="active"><a>3</a></li>
-        <li><a>4</a></li>
-        <li><a>5</a></li>
-        <li class="submit-property__caret"></li>
-    </ul>
-}
-else if (Model == 4)
-{
-    <ul class="submit-property__steps">
-        <li class="passed"><a asp-area="Office" asp-controller="Profile" asp-action="SetUserType">1</a></li>
-        <li class="passed"><a asp-area="Office" asp-controller="Profile" asp-action="SetPersonProfile">2</a></li>
-        <li class="passed"><a asp-area="Office" asp-controller="Profile" asp-action="SetSocial">3</a></li>
-        <li class="active"><a>4</a></li>
-        <li><a>5</a></li>
-        <li class="submit-property__caret"></li>
-    </ul>
-}
-else if (Model == 5)
-{
-    <ul class="submit-property__steps">
-        <li class="passed"><a asp-area="Office" asp-controller="Profile" asp-action="SetUserType">1</a></li>
-        <li class="passed"><a asp-area="Office" asp-controller="Profile" asp-action="SetPersonProfile">2</a></li>
-        <li class="passed"><a asp-area="Office" asp-controller="Profile" asp-action="SetSocial">3</a></li>
-        <li class="passed"><a asp-area="Office" asp-controller="Profile" asp-action="SetPhoto">4</a></li>
-        <li class="active"><a>5</a></li>
-        <li class="submit-property__caret"></li>
-    </ul>
-}
+
+<ul class="submit-property__steps">
+    @for (int i = 1; i <= ad.Count; i++)
+    {
+        if (Model.Step == i)
+        {
+            <li class="active"><a>@Model.Step</a></li>
+        }
+        else if (Model.Step - i <= 0)
+        {
+            <li><a>@i</a></li>
+        }
+        else
+        {
+            <li class="passed"><a asp-area="Office" asp-controller="Profile" asp-action="@ad[i]" asp-route-userType="@Model.UserType">@i</a></li>
+        }
+    }
+    <li class="submit-property__caret"></li>
+</ul>
+
+@*@if (Model.Step == 1)
+    {
+        <ul class="submit-property__steps">
+            <li class="active"><a>1</a></li>
+            <li><a>2</a></li>
+            <li><a>3</a></li>
+            <li><a>4</a></li>
+            <li><a>5</a></li>
+            <li class="submit-property__caret"></li>
+        </ul>
+    }
+    else if (Model.Step == 2)
+    {
+        <ul class="submit-property__steps">
+            <li class="passed"><a asp-area="Office" asp-controller="Profile" asp-action="SetUserType">1</a></li>
+            <li class="active"><a>2</a></li>
+            <li><a>3</a></li>
+            <li><a>4</a></li>
+            <li><a>5</a></li>
+            <li class="submit-property__caret"></li>
+        </ul>
+    }
+    else if (Model.Step == 3)
+    {
+        <ul class="submit-property__steps">
+            <li class="passed"><a asp-area="Office" asp-controller="Profile" asp-action="SetUserType">1</a></li>
+            <li class="passed"><a asp-area="Office" asp-controller="Profile" asp-action="SetPersonProfile">2</a></li>
+            <li class="active"><a>3</a></li>
+            <li><a>4</a></li>
+            <li><a>5</a></li>
+            <li class="submit-property__caret"></li>
+        </ul>
+    }
+    else if (Model.Step == 4)
+    {
+        <ul class="submit-property__steps">
+            <li class="passed"><a asp-area="Office" asp-controller="Profile" asp-action="SetUserType">1</a></li>
+            <li class="passed"><a asp-area="Office" asp-controller="Profile" asp-action="SetPersonProfile">2</a></li>
+            <li class="passed"><a asp-area="Office" asp-controller="Profile" asp-action="SetSocial">3</a></li>
+            <li class="active"><a>4</a></li>
+            <li><a>5</a></li>
+            <li class="submit-property__caret"></li>
+        </ul>
+    }
+    else if (Model.Step == 5)
+    {
+        <ul class="submit-property__steps">
+            <li class="passed"><a asp-area="Office" asp-controller="Profile" asp-action="SetUserType">1</a></li>
+            <li class="passed"><a asp-area="Office" asp-controller="Profile" asp-action="SetPersonProfile">2</a></li>
+            <li class="passed"><a asp-area="Office" asp-controller="Profile" asp-action="SetSocial">3</a></li>
+            <li class="passed"><a asp-area="Office" asp-controller="Profile" asp-action="SetPhoto">4</a></li>
+            <li class="active"><a>5</a></li>
+            <li class="submit-property__caret"></li>
+        </ul>
+    }*@

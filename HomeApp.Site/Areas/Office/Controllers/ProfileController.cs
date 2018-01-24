@@ -10,7 +10,7 @@ using MongoDB.Bson;
 namespace HomeApp.Site.Areas.Office.Controllers
 {
     [Area("Office")]
-    [Route("[area]/[controller]/[action]")]
+    [Route("[area]/[controller]/[action]/{userType?}")]
     [Authorize]
     public class ProfileController : Controller
     {
@@ -19,14 +19,23 @@ namespace HomeApp.Site.Areas.Office.Controllers
         public ProfileController(IUserRepository userRepository)
         {
             _userRepository = userRepository;
-        } 
+        }
 
         [HttpGet]
-        public async Task<IActionResult> SetUserType()
+        public async Task<IActionResult> SetUserType(UserType? userType)
         {
-             User user = await _userRepository.GetUser(HttpContext.User.Identity.Name);
+            User user = await _userRepository.GetUser(HttpContext.User.Identity.Name);
+            bool isRealtor;
+            if (userType != null)
+            {
+                isRealtor = userType == UserType.Realtor;
+            }
+            else
+                isRealtor = user.UserType == UserType.Realtor;
+
+
             SetUserTypeViewModel setUserTypeViewModel =
-                new SetUserTypeViewModel {IsRealtor = user.UserType == UserType.Realtor, UserId = user.Id.ToString()};
+                new SetUserTypeViewModel { IsRealtor = isRealtor, UserId = user.Id.ToString() };
 
             return View(setUserTypeViewModel);
         }
@@ -50,58 +59,72 @@ namespace HomeApp.Site.Areas.Office.Controllers
                 return View(model);
             }
 
-            if (userType == UserType.Realtor)
-            {
-                return View(model);
-            }
-            else if (userType == UserType.Person)
-            {
-                return RedirectToAction("SetPersonProfile");
-            }
-            else
-                return View(model);
+            return RedirectToAction("SetPersonProfile", new {userType = userType});
         }
 
         [HttpGet]
-        public async Task<IActionResult> SetPersonProfile()
+        public async Task<IActionResult> SetPersonProfile(UserType userType)
         {
-            return View();
+            SetPersonProfileViewModel model = new SetPersonProfileViewModel();
+            model.UserType = userType;
+            return View(model);
         }
 
         [HttpPost]
         public async Task<IActionResult> SetPersonProfile(SetPersonProfileViewModel model)
         {
-            return RedirectToAction("SetSocial");
+            if (model.UserType == UserType.Realtor)
+                return RedirectToAction("SetRealtorProfile", new { model.UserType });
+
+            return RedirectToAction("SetSocial", new {model.UserType});
         }
 
         [HttpGet]
-        public async Task<IActionResult> SetSocial()
+        public async Task<IActionResult> SetRealtorProfile(UserType userType)
         {
-            return View();
+            SetRealtorProfileViewModel model = new SetRealtorProfileViewModel();
+            model.UserType = userType;
+            return View(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> SetSocial(SetSocialViewModel viewModel)
+        public async Task<IActionResult> SetRealtorProfile(SetRealtorProfileViewModel model)
         {
-            return RedirectToAction("SetPhoto");
+            return RedirectToAction("SetSocial", new {userType = model.UserType});
         }
 
         [HttpGet]
-        public async Task<IActionResult> SetPhoto()
+        public async Task<IActionResult> SetSocial(UserType userType)
         {
-            return View();
+            SetSocialViewModel model = new SetSocialViewModel();
+            model.UserType = userType;
+            return View(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> SetPhoto(string photo = "")
+        public async Task<IActionResult> SetSocial(SetSocialViewModel model)
         {
-            return RedirectToAction("Success");
+            return RedirectToAction("SetPhoto", new  {userType = model.UserType});
         }
 
         [HttpGet]
-        public async Task<IActionResult> Success()
+        public async Task<IActionResult> SetPhoto(UserType userType)
         {
-            return View();
+            SetPhotoViewModel model = new SetPhotoViewModel();
+            model.UserType = userType;
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SetPhoto(SetPhotoViewModel model)
+        {
+            return RedirectToAction("Success", new {userType = model.UserType});
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Success(UserType userType)
+        {
+            return View(userType);
         }
     }
 }
