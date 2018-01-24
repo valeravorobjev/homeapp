@@ -91,5 +91,17 @@ namespace HomeApp.Site.Areas.Office.Controllers
         {
             return View();
         }
+
+        [HttpPost]
+        public async Task<IActionResult> SetPhoto(string photo = "")
+        {
+            return RedirectToAction("Success");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Success()
+        {
+            return View();
+        }
     }
 }

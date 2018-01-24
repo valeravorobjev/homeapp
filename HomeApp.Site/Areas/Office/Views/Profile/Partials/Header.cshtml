@@ -1,0 +1,14 @@
+﻿@using HomeApp.Core.Identity.CustomProvider
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<CustomIdentityUser> UserManager
+
+@{
+    CustomIdentityUser user = UserManager.FindByNameAsync(Context.User.Identity.Name).Result;
+    string userName = user.UserName ?? user.Email;
+}
+
+<header class="main__title text-center">
+    <h2>Настройка профайла</h2>
+    <small>Уважаемый <b>@userName</b>, чтобы воспользоваться личным кабинетом вам необходимо активировать ваш профайл.</small>
+    <small>Следуйте инструкциям ниже, это займет совсем немного времени!</small>
+</header>

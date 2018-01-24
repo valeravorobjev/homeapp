@@ -1,0 +1,57 @@
+﻿@model int
+
+@if (Model == 1)
+{
+    <ul class="submit-property__steps">
+        <li class="active"><a>1</a></li>
+        <li><a>2</a></li>
+        <li><a>3</a></li>
+        <li><a>4</a></li>
+        <li><a>5</a></li>
+        <li class="submit-property__caret"></li>
+    </ul>
+}
+else if (Model == 2)
+{
+    <ul class="submit-property__steps">
+        <li class="passed"><a asp-area="Office" asp-controller="Profile" asp-action="SetUserType">1</a></li>
+        <li class="active"><a>2</a></li>
+        <li><a>3</a></li>
+        <li><a>4</a></li>
+        <li><a>5</a></li>
+        <li class="submit-property__caret"></li>
+    </ul>
+}
+else if (Model == 3)
+{
+    <ul class="submit-property__steps">
+        <li class="passed"><a asp-area="Office" asp-controller="Profile" asp-action="SetUserType">1</a></li>
+        <li class="passed"><a asp-area="Office" asp-controller="Profile" asp-action="SetPersonProfile">2</a></li>
+        <li class="active"><a>3</a></li>
+        <li><a>4</a></li>
+        <li><a>5</a></li>
+        <li class="submit-property__caret"></li>
+    </ul>
+}
+else if (Model == 4)
+{
+    <ul class="submit-property__steps">
+        <li class="passed"><a asp-area="Office" asp-controller="Profile" asp-action="SetUserType">1</a></li>
+        <li class="passed"><a asp-area="Office" asp-controller="Profile" asp-action="SetPersonProfile">2</a></li>
+        <li class="passed"><a asp-area="Office" asp-controller="Profile" asp-action="SetSocial">3</a></li>
+        <li class="active"><a>4</a></li>
+        <li><a>5</a></li>
+        <li class="submit-property__caret"></li>
+    </ul>
+}
+else if (Model == 5)
+{
+    <ul class="submit-property__steps">
+        <li class="passed"><a asp-area="Office" asp-controller="Profile" asp-action="SetUserType">1</a></li>
+        <li class="passed"><a asp-area="Office" asp-controller="Profile" asp-action="SetPersonProfile">2</a></li>
+        <li class="passed"><a asp-area="Office" asp-controller="Profile" asp-action="SetSocial">3</a></li>
+        <li class="passed"><a asp-area="Office" asp-controller="Profile" asp-action="SetPhoto">4</a></li>
+        <li class="active"><a>5</a></li>
+        <li class="submit-property__caret"></li>
+    </ul>
+}
