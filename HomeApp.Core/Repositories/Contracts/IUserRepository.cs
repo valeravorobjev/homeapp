@@ -94,6 +94,7 @@ namespace HomeApp.Core.Repositories.Contracts
         /// <param name="userId">Идентификатор пользователя</param>
         /// <param name="personProfessional">Проф. данные пользователя</param>
         Task SetPersonProfessionalAsync(ObjectId userId, PersonProfessional personProfessional);
+        
         /// <summary>
         /// Устанавливает или обновляет социальные сети пользователя
         /// </summary>
@@ -101,5 +102,24 @@ namespace HomeApp.Core.Repositories.Contracts
         /// <param name="socialMedia">Социальные сети</param>
         /// <returns></returns>
         Task SetSocialMediaAsync(ObjectId userId, SocialMedia socialMedia);
+
+        /// <summary>
+        /// Добавляет фотограффию пользователя
+        /// </summary>
+        /// <param name="userId">Идентификатор пользователя</param>
+        /// <param name="contentType">Тип файла</param>
+        /// <param name="serverPath">Путь к дирректории wwwroot на сервере</param>
+        /// <param name="fileName">Имя файла</param>
+        /// <param name="file">Файл</param>
+        /// <returns></returns>
+        Task SetPhotoAsync(ObjectId userId, string contentType, string serverPath, string fileName, byte[] file);
+
+        /// <summary>
+        /// Удаляет аватар пользователя
+        /// </summary>
+        /// <param name="userId">Идентификатор пользователя</param>
+        /// <param name="serverPath">Путь к серверной папке wwwroot</param>
+        /// <returns></returns>
+        Task DeletePhotoAsync(ObjectId userId, string serverPath);
     }
 }

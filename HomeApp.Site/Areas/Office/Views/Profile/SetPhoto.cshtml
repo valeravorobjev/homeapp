@@ -9,25 +9,82 @@
     <div class="tab-content submit-property__content">
         <div class="tab-pane fade in active">
             <div class="card">
-                <div class="card__header">
-                    <h2>Фото профиля</h2>
-                    <small>Пожалуйста, загрузить вашу фотографию. Люди будут более доверительно к вам относиться, если в профайле будет ваша фотография!</small>
-                </div>
-                <form class="card__body" asp-area="Office" asp-controller="Profile" asp-action="SetPhoto" method="post" id="photo">
-
-                    <div class="form-group form-group--float form-group--float-center">
-                        <input type="file" class="form-control text-center">
-                        <i class="form-group__bar"></i>
+                @if (Model.File != null)
+                {
+                    <div class="card__header">
+                        <h2>Фото профиля</h2>
+                        <small>У вас уже загружено фото профиля. Вы можете его удалить, например, чтобы обновить фотографию.</small>
                     </div>
-
-                    <a href="javascript:{}" onclick="document.getElementById('photo').submit();" data-toggle="tab" class="btn btn--circle btn-primary submit-property__button">
+                    
+                    <form method="post" asp-area="Office" asp-controller="Profile" asp-action="DeletePhoto" asp-route-userType="@Model.UserType">
+                        <div class="list-group-item media">
+                            <div class="pull-left">
+                                <img src="~/content/users/@Model.UserId/profile/@Model.File.FileName" alt="" class="list-group__img" width="60">
+                            </div>
+                            <div class="media-body list-group__text" style="text-align: left">
+                                <span>Миниатюра!</span>
+                                <div class="list-group__label list-group__label--float">
+                                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal">Смотреть</button>
+                                    <button type="submit" class="btn btn-danger btn-sm">Удалить</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <br/><br/>
+                    
+                    <a asp-area="Office" asp-controller="Profile" asp-action="Success" asp-route-userType="@Model.UserType" 
+                       class="btn btn--circle btn-primary submit-property__button">
                         <i class="zmdi zmdi-long-arrow-right"></i>
                     </a>
-                </form>
+                }
+                else
+                {
+                    <div class="card__header">
+                        <h2>Фото профиля</h2>
+                        <small>Пожалуйста, загрузить вашу фотографию. Люди будут более доверительно к вам относиться, если в профайле будет ваша фотография!</small>
+                        <b>Рекомендуем загружать изображения 500x500px</b>
+                    </div>
+                    
+                    <form class="card__body" enctype="multipart/form-data" asp-area="Office" asp-controller="Profile" asp-action="SetPhoto" method="post" id="photo">
+                        <input type="hidden" asp-for="UserId"/>
+                        <input type="hidden" asp-for="UserType"/>
+                        <div class="form-group form-group--float">
+                            <input type="file" name="file" class="form-control">
+                            <i class="form-group__bar"></i>
+                        </div>
+
+                        <a href="javascript:{}" onclick="document.getElementById('photo').submit();" data-toggle="tab" class="btn btn--circle btn-primary submit-property__button">
+                            <i class="zmdi zmdi-long-arrow-right"></i>
+                        </a>
+                    </form>
+                }
+                
             </div>
         </div>
     </div>
 </div>
+
+@if (Model.File != null)
+{
+    <div class="modal fade" id="myModal">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        Фото профиля
+                        <small>Рекомендуемый размер изображения 500x500px</small>
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <img src="~/content/users/@Model.UserId/profile/@Model.File?.FileName.Split('_').Last()" alt="" style="width: 250px; height: 250px;">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link" data-dismiss="modal">Закрыть</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
 
 
 @section Styles

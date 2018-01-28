@@ -1,17 +1,14 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
-
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <UserSecretsId>563b2856-b685-4e23-aada-78aad2e9ebf8</UserSecretsId>
   </PropertyGroup>
-
   <ItemGroup>
     <Compile Remove="Areas\Auth\Data\**" />
     <Content Remove="Areas\Auth\Data\**" />
     <EmbeddedResource Remove="Areas\Auth\Data\**" />
     <None Remove="Areas\Auth\Data\**" />
   </ItemGroup>
-
   <ItemGroup>
     <Content Include="wwwroot\vendors\roost\vendors\bower_components\animate.css\animate-config.json" />
     <Content Include="wwwroot\vendors\roost\vendors\bower_components\animate.css\animate.css" />
@@ -404,18 +401,15 @@
     <Content Include="wwwroot\vendors\roost\vendors\bower_components\Waves\package.json" />
     <Content Include="wwwroot\vendors\roost\vendors\bower_components\Waves\situs.json" />
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="AspNet.Security.OAuth.VK" Version="0.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.2" />
   </ItemGroup>
-
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.1" />
     <DotNetCliToolReference Include="Microsoft.Extensions.SecretManager.Tools" Version="2.0.0" />
   </ItemGroup>
-
   <ItemGroup>
     <None Include="wwwroot\vendors\roost\vendors\bower_components\animate.css\gulpfile.js" />
     <None Include="wwwroot\vendors\roost\vendors\bower_components\autosize\build.js" />
@@ -4391,23 +4385,19 @@
     <None Include="wwwroot\vendors\roost\vendors\bower_components\Waves\src\scss\waves.scss" />
     <None Include="wwwroot\vendors\roost\vendors\bower_components\Waves\src\stylus\waves.styl" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\HomeApp.Core\HomeApp.Core.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <TypeScriptCompile Include="wwwroot\vendors\roost\vendors\bower_components\moment\moment.d.ts" />
   </ItemGroup>
-
   <ItemGroup>
     <Content Update="RazorTemplates\Emails\ConfirmRu.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-
   <ItemGroup>
     <Folder Include="Areas\Office\Data\" />
+    <Folder Include="wwwroot\content\users" />
   </ItemGroup>
-
 </Project>

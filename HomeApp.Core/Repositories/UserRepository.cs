@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using HomeApp.Core.Db;
 using HomeApp.Core.Db.Entities;
@@ -16,6 +16,8 @@ using HomeApp.Core.Extentions.Sorts;
 using HomeApp.Core.Extentions.Sorts.Models.Enums;
 using HomeApp.Core.Models;
 using HomeApp.Core.Repositories.Contracts;
+using ImageSharp;
+using ImageSharp.Formats;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
@@ -269,6 +271,55 @@ namespace HomeApp.Core.Repositories
             UpdateDefinitionBuilder<User> ub = new UpdateDefinitionBuilder<User>();
 
             await _usersCollection.FindOneAndUpdateAsync(fb.Eq(u => u.Id, userId), ub.Set(u => u.SocialMedia, socialMedia));
+        }
+
+        public async Task SetPhotoAsync(ObjectId userId, string contentType, string serverPath, string fileName, byte[] file)
+        {
+            FilterDefinitionBuilder<User> fb = new FilterDefinitionBuilder<User>();
+            UpdateDefinitionBuilder<User> ub = new UpdateDefinitionBuilder<User>(); 
+
+            string profilePath = $"{serverPath}/content/users/{userId}/profile";
+
+            if (!Directory.Exists(profilePath))
+            {
+                Directory.CreateDirectory(profilePath);
+            }
+
+            using (Image image = new Image(file))
+            {
+                Image<Color> rs = image.Resize(40, 40);
+                rs.Save($"{profilePath}/min_{fileName}");
+            }
+            
+            using (Image image = new Image(file))
+            {
+                Image<Color> rs = image.Resize(500, 500);
+                rs.Save($"{profilePath}/{fileName}");
+            }
+            
+            await _usersCollection.FindOneAndUpdateAsync(fb.Eq(u => u.Id, userId),
+                ub.Combine(
+                    ub.Set(u => u.PhotoMinPath, $"min_{fileName}"), 
+                    ub.Set(u => u.PhotoPath, fileName))
+                );
+        }
+
+        public async Task DeletePhotoAsync(ObjectId userId, string serverPath)
+        {
+            FilterDefinitionBuilder<User> fb = new FilterDefinitionBuilder<User>();
+            UpdateDefinitionBuilder<User> ub = new UpdateDefinitionBuilder<User>();
+
+
+            foreach (string path in Directory.GetFiles($"{serverPath}/content/users/{userId}/profile"))
+            {
+                File.Delete(path);
+            }
+
+            await _usersCollection.FindOneAndUpdateAsync(fb.Eq(u => u.Id, userId),
+                ub.Combine(
+                    ub.Unset(u => u.PhotoPath), 
+                    ub.Unset(u => u.PhotoMinPath))
+                );
         }
     }
 }

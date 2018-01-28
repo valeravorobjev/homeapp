@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 using HomeApp.Core.Db.Entities;
 using HomeApp.Core.Db.Entities.Models;
 using HomeApp.Core.Db.Entities.Models.Enums;
@@ -6,6 +8,8 @@ using HomeApp.Core.Extentions;
 using HomeApp.Core.Repositories.Contracts;
 using HomeApp.Site.Areas.Office.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using MongoDB.Bson;
@@ -19,11 +23,13 @@ namespace HomeApp.Site.Areas.Office.Controllers
     {
         private readonly IUserRepository _userRepository;
         private readonly IConfiguration _configuration;
+        private readonly IHostingEnvironment _env;
 
-        public ProfileController(IUserRepository userRepository, IConfiguration configuration)
+        public ProfileController(IUserRepository userRepository, IConfiguration configuration, IHostingEnvironment env)
         {
             _userRepository = userRepository;
             _configuration = configuration;
+            _env = env;
         }
 
         [HttpGet]
@@ -176,14 +182,51 @@ namespace HomeApp.Site.Areas.Office.Controllers
         [HttpGet]
         public async Task<IActionResult> SetPhoto(UserType userType)
         {
-            SetPhotoViewModel model = new SetPhotoViewModel();
-            model.UserType = userType;
+            User user = await _userRepository.GetUserAsync(HttpContext.User.Identity.Name);
+            
+            SetPhotoViewModel model = new SetPhotoViewModel
+            {
+                UserType = userType,
+                UserId = user.Id.ToString()
+            };
+
+            if (!string.IsNullOrEmpty(user.PhotoMinPath))
+            {
+                string path = $"{_env.WebRootPath}/content/users/{user.Id}/profile/{user.PhotoMinPath}";
+                using (MemoryStream memoryStream = new MemoryStream(System.IO.File.ReadAllBytes(path)))
+                {
+                    model.File = new FormFile(memoryStream, 0, memoryStream.Length, "file",
+                        user.PhotoMinPath);
+                }
+            }
+            
             return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeletePhoto(UserType userType)
+        {
+            User user = await _userRepository.GetUserAsync(HttpContext.User.Identity.Name);
+            await _userRepository.DeletePhotoAsync(user.Id, _env.WebRootPath);
+            
+            return RedirectToAction("SetPhoto");
         }
 
         [HttpPost]
         public async Task<IActionResult> SetPhoto(SetPhotoViewModel model)
         {
+            if (!ModelState.IsValid)
+                return View();
+            
+            if (model.File != null)
+            {
+                MemoryStream stream = new MemoryStream();
+                await model.File.CopyToAsync(stream);
+
+                await _userRepository.SetPhotoAsync(new ObjectId(model.UserId), model.File.ContentType,
+                    _env.WebRootPath, model.File.FileName, stream.GetBuffer());
+            }
+            
             return RedirectToAction("Success", new { userType = model.UserType });
         }
 
