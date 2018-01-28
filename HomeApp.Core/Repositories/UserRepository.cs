@@ -17,7 +17,6 @@ using HomeApp.Core.Extentions.Sorts.Models.Enums;
 using HomeApp.Core.Models;
 using HomeApp.Core.Repositories.Contracts;
 using ImageSharp;
-using ImageSharp.Formats;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
