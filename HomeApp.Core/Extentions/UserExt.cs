@@ -32,8 +32,17 @@ namespace HomeApp.Core.Extentions
                 UserMode = user.UserMode,
                 PhotoPath = user.PhotoPath,
                 Seo = user.Seo,
-                SocialMedia = user.SocialMedia
+                SocialMedia = user.SocialMedia               
             };
+            
+            Person person = user as Person;
+            realtor.FirstName = person?.FirstName;
+            realtor.LastName = person?.LastName;
+            realtor.MidName = person?.MidName;
+            realtor.Sex = person?.Sex;
+            realtor.DateBirth = person?.DateBirth;
+            
+            
             return realtor;
         }
 
@@ -55,6 +64,15 @@ namespace HomeApp.Core.Extentions
                 Seo = user.Seo,
                 SocialMedia = user.SocialMedia
             };
+            
+            Realtor realtor = user as Realtor;
+            
+            person.FirstName = realtor?.FirstName;
+            person.LastName = realtor?.LastName;
+            person.MidName = realtor?.MidName;
+            person.Sex = realtor?.Sex;
+            person.DateBirth = realtor?.DateBirth;
+            
             return person;
         }
 
