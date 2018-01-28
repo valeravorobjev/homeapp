@@ -94,5 +94,12 @@ namespace HomeApp.Core.Repositories.Contracts
         /// <param name="userId">Идентификатор пользователя</param>
         /// <param name="personProfessional">Проф. данные пользователя</param>
         Task SetPersonProfessionalAsync(ObjectId userId, PersonProfessional personProfessional);
+        /// <summary>
+        /// Устанавливает или обновляет социальные сети пользователя
+        /// </summary>
+        /// <param name="userId">Идентификатор пользователя</param>
+        /// <param name="socialMedia">Социальные сети</param>
+        /// <returns></returns>
+        Task SetSocialMediaAsync(ObjectId userId, SocialMedia socialMedia);
     }
 }

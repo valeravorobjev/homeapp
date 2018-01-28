@@ -64,7 +64,7 @@ namespace HomeApp.Site.Areas.Office.Controllers
                 return View(model);
             }
 
-            return RedirectToAction("SetPersonProfile", new {userType = userType});
+            return RedirectToAction("SetPersonProfile", new { userType = userType });
         }
 
         [HttpGet]
@@ -97,9 +97,9 @@ namespace HomeApp.Site.Areas.Office.Controllers
 
             Person person = new Person
             {
-                FirstName = new Element {Ru = model.FirstName},
-                LastName = new Element {Ru = model.LastName},
-                MidName = new Element {Ru = model.MidName},
+                FirstName = new Element { Ru = model.FirstName },
+                LastName = new Element { Ru = model.LastName },
+                MidName = new Element { Ru = model.MidName },
                 DateBirth = model.DateBirth,
                 Sex = model.Sex,
                 Phones = model.Phones,
@@ -115,7 +115,7 @@ namespace HomeApp.Site.Areas.Office.Controllers
             if (model.UserType == UserType.Realtor)
                 return RedirectToAction("SetRealtorProfile", new { model.UserType });
 
-            return RedirectToAction("SetSocial", new {model.UserType});
+            return RedirectToAction("SetSocial", new { model.UserType });
         }
 
         [HttpGet]
@@ -129,13 +129,25 @@ namespace HomeApp.Site.Areas.Office.Controllers
         [HttpPost]
         public async Task<IActionResult> SetRealtorProfile(SetRealtorProfileViewModel model)
         {
-            return RedirectToAction("SetSocial", new {userType = model.UserType});
+            return RedirectToAction("SetSocial", new { userType = model.UserType });
         }
 
         [HttpGet]
         public async Task<IActionResult> SetSocial(UserType userType)
         {
-            SetSocialViewModel model = new SetSocialViewModel();
+            User user = await _userRepository.GetUserAsync(HttpContext.User.Identity.Name);
+
+            SetSocialViewModel model = new SetSocialViewModel
+            {
+                Facebook = user.SocialMedia?.Facebook,
+                GooglePlus = user.SocialMedia?.GooglePlus,
+                Instagram = user.SocialMedia?.Instagram,
+                Ok = user.SocialMedia?.Ok,
+                Twitter = user.SocialMedia?.Twitter,
+                Vk = user.SocialMedia?.Vk,
+                UserType = userType,
+                UserId = user.Id.ToString()
+            };
             model.UserType = userType;
             return View(model);
         }
@@ -143,7 +155,22 @@ namespace HomeApp.Site.Areas.Office.Controllers
         [HttpPost]
         public async Task<IActionResult> SetSocial(SetSocialViewModel model)
         {
-            return RedirectToAction("SetPhoto", new  {userType = model.UserType});
+            if (!ModelState.IsValid)
+                return View(model);
+
+            SocialMedia socialMedia = new SocialMedia
+            {
+                Facebook = model.Facebook,
+                GooglePlus = model.GooglePlus,
+                Instagram = model.Instagram,
+                Ok = model.Ok,
+                Twitter = model.Twitter,
+                Vk = model.Vk
+            };
+
+            await _userRepository.SetSocialMediaAsync(new ObjectId(model.UserId), socialMedia);
+
+            return RedirectToAction("SetPhoto", new { userType = model.UserType });
         }
 
         [HttpGet]
@@ -157,7 +184,7 @@ namespace HomeApp.Site.Areas.Office.Controllers
         [HttpPost]
         public async Task<IActionResult> SetPhoto(SetPhotoViewModel model)
         {
-            return RedirectToAction("Success", new {userType = model.UserType});
+            return RedirectToAction("Success", new { userType = model.UserType });
         }
 
         [HttpGet]

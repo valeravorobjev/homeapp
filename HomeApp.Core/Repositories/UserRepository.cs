@@ -262,5 +262,13 @@ namespace HomeApp.Core.Repositories
 
             await _usersCollection.ReplaceOneAsync(fb.Eq(u => u.Id, userId), user);
         }
+
+        public async Task SetSocialMediaAsync(ObjectId userId, SocialMedia socialMedia)
+        {
+            FilterDefinitionBuilder<User> fb = new FilterDefinitionBuilder<User>();
+            UpdateDefinitionBuilder<User> ub = new UpdateDefinitionBuilder<User>();
+
+            await _usersCollection.FindOneAndUpdateAsync(fb.Eq(u => u.Id, userId), ub.Set(u => u.SocialMedia, socialMedia));
+        }
     }
 }
