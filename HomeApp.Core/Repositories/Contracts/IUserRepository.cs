@@ -92,8 +92,8 @@ namespace HomeApp.Core.Repositories.Contracts
         /// Добавляет профессиональную информацию о пользователе
         /// </summary>
         /// <param name="userId">Идентификатор пользователя</param>
-        /// <param name="personProfessional">Проф. данные пользователя</param>
-        Task SetPersonProfessionalAsync(ObjectId userId, PersonProfessional personProfessional);
+        /// <param name="realtor">Проф. данные пользователя</param>
+        Task SetRealtorAsync(ObjectId userId, Realtor realtor);
         
         /// <summary>
         /// Устанавливает или обновляет социальные сети пользователя
@@ -121,5 +121,12 @@ namespace HomeApp.Core.Repositories.Contracts
         /// <param name="serverPath">Путь к серверной папке wwwroot</param>
         /// <returns></returns>
         Task DeletePhotoAsync(ObjectId userId, string serverPath);
+
+        /// <summary>
+        /// Делает пользователя активным
+        /// </summary>
+        /// <param name="userId">Идентификатор пользователя</param>
+        /// <returns></returns>
+        Task MakeUserActiveAsync(ObjectId userId);
     }
 }

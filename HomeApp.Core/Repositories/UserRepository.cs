@@ -235,7 +235,7 @@ namespace HomeApp.Core.Repositories
         {
             FilterDefinitionBuilder<User> fb = new FilterDefinitionBuilder<User>();
 
-            Person user = (Person) await _usersCollection.AsQueryable().FirstOrDefaultAsync(u => u.Id == userId);
+            Person user = (Person)await _usersCollection.AsQueryable().FirstOrDefaultAsync(u => u.Id == userId);
             user.FirstName = person.FirstName;
             user.LastName = person.LastName;
             user.MidName = person.MidName;
@@ -248,18 +248,19 @@ namespace HomeApp.Core.Repositories
 
         }
 
-        public async Task SetPersonProfessionalAsync(ObjectId userId, PersonProfessional personProfessional)
+        public async Task SetRealtorAsync(ObjectId userId, Realtor realtor)
         {
             FilterDefinitionBuilder<User> fb = new FilterDefinitionBuilder<User>();
 
-            PersonProfessional user = (PersonProfessional)await _usersCollection.AsQueryable().FirstOrDefaultAsync(u => u.Id == userId);
+            Realtor user = (Realtor)await _usersCollection.AsQueryable().FirstOrDefaultAsync(u => u.Id == userId);
 
-            user.Description = personProfessional.Description;
-            user.Education = personProfessional.Education;
-            user.FromYear = personProfessional.FromYear;
-            user.Site = personProfessional.Site;
-            user.Specialization = personProfessional.Specialization;
-            user.WorkRegions = personProfessional.WorkRegions;
+            user.Description = realtor.Description;
+            user.Education = realtor.Education;
+            user.FromYear = realtor.FromYear;
+            user.Site = realtor.Site;
+            user.Specialization = realtor.Specialization;
+            user.WorkRegions = realtor.WorkRegions;
+            user.Job = realtor.Job;
 
             await _usersCollection.ReplaceOneAsync(fb.Eq(u => u.Id, userId), user);
         }
@@ -275,7 +276,7 @@ namespace HomeApp.Core.Repositories
         public async Task SetPhotoAsync(ObjectId userId, string contentType, string serverPath, string fileName, byte[] file)
         {
             FilterDefinitionBuilder<User> fb = new FilterDefinitionBuilder<User>();
-            UpdateDefinitionBuilder<User> ub = new UpdateDefinitionBuilder<User>(); 
+            UpdateDefinitionBuilder<User> ub = new UpdateDefinitionBuilder<User>();
 
             string profilePath = $"{serverPath}/content/users/{userId}/profile";
 
@@ -289,16 +290,16 @@ namespace HomeApp.Core.Repositories
                 Image<Color> rs = image.Resize(40, 40);
                 rs.Save($"{profilePath}/min_{fileName}");
             }
-            
+
             using (Image image = new Image(file))
             {
                 Image<Color> rs = image.Resize(500, 500);
                 rs.Save($"{profilePath}/{fileName}");
             }
-            
+
             await _usersCollection.FindOneAndUpdateAsync(fb.Eq(u => u.Id, userId),
                 ub.Combine(
-                    ub.Set(u => u.PhotoMinPath, $"min_{fileName}"), 
+                    ub.Set(u => u.PhotoMinPath, $"min_{fileName}"),
                     ub.Set(u => u.PhotoPath, fileName))
                 );
         }
@@ -316,9 +317,18 @@ namespace HomeApp.Core.Repositories
 
             await _usersCollection.FindOneAndUpdateAsync(fb.Eq(u => u.Id, userId),
                 ub.Combine(
-                    ub.Unset(u => u.PhotoPath), 
+                    ub.Unset(u => u.PhotoPath),
                     ub.Unset(u => u.PhotoMinPath))
                 );
+        }
+
+        public async Task MakeUserActiveAsync(ObjectId userId)
+        {
+            FilterDefinitionBuilder<User> fb = new FilterDefinitionBuilder<User>();
+            UpdateDefinitionBuilder<User> ub = new UpdateDefinitionBuilder<User>();
+
+            await _usersCollection.FindOneAndUpdateAsync(fb.Eq(u => u.Id, userId),
+                ub.Set(u => u.Membership.UserStatus, UserStatus.Active));
         }
     }
 }

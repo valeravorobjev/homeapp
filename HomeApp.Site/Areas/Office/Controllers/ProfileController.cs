@@ -127,7 +127,22 @@ namespace HomeApp.Site.Areas.Office.Controllers
         [HttpGet]
         public async Task<IActionResult> SetRealtorProfile(UserType userType)
         {
-            SetRealtorProfileViewModel model = new SetRealtorProfileViewModel();
+            Realtor user = (Realtor)await _userRepository.GetUserAsync(HttpContext.User.Identity.Name);
+
+            SetRealtorProfileViewModel model = new SetRealtorProfileViewModel
+            {
+                UserId = user.Id.ToString(),
+                AddServices = user.Specialization?.AddServices,
+                Description = user.Description,
+                Education = user.Education,
+                EstateSales = user.Specialization?.EstateSales,
+                FromYear = user.FromYear,
+                Job = user.Job,
+                RentalProperties = user.Specialization?.RentalProperties,
+                Site = user.Site,
+                UserType = userType,
+                WorkRegions = user.WorkRegions != null ? new Element {Ru = string.Join(",", user.WorkRegions?.Select(wr => wr.Ru))} : null
+            };
             model.UserType = userType;
             return View(model);
         }
@@ -135,6 +150,30 @@ namespace HomeApp.Site.Areas.Office.Controllers
         [HttpPost]
         public async Task<IActionResult> SetRealtorProfile(SetRealtorProfileViewModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            Realtor realtor = new Realtor
+            {
+                Specialization = new Specialization
+                {
+                    AddServices = model.AddServices,
+                    EstateSales = model.EstateSales,
+                    RentalProperties = model.RentalProperties
+                },
+                Description = model.Description,
+                Education = model.Education,
+                FromYear = model.FromYear,
+                Job = model.Job,
+                Site = model.Site,
+                UserType = model.UserType,
+                WorkRegions = model.WorkRegions?.Ru?.Split(',', ';').Select(wr => new Element {Ru = wr.Trim()}).ToList()
+            };
+
+            await _userRepository.SetRealtorAsync(new ObjectId(model.UserId), realtor);
+
             return RedirectToAction("SetSocial", new { userType = model.UserType });
         }
 
@@ -183,7 +222,7 @@ namespace HomeApp.Site.Areas.Office.Controllers
         public async Task<IActionResult> SetPhoto(UserType userType)
         {
             User user = await _userRepository.GetUserAsync(HttpContext.User.Identity.Name);
-            
+
             SetPhotoViewModel model = new SetPhotoViewModel
             {
                 UserType = userType,
@@ -199,7 +238,7 @@ namespace HomeApp.Site.Areas.Office.Controllers
                         user.PhotoMinPath);
                 }
             }
-            
+
             return View(model);
         }
 
@@ -208,7 +247,7 @@ namespace HomeApp.Site.Areas.Office.Controllers
         {
             User user = await _userRepository.GetUserAsync(HttpContext.User.Identity.Name);
             await _userRepository.DeletePhotoAsync(user.Id, _env.WebRootPath);
-            
+
             return RedirectToAction("SetPhoto");
         }
 
@@ -217,7 +256,7 @@ namespace HomeApp.Site.Areas.Office.Controllers
         {
             if (!ModelState.IsValid)
                 return View();
-            
+
             if (model.File != null)
             {
                 MemoryStream stream = new MemoryStream();
@@ -226,13 +265,16 @@ namespace HomeApp.Site.Areas.Office.Controllers
                 await _userRepository.SetPhotoAsync(new ObjectId(model.UserId), model.File.ContentType,
                     _env.WebRootPath, model.File.FileName, stream.GetBuffer());
             }
-            
+
             return RedirectToAction("Success", new { userType = model.UserType });
         }
 
         [HttpGet]
         public async Task<IActionResult> Success(UserType userType)
         {
+            User user = await _userRepository.GetUserAsync(HttpContext.User.Identity.Name);
+            await _userRepository.MakeUserActiveAsync(user.Id);
+
             return View(userType);
         }
     }

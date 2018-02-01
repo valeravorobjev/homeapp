@@ -33,7 +33,7 @@ namespace HomeApp.Core.Extentions.Filters
             }
             if (filter.WorkRegions?.Count > 0)
             {
-                users = users.Where(u => ((PersonProfessional) u).WorkRegions.Any(w => filter.WorkRegions.Contains(w)));
+                users = users.Where(u => ((PersonProfessional) u).WorkRegions.Any(w => filter.WorkRegions.Contains(w.Ru)));
             }
             if (filter.Specialization?.EstateSales?.Count > 0)
             {

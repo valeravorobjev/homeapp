@@ -19,7 +19,7 @@ namespace HomeApp.Core.Db.Entities.Models
         /// </summary>
         [BsonElement("work_regions")]
         [BsonIgnoreIfNull]
-        public List<string> WorkRegions { get; set; }
+        public List<Element> WorkRegions { get; set; }
         /// <summary>
         /// Специализация
         /// </summary>
