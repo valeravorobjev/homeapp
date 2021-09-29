@@ -28,7 +28,7 @@ namespace HomeApp.Core.Repositories
 
             if (language == Language.En)
             {
-                message.From.Add(new MailboxAddress("HOMEAPP PRO", "info@rabun.ru"));
+                message.From.Add(new MailboxAddress("HOMEAPP PRO", "info@sadfasdf.ru"));
                 message.Subject = "Registration confirmation";
 
                 message.Body = new TextPart(TextFormat.Html)
@@ -38,7 +38,7 @@ namespace HomeApp.Core.Repositories
             }
             else if (language == Language.Ru)
             {
-                message.From.Add(new MailboxAddress("HOMEAPP PRO", "info@rabun.ru"));
+                message.From.Add(new MailboxAddress("HOMEAPP PRO", "info@safsdfadsf.ru"));
                 message.Subject = "Подтверждение регистрации";
 
                 message.Body = new TextPart(TextFormat.Html)
@@ -55,7 +55,7 @@ namespace HomeApp.Core.Repositories
 
                 client.Connect("smtp.mail.ru", 465, true);
                 client.AuthenticationMechanisms.Remove("XOAUTH2");
-                client.Authenticate("info@rabun.ru", "TM_1Qt_2Bd_3RPM");
+                client.Authenticate("info@asdfff.ru", "Tasfasdfadf");
 
                 await client.SendAsync(message);
                 client.Disconnect(true);
