@@ -33,26 +33,6 @@ namespace HomeApp.Site
             string con = Configuration.GetConnectionString("MongoDb");
 
             services.AddIdentityMongoDbStores(con).AddDefaultTokenProviders();
-            services.AddAuthentication().AddFacebook(facebookOptions =>
-            {
-                facebookOptions.AppId = Configuration["Authentication:Facebook:AppId"];
-                facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
-            });
-            services.AddAuthentication().AddGoogle(googleOptions =>
-            {
-                googleOptions.ClientId = Configuration["Authentication:Google:ClientId"];
-                googleOptions.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
-            });
-            services.AddAuthentication().AddTwitter(twitterOptions =>
-            {
-                twitterOptions.ConsumerKey = Configuration["Authentication:Twitter:ConsumerKey"];
-                twitterOptions.ConsumerSecret = Configuration["Authentication:Twitter:ConsumerSecret"];
-            });
-            services.AddAuthentication().AddMicrosoftAccount(microsoftOptions =>
-            {
-                microsoftOptions.ClientId = Configuration["Authentication:Microsoft:ApplicationId"];
-                microsoftOptions.ClientSecret = Configuration["Authentication:Microsoft:Password"];
-            });
             services.AddAuthentication().AddVK(options =>
             {
                 options.ClientId = Configuration["Authentication:Vk:ClientId"];
@@ -82,12 +62,7 @@ namespace HomeApp.Site
                 options.ReturnUrlParameter = CookieAuthenticationDefaults.ReturnUrlParameter;
             });
 
-            services.AddMvc().AddJsonOptions(options =>
-            {
-                options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
-                options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-                options.SerializerSettings.Converters = new List<JsonConverter> { new BsonIdConverter() };
-            });
+            services.AddMvc();
 
             services.AddRouting(options => { options.LowercaseUrls = true; });
 
@@ -113,7 +88,6 @@ namespace HomeApp.Site
             {
                 app.UseStatusCodePages();
                 app.UseDeveloperExceptionPage();
-                app.UseBrowserLink();
             }
             else
             {
